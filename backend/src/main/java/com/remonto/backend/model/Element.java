@@ -1,6 +1,5 @@
 package com.remonto.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -56,83 +55,24 @@ public abstract class Element {
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public @Size(max = 500) String getNote() {
-        return note;
-    }
-
-    public void setNote(@Size(max = 500) String note) {
-        this.note = note;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
+     public Long getId() { return id; }
+     public void setId(Long id) { this.id = id; }
+     public String getName() { return name; }
+     public void setName(String name) { this.name = name; }
+     public String getImageUrl() { return imageUrl; }
+     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+     public String getStatus() { return status; }
+     public void setStatus(String status) { this.status = status; }
+     public BigDecimal getCost() { return cost; }
+     public void setCost(BigDecimal cost) { this.cost = cost; }
+     public Integer getQuantity() { return quantity; }
+     public void setQuantity(Integer quantity) { this.quantity = quantity; }
+     public String getLocation() { return location; }
+     public void setLocation(String location) { this.location = location; }
+     public String getLink() { return link; }
+     public void setLink(String link) { this.link = link; }
+     public String getNote() { return note; }
+     public void setNote(String note) { this.note = note; }
+     public Project getProject() { return project; }
+     public void setProject(Project project) { this.project = project; }
 }

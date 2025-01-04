@@ -1,104 +1,77 @@
 package com.remonto.backend.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+// @Data - combines @Getter, @Setter, @ToString, @EqualsAndHashCode and @RequiredArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "app_user")
+// note: user is a reserved keyword in postgres, so the table storing users is called app_user
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Email
-    @Column(name = "email", unique = true)
+    @Setter
+    @Getter
+    private String name;
+
+    @Setter
+    @Getter
+    private String surname;
+
+    @Setter
+    @Getter
+    private String role; // admin or user?
+
+    @Setter
+    @Getter
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @NotNull
-    @Size(min = 2, max = 50)
-    @Column(name = "first_name")
-    private String firstName;
-
-    @NotNull
-    @Size(min = 2, max = 50)
-    @Column(name = "last_name")
-    private String lastName;
-
-    @NotNull
-    @Size(min = 8, max = 100)
-    @Column(name = "password")
+    @Setter
+    @Getter
+    @Column(unique = true, nullable = false)
     private String password;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private UserRole role;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects;
 
-    // To remove later
-    public Long getId() {
-        return id;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public @NotNull @Size(min = 2, max = 50) String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(@NotNull @Size(min = 2, max = 50) String firstName) {
-        this.firstName = firstName;
-    }
-
-    public @NotNull @Size(min = 2, max = 50) String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(@NotNull @Size(min = 2, max = 50) String lastName) {
-        this.lastName = lastName;
-    }
-
-    public @NotNull @Email String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@NotNull @Email String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public @NotNull @Size(min = 8, max = 100) String getPassword() {
-        return password;
-    }
-
-    public void setPassword(@NotNull @Size(min = 8, max = 100) String password) {
-        this.password = password;
-    }
-
-    public @NotNull UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(@NotNull UserRole role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
-    public List<Project> getProjects() {
-        return projects;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

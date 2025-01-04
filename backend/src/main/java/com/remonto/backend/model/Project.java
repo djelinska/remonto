@@ -1,17 +1,11 @@
 package com.remonto.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "projects")
 public class Project {
@@ -52,6 +46,8 @@ public class Project {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    // Getters and Setters
+
     public Long getId() {
         return id;
     }
@@ -60,43 +56,43 @@ public class Project {
         this.id = id;
     }
 
-    public @NotNull @Size(min = 3, max = 100) String getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(@NotNull @Size(min = 3, max = 100) String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public @NotNull @Size(min = 3, max = 100) String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(@Size(max = 500) String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public @NotNull LocalDate getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(@NotNull LocalDate startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public @NotNull LocalDate getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(@NotNull LocalDate endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 15, fraction = 2) BigDecimal getBudget() {
+    public BigDecimal getBudget() {
         return budget;
     }
 
-    public void setBudget(@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 15, fraction = 2) BigDecimal budget) {
+    public void setBudget(BigDecimal budget) {
         this.budget = budget;
     }
 

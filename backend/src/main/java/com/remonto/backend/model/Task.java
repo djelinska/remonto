@@ -2,18 +2,14 @@ package com.remonto.backend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "tasks")
 public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -87,11 +83,125 @@ public class Task {
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public TaskCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(TaskCategory category) {
+        this.category = category;
+    }
+
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatus status) {
+        this.status = status;
+    }
+
     public LocalDateTime getStartTime() {
         return startTime;
     }
 
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
     public LocalDateTime getEndTime() {
         return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public TaskPriority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(TaskPriority priority) {
+        this.priority = priority;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Task getParentTask() {
+        return parentTask;
+    }
+
+    public void setParentTask(Task parentTask) {
+        this.parentTask = parentTask;
+    }
+
+    public List<Task> getSubTasks() {
+        return subTasks;
+    }
+
+    public void setSubTasks(List<Task> subTasks) {
+        this.subTasks = subTasks;
+    }
+
+    public List<Material> getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(List<Material> materials) {
+        this.materials = materials;
+    }
+
+    public List<Tool> getTools() {
+        return tools;
+    }
+
+    public void setTools(List<Tool> tools) {
+        this.tools = tools;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }
