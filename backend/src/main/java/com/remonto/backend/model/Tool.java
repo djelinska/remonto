@@ -18,4 +18,12 @@ public class Tool extends Element {
 
     @ManyToMany(mappedBy = "tools")
     private List<Task> tasks;
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
 }

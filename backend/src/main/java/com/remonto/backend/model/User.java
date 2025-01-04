@@ -44,4 +44,61 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> projects;
+
+    // To remove later
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public @NotNull @Size(min = 2, max = 50) String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(@NotNull @Size(min = 2, max = 50) String firstName) {
+        this.firstName = firstName;
+    }
+
+    public @NotNull @Size(min = 2, max = 50) String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(@NotNull @Size(min = 2, max = 50) String lastName) {
+        this.lastName = lastName;
+    }
+
+    public @NotNull @Email String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@NotNull @Email String email) {
+        this.email = email;
+    }
+
+    public @NotNull @Size(min = 8, max = 100) String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@NotNull @Size(min = 8, max = 100) String password) {
+        this.password = password;
+    }
+
+    public @NotNull UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(@NotNull UserRole role) {
+        this.role = role;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
 }

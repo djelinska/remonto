@@ -1,5 +1,6 @@
 package com.remonto.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -50,4 +51,76 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public @NotNull @Size(min = 3, max = 100) String getName() {
+        return name;
+    }
+
+    public void setName(@NotNull @Size(min = 3, max = 100) String name) {
+        this.name = name;
+    }
+
+    public @NotNull @Size(min = 3, max = 100) String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@Size(max = 500) String description) {
+        this.description = description;
+    }
+
+    public @NotNull LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(@NotNull LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public @NotNull LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(@NotNull LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public @DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 15, fraction = 2) BigDecimal getBudget() {
+        return budget;
+    }
+
+    public void setBudget(@DecimalMin(value = "0.0", inclusive = false) @Digits(integer = 15, fraction = 2) BigDecimal budget) {
+        this.budget = budget;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public List<Element> getElements() {
+        return elements;
+    }
+
+    public void setElements(List<Element> elements) {
+        this.elements = elements;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
