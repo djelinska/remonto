@@ -1,15 +1,17 @@
 version: '3.8'
+
 services:
-  postgres:
-    image: postgres:15
-    container_name: postgres-db
+  mongodb:
+    image: mongo:6.0 # Use the required version
+    container_name: mongodb_container
     ports:
-      - "${DB_PORT}:5432"
+      - "${DB_PORT}:27017" # Map host port to container port
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER} # Replace with your username
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD} # Replace with your password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mongodb_data:/data/db # Persist data using a volume
+
 volumes:
-  postgres_data:
+  mongodb_data: # Define the volume
+
