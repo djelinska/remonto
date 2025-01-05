@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Data
+//@Data
 // @Data - combines @Getter, @Setter, @ToString, @EqualsAndHashCode and @RequiredArgsConstructor
 @Entity
 @Table(name = "app_user")
@@ -73,5 +73,17 @@ public class User {
 
     public String getRole() {
         return role;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

@@ -56,4 +56,9 @@ public class UserService {
 
         return user;
     }
+
+    // To change
+    public UserRepository getUserRepository() {
+        return this.userRepository;
+    }
 }

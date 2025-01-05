@@ -35,6 +35,7 @@ public abstract class Element {
     @Column(name = "cost")
     private BigDecimal cost;
 
+    @NotNull
     @Min(0)
     @Column(name = "quantity")
     private Integer quantity;
