@@ -1,0 +1,47 @@
+<div
+  class="px-4 py-3 border-bottom d-flex align-items-center"
+  id="tabs-container"
+>
+  <ul class="nav nav-pills border rounded">
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [routerLink]="['./calendar']"
+        routerLinkActive="border tab-link-active"
+      >
+        <i class="bi bi-calendar me-2"></i>
+        Kalendarz
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [routerLink]="['./tasks']"
+        routerLinkActive="border tab-link-active"
+      >
+        <i class="bi bi-file-earmark-text me-2"></i>
+        Zadania
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [routerLink]="['./materials-tools']"
+        routerLinkActive="border tab-link-active"
+      >
+        <i class="bi bi-tools me-2"></i>
+        Materiały i narzędzia
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [routerLink]="['./info']"
+        routerLinkActive="border tab-link-active"
+      >
+        <i class="bi bi-info-circle me-2"></i>
+        Ogólne
+      </a>
+    </li>
+  </ul>
+</div>
