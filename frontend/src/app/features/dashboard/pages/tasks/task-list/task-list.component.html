@@ -1,0 +1,34 @@
+<div class="table-responsive">
+  <table class="table table-bordered align-middle">
+    <thead>
+      <tr>
+        <th class="col-2">Nazwa</th>
+        <th>Status</th>
+        <th>Termin wykonania</th>
+        <th>Priorytet</th>
+        <th>Koszt</th>
+        <th>Kategoria</th>
+        <th class="col-3">Notatka</th>
+        <th class="th-action"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (task of tasks; track task.id) {
+      <tr>
+        <td>{{ task.name }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.endTime }}</td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.cost }}</td>
+        <td>{{ task.category }}</td>
+        <td>{{ task.note }}</td>
+        <td class="text-center">
+          <button type="button" class="btn">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

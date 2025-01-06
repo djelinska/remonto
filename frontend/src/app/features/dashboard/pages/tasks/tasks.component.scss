@@ -1,0 +1,7 @@
+.accordion-button {
+  font-weight: 500;
+
+  &:not(.collapsed) {
+    background-color: var(--gray-100);
+  }
+}

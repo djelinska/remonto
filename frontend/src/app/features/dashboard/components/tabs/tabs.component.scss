@@ -1,0 +1,20 @@
+#tabs-container {
+  background-color: var(--gray-100);
+  min-height: 80px;
+
+  .nav {
+    width: fit-content;
+    background-color: var(--gray-50);
+
+    .nav-link {
+      color: var(--gray-500);
+      margin: 4px;
+      border: 1px solid transparent;
+
+      &.tab-link-active {
+        color: var(--primary) !important;
+        background-color: var(--white);
+      }
+    }
+  }
+}

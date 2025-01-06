@@ -1,0 +1,66 @@
+<div class="p-4">
+  <div class="accordion accordion-flush" id="tasks">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#todoTasks"
+        >
+          <i class="bi bi-file-earmark-text text-primary me-2"></i>
+          Planowane
+        </button>
+      </h2>
+      <div id="todoTasks" class="accordion-collapse collapse show my-4">
+        @if (todoTasks.length > 0) {
+        <app-task-list [tasks]="todoTasks"></app-task-list>
+        } @else {
+        <div class="alert alert-info">Brak zadań</div>
+        }
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#inProgressTasks"
+        >
+          <i class="bi bi-arrow-repeat text-primary me-2"></i>
+          W trakcie
+        </button>
+      </h2>
+      <div id="inProgressTasks" class="accordion-collapse collapse show my-4">
+        @if (inProgressTasks.length > 0) {
+        <app-task-list [tasks]="inProgressTasks"></app-task-list>
+        } @else {
+        <div class="alert alert-info">Brak zadań</div>
+        }
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#completedTasks"
+        >
+          <i class="bi bi-check2-square text-primary me-2"></i>
+          Zakończone
+        </button>
+      </h2>
+      <div id="completedTasks" class="accordion-collapse collapse show my-4">
+        @if (completedTasks.length > 0) {
+        <app-task-list [tasks]="completedTasks"></app-task-list>
+        } @else {
+        <div class="alert alert-info">Brak zadań</div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
