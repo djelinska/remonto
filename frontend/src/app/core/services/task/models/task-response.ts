@@ -1,4 +1,4 @@
-export interface Task {
+export interface TaskResponse {
   id: string;
   name: string;
   description?: string;

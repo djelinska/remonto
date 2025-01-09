@@ -1,41 +1,49 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Task } from 'zone.js/lib/zone-impl';
+import { TaskRequest } from './models/task-request';
+import { TaskResponse } from './models/task-response';
+import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
-  private apiUrl = 'http://localhost:8080/api/tasks';
+  private apiUrl = `${environment.apiUrl}/projects`;
 
   constructor(private http: HttpClient) {}
 
-  getTasksByProject(projectId: number): Observable<any[]> {
-    return this.http.get<Task[]>(`${this.apiUrl}?projectId=${projectId}`, {
-      withCredentials: true,
-    });
+  getTasksByProject(projectId: string): Observable<TaskResponse[]> {
+    return this.http.get<TaskResponse[]>(`${this.apiUrl}/${projectId}/tasks`);
   }
 
-  getTaskById(id: number): Observable<Task> {
-    return this.http.get<Task>(`${this.apiUrl}/${id}`, {
-      withCredentials: true,
-    });
+  getTaskById(projectId: string, taskId: string): Observable<TaskResponse> {
+    return this.http.get<TaskResponse>(
+      `${this.apiUrl}/${projectId}/tasks/${taskId}`
+    );
   }
 
-  createTask(task: Task): Observable<Task> {
-    return this.http.post<Task>(this.apiUrl, task, { withCredentials: true });
+  createTask(projectId: string, task: TaskRequest): Observable<TaskResponse> {
+    return this.http.post<TaskResponse>(
+      `${this.apiUrl}/${projectId}/tasks`,
+      task
+    );
   }
 
-  updateTask(id: number, task: Task): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl}/${id}`, task, {
-      withCredentials: true,
-    });
+  updateTask(
+    projectId: string,
+    taskId: string,
+    task: TaskRequest
+  ): Observable<TaskResponse> {
+    return this.http.put<TaskResponse>(
+      `${this.apiUrl}/${projectId}/tasks/${taskId}`,
+      task
+    );
   }
 
-  deleteTask(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
-      withCredentials: true,
-    });
+  deleteTask(projectId: string, taskId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${projectId}/tasks/${taskId}`
+    );
   }
 }

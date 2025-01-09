@@ -1,8 +1,10 @@
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 import { Task } from '../../../../shared/models/task.model';
-import { TaskListComponent } from './task-list/task-list.component';
+import { TaskAddComponent } from '../../components/task/task-add/task-add.component';
+import { TaskListComponent } from '../../components/task/task-list/task-list.component';
 import { TaskService } from '../../../../core/services/task/task.service';
 import { TaskStatus } from '../../../../shared/enums/task-status';
 
@@ -15,32 +17,33 @@ import { TaskStatus } from '../../../../shared/enums/task-status';
   styleUrl: './tasks.component.scss',
 })
 export class TasksComponent implements OnInit {
-  projectId: number = 0;
+  projectId: string | null = null;
   tasks: Task[] = [];
   todoTasks: Task[] = [];
   inProgressTasks: Task[] = [];
   completedTasks: Task[] = [];
+  modalRef?: BsModalRef;
 
   constructor(
     private route: ActivatedRoute,
+    private modalService: BsModalService,
     private taskService: TaskService
   ) {}
 
   ngOnInit(): void {
     this.route.parent?.paramMap.subscribe((params) => {
-      const projectId = params.get('id');
-      if (projectId) {
-        this.projectId = Number(projectId);
-        this.loadTasks();
-      }
+      this.projectId = params.get('id');
+      this.loadTasks();
     });
   }
 
   private loadTasks(): void {
-    this.taskService.getTasksByProject(this.projectId).subscribe((tasks) => {
-      this.tasks = tasks;
-      this.filterTasksByStatus();
-    });
+    if (this.projectId) {
+      this.taskService.getTasksByProject(this.projectId).subscribe((tasks) => {
+        this.tasks = tasks;
+        this.filterTasksByStatus();
+      });
+    }
   }
 
   private filterTasksByStatus(): void {
@@ -53,5 +56,32 @@ export class TasksComponent implements OnInit {
     this.completedTasks = this.tasks.filter(
       (task) => task.status === TaskStatus.COMPLETED
     );
+  }
+
+  openAddTaskModal(): void {
+    const initialState = { projectId: this.projectId ?? undefined };
+    const modalRef: BsModalRef = this.modalService.show(TaskAddComponent, {
+      class: 'modal-md',
+      backdrop: 'static',
+      keyboard: false,
+      initialState,
+    });
+
+    modalRef.content.taskAdded.subscribe(() => {
+      this.loadTasks();
+    });
+  }
+
+  deleteTask(taskId: string): void {
+    if (this.projectId) {
+      this.taskService.deleteTask(this.projectId, taskId).subscribe({
+        next: () => {
+          this.loadTasks();
+        },
+        error: (error) => {
+          console.error('Error deleting task:', error);
+        },
+      });
+    }
   }
 }

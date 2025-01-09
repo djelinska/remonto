@@ -1,8 +1,8 @@
-import { BehaviorSubject, Observable, of } from 'rxjs';
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Project } from '../../../shared/models/project.model';
+import { Observable } from 'rxjs';
+import { ProjectRequest } from './models/project-request';
+import { ProjectResponse } from './models/project-response';
 import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
@@ -13,29 +13,26 @@ export class ProjectService {
 
   constructor(private http: HttpClient) {}
 
-  getProjects(): Observable<any[]> {
-    return this.http.get<Project[]>(this.apiUrl);
+  getProjects(): Observable<ProjectResponse[]> {
+    return this.http.get<ProjectResponse[]>(this.apiUrl);
   }
 
-  getProjectById(id: string): Observable<any> {
-    return this.http.get<Project>(`${this.apiUrl}/${id}`, {
-      withCredentials: true,
-    });
+  getProjectById(id: string): Observable<ProjectResponse> {
+    return this.http.get<ProjectResponse>(`${this.apiUrl}/${id}`);
   }
 
-  createProject(project: Project): Observable<Project> {
-    return this.http.post<Project>(this.apiUrl, project);
+  createProject(project: ProjectRequest): Observable<ProjectResponse> {
+    return this.http.post<ProjectResponse>(this.apiUrl, project);
   }
 
-  updateProject(id: string, project: Project): Observable<Project> {
-    return this.http.put<Project>(`${this.apiUrl}/${id}`, project, {
-      withCredentials: true,
-    });
+  updateProject(
+    id: string,
+    project: ProjectRequest
+  ): Observable<ProjectResponse> {
+    return this.http.put<ProjectResponse>(`${this.apiUrl}/${id}`, project);
   }
 
   deleteProject(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
-      withCredentials: true,
-    });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

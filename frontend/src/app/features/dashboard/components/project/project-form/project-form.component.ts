@@ -9,6 +9,7 @@ import {
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { FormErrorComponent } from '../../../../../shared/components/form-error/form-error.component';
 import { Project } from '../../../../../shared/models/project.model';
+import { ProjectRequest } from '../../../../../core/services/project/models/project-request';
 
 @Component({
   selector: 'app-project-form',
@@ -19,7 +20,7 @@ import { Project } from '../../../../../shared/models/project.model';
 })
 export class ProjectFormComponent {
   @Input() project: Project | null = null;
-  @Output() formSubmit = new EventEmitter<Project>();
+  @Output() formSubmit = new EventEmitter<ProjectRequest>();
 
   form: FormGroup;
 
