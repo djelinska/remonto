@@ -6,6 +6,10 @@
   <small class="text-danger">Nieprawidłowy format adresu email.</small>
   } @if (control.errors['pattern']) {
   <small class="text-danger">Nieprawidłowy format.</small>
+  } @if (control.errors['min']) {
+  <small class="text-danger">
+    Minimalna wartość to {{ control.errors["min"].min }}.
+  </small>
   }
 </div>
 }
