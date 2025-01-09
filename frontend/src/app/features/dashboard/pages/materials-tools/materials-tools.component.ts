@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Material } from '../../../../shared/models/material.model';
 import { Tool } from '../../../../shared/models/tool.model';
-import { MaterialListComponent } from './material-list/material-list.component';
-import { ToolListComponent } from './tool-list/tool-list.component';
+import { MaterialListComponent } from '../../components/material/material-list/material-list.component';
+import { ToolListComponent } from '../../components/tool/tool-list/tool-list.component';
 import { MaterialService } from '../../../../core/services/material/material.service';
 import { ToolService } from '../../../../core/services/tool/tool.service';
 

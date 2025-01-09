@@ -12,12 +12,47 @@ export class ToolService {
   constructor(private http: HttpClient) {}
 
   getToolsByProject(projectId: string): Observable<any[]> {
-    // projectId = '677c811b6da0ff7787ea640e';
-    console.log('Project ID:', projectId);
-    console.log(typeof projectId);
-    console.log(`${this.apiUrl}/projects/${projectId}/tools`);
     return this.http.get<Tool[]>(`${this.apiUrl}/projects/${projectId}/tools`, {
       withCredentials: true,
     });
+  }
+
+  getToolByProject(projectId: string, toolId: string): Observable<any[]> {
+    return this.http.get<Tool[]>(
+      `${this.apiUrl}/projects/${projectId}/tools/${toolId}`,
+      {
+        withCredentials: true,
+      }
+    );
+  }
+
+  addToolToProject(projectId: string, tool: Tool): Observable<Tool> {
+    return this.http.post<Tool>(
+      `${this.apiUrl}/projects/${projectId}/tools`,
+      tool
+    );
+  }
+
+  updateToolInProject(
+    projectId: string,
+    toolId: string,
+    tool: Tool
+  ): Observable<Tool> {
+    return this.http.put<Tool>(
+      `${this.apiUrl}/projects/${projectId}/tools/${toolId}`,
+      tool,
+      {
+        withCredentials: true,
+      }
+    );
+  }
+
+  deleteToolFromProject(projectId: string, toolId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/projects/${projectId}/tools/${toolId}`,
+      {
+        withCredentials: true,
+      }
+    );
   }
 }

@@ -12,12 +12,56 @@ export class MaterialService {
   constructor(private http: HttpClient) {}
 
   getMaterialsByProject(projectId: string): Observable<any[]> {
-    projectId = '677c811b6da0ff7787ea640e';
-    console.log('Project ID:', projectId);
-    console.log(typeof projectId);
-    console.log(`${this.apiUrl}/projects/${projectId}/materials`);
     return this.http.get<Material[]>(
       `${this.apiUrl}/projects/${projectId}/materials`,
+      {
+        withCredentials: true,
+      }
+    );
+  }
+
+  getMaterialByProject(
+    projectId: string,
+    materialId: string
+  ): Observable<any[]> {
+    return this.http.get<Material[]>(
+      `${this.apiUrl}/projects/${projectId}/materials/${materialId}`,
+      {
+        withCredentials: true,
+      }
+    );
+  }
+
+  addMaterialToProject(
+    projectId: string,
+    material: Material
+  ): Observable<Material> {
+    return this.http.post<Material>(
+      `${this.apiUrl}/projects/${projectId}/materials`,
+      material
+    );
+  }
+
+  updateMaterialInProject(
+    projectId: string,
+    materialId: string,
+    material: Material
+  ): Observable<Material> {
+    return this.http.put<Material>(
+      `${this.apiUrl}/projects/${projectId}/materials/${materialId}`,
+      material,
+      {
+        withCredentials: true,
+      }
+    );
+  }
+
+  deleteMaterialFromProject(
+    projectId: string,
+    materialId: string
+  ): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/projects/${projectId}/materials/${materialId}`,
       {
         withCredentials: true,
       }
