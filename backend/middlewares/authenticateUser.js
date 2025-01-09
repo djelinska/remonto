@@ -1,27 +1,36 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 const authenticateUser = (req, res, next) => {
-  try {
-    // Get token from cookie
-    const token = req.cookies.token;
+	try {
+		// Get token from the 'Authorization' header (format: Bearer <token>)
+		const authHeader = req.headers['authorization'];
 
-    if (!token) {
-      return res
-        .status(401)
-        .json({ message: "Authentication token is missing" });
-    }
+		if (!authHeader) {
+			return res
+				.status(401)
+				.json({ message: 'Authorization header is missing' });
+		}
 
-    // Verify the token
-    const decoded = jwt.verify(token, process.env.SECRETKEY);
+		// Extract token from "Bearer <token>" format
+		const token = authHeader.split(' ')[1];
 
-    // Attach user data to the request object
-    req.user = decoded;
+		if (!token) {
+			return res
+				.status(401)
+				.json({ message: 'Authentication token is missing' });
+		}
 
-    next();
-  } catch (error) {
-    console.error("Authentication error:", error.message);
-    return res.status(401).json({ message: "Invalid or expired token" });
-  }
+		// Verify the token
+		const decoded = jwt.verify(token, process.env.SECRETKEY);
+
+		// Attach user data to the request object
+		req.user = decoded;
+
+		next();
+	} catch (error) {
+		console.error('Authentication error:', error.message);
+		return res.status(401).json({ message: 'Invalid or expired token' });
+	}
 };
 
 module.exports = authenticateUser;

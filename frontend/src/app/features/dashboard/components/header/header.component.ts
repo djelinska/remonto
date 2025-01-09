@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 import { Project } from '../../../../shared/models/project.model';
-import { ProjectService } from '../../../../core/services/project.service';
+import { ProjectService } from '../../../../core/services/project/project.service';
 import { switchMap } from 'rxjs';
 
 @Component({

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Task } from '../../../../shared/models/task.model';
 import { TaskListComponent } from './task-list/task-list.component';
-import { TaskService } from '../../../../core/services/task.service';
+import { TaskService } from '../../../../core/services/task/task.service';
 import { TaskStatus } from '../../../../shared/enums/task-status';
 
 @Component({

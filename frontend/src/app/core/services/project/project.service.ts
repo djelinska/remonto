@@ -2,8 +2,8 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MOCK_PROJECTS } from '../../mock-data';
-import { Project } from '../../shared/models/project.model';
+import { MOCK_PROJECTS } from '../../../mock-data';
+import { Project } from '../../../shared/models/project.model';
 
 @Injectable({
   providedIn: 'root',
