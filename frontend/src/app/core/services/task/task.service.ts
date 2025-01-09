@@ -1,4 +1,4 @@
-import { MOCK_PROJECTS, MOCK_TASKS } from '../../mock-data';
+import { MOCK_PROJECTS, MOCK_TASKS } from '../../../mock-data';
 import { Observable, of } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';

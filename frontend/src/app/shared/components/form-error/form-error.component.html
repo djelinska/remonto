@@ -1,0 +1,11 @@
+@if (control && control.errors && control.touched) {
+<div class="form-error mt-1">
+  @if (control.errors['required']) {
+  <small class="text-danger">To pole jest wymagane.</small>
+  } @if (control.errors['email']) {
+  <small class="text-danger">Nieprawidłowy format adresu email.</small>
+  } @if (control.errors['pattern']) {
+  <small class="text-danger">Nieprawidłowy format.</small>
+  }
+</div>
+}

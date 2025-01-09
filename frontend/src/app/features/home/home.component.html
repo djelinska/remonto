@@ -1,1 +1,30 @@
-<p>home works!</p>
+<div class="container mt-5">
+  <a [routerLink]="['/home']">
+    <img src="/assets/images/remonto_logo.svg" alt="Remonto" />
+  </a>
+
+  <div class="row align-items-center mt-5">
+    <div class="col-md-6">
+      <div class="d-flex flex-column gap-4">
+        <h1>Zaplanuj i zarządzaj swoim remontem z łatwością!</h1>
+        <p>
+          Nasza aplikacja pomoże Ci sprawnie organizować remonty wnętrz, śledzić
+          postępy oraz zarządzać budżetem w jednym miejscu. Intuicyjny interfejs
+          i przydatne narzędzia sprawią, że każdy projekt stanie się prostszy i
+          przyjemniejszy!
+        </p>
+        <div>
+          <a [routerLink]="['/login']" class="btn btn-primary me-2">
+            Zaloguj się
+          </a>
+          <a [routerLink]="['/register']" class="btn btn-light">
+            Zarejestruj się
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 text-center">
+      <i class="bi bi-house-gear" id="image"></i>
+    </div>
+  </div>
+</div>

@@ -42,7 +42,8 @@ h2 {
   margin-bottom: 0;
 }
 
-app-project-details {
+app-project-details,
+app-user-profile {
   width: 100%;
 }
 
@@ -62,6 +63,10 @@ app-project-details {
       background-color: var(--gray-100) !important;
     }
   }
+
+  &.btn-outline-danger:hover {
+    color: var(--gray-50) !important;
+  }
 }
 
 table.table {
@@ -77,4 +82,21 @@ table.table {
   background-color: #e6edff;
   border-color: #ccdaff;
   font-size: 13px;
+}
+
+.alert-danger {
+  background-color: #faebee;
+  border-color: #ecb9c2;
+  font-size: 13px;
+}
+
+.card {
+  border-radius: 0.25rem;
+  border-color: var(--gray-200);
+  .card-header {
+    background-color: var(--gray-100);
+    border-color: var(--gray-200);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
 }
