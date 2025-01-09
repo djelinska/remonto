@@ -1,7 +1,12 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="mb-3">
     <label for="name" class="form-label">Nazwa</label>
-    <input id="name" class="form-control" formControlName="name" />
+    <input
+      id="name"
+      class="form-control"
+      formControlName="name"
+      placeholder="Wprowadź nazwę projektu"
+    />
     <shared-form-error [control]="form.get('name')"></shared-form-error>
   </div>
 
@@ -11,6 +16,7 @@
       id="description"
       class="form-control"
       formControlName="description"
+      placeholder="Opcjonalny opis"
     ></textarea>
   </div>
 

@@ -1,0 +1,114 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label for="name" class="form-label">Nazwa</label>
+    <input
+      id="name"
+      formControlName="name"
+      class="form-control"
+      placeholder="Wprowadź nazwę zadania"
+    />
+    <shared-form-error [control]="form.get('name')"></shared-form-error>
+  </div>
+
+  <div class="mb-3">
+    <label for="description" class="form-label">Opis</label>
+    <textarea
+      id="description"
+      formControlName="description"
+      class="form-control"
+      placeholder="Opcjonalny opis"
+    ></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="category" class="form-label">Kategoria</label>
+    <select id="category" formControlName="category" class="form-select">
+      <option value="null" disabled selected>Wybierz kategorię</option>
+      @for (category of categories; track $index) {
+      <option [value]="category">
+        {{ category }}
+      </option>
+      }
+    </select>
+    <shared-form-error [control]="form.get('category')"></shared-form-error>
+  </div>
+
+  <div class="mb-3">
+    <label for="status" class="form-label">Status</label>
+    <select id="status" formControlName="status" class="form-select">
+      <option value="null" disabled selected>Wybierz status</option>
+      @for (status of statuses; track $index) {
+      <option [value]="status">
+        {{ status }}
+      </option>
+      }
+    </select>
+    <shared-form-error [control]="form.get('status')"></shared-form-error>
+  </div>
+
+  <div class="mb-3">
+    <label for="startTime" class="form-label">Czas rozpoczęcia</label>
+    <input
+      id="startTime"
+      type="datetime-local"
+      formControlName="startTime"
+      class="form-control"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="endTime" class="form-label">Czas zakończenia</label>
+    <input
+      id="endTime"
+      type="datetime-local"
+      formControlName="endTime"
+      class="form-control"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="priority" class="form-label">Priorytet</label>
+    <select id="priority" formControlName="priority" class="form-select">
+      <option value="null" disabled selected>Wybierz priorytet</option>
+      @for (priority of priorities; track $index) {
+      <option [value]="priority">
+        {{ priority }}
+      </option>
+      }
+    </select>
+    <shared-form-error [control]="form.get('priority')"></shared-form-error>
+  </div>
+
+  <div class="mb-3">
+    <label for="cost" class="form-label">Koszt</label>
+    <div class="input-group">
+      <input
+        type="number"
+        id="cost"
+        class="form-control"
+        formControlName="cost"
+        step="0.01"
+      />
+      <span class="input-group-text">zł</span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="note" class="form-label">Notatka</label>
+    <textarea
+      id="note"
+      formControlName="note"
+      class="form-control"
+      placeholder="Opcjonalna notatka"
+    ></textarea>
+  </div>
+
+  <div class="d-flex justify-content-between">
+    <button type="button" class="btn btn-light" (click)="onCancel()">
+      Anuluj
+    </button>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      Zapisz
+    </button>
+  </div>
+</form>

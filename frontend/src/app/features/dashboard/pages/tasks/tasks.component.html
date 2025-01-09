@@ -1,4 +1,11 @@
 <div class="p-4">
+  <div class="d-flex justify-content-end mb-4">
+    <button type="button" class="btn btn-primary" (click)="openAddTaskModal()">
+      <i class="bi bi-plus"></i>
+      Dodaj zadanie
+    </button>
+  </div>
+
   <div class="accordion accordion-flush" id="tasks">
     <div class="accordion-item">
       <h2 class="accordion-header">
@@ -14,7 +21,10 @@
       </h2>
       <div id="todoTasks" class="accordion-collapse collapse show my-4">
         @if (todoTasks.length > 0) {
-        <app-task-list [tasks]="todoTasks"></app-task-list>
+        <app-task-list
+          [tasks]="todoTasks"
+          (taskDeleted)="deleteTask($event)"
+        ></app-task-list>
         } @else {
         <div class="alert alert-info">Brak zadań</div>
         }
@@ -35,7 +45,10 @@
       </h2>
       <div id="inProgressTasks" class="accordion-collapse collapse show my-4">
         @if (inProgressTasks.length > 0) {
-        <app-task-list [tasks]="inProgressTasks"></app-task-list>
+        <app-task-list
+          [tasks]="inProgressTasks"
+          (taskDeleted)="deleteTask($event)"
+        ></app-task-list>
         } @else {
         <div class="alert alert-info">Brak zadań</div>
         }
@@ -56,7 +69,10 @@
       </h2>
       <div id="completedTasks" class="accordion-collapse collapse show my-4">
         @if (completedTasks.length > 0) {
-        <app-task-list [tasks]="completedTasks"></app-task-list>
+        <app-task-list
+          [tasks]="completedTasks"
+          (taskDeleted)="deleteTask($event)"
+        ></app-task-list>
         } @else {
         <div class="alert alert-info">Brak zadań</div>
         }

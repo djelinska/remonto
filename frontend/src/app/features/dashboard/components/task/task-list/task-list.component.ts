@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Task } from '../../../../../shared/models/task.model';
 
@@ -11,4 +11,9 @@ import { Task } from '../../../../../shared/models/task.model';
 })
 export class TaskListComponent {
   @Input() tasks: Task[] = [];
+  @Output() taskDeleted = new EventEmitter<string>();
+
+  deleteTask(taskId: string): void {
+    this.taskDeleted.emit(taskId);
+  }
 }

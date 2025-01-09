@@ -75,6 +75,10 @@ table.table {
 
   thead th {
     background-color: var(--gray-100) !important;
+
+    &.th-action {
+      width: 50px;
+    }
   }
 }
 
@@ -99,4 +103,24 @@ table.table {
     padding-top: 1rem;
     padding-bottom: 1rem;
   }
+}
+
+.accordion-button {
+  font-weight: 500;
+
+  &:not(.collapsed) {
+    background-color: var(--gray-100);
+  }
+}
+
+.dropdown-item {
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--gray-100);
+  }
+}
+
+.form-label {
+  font-weight: 500;
 }
