@@ -1,8 +1,8 @@
 export interface Project {
-  id: number;
+  id: string;
   name: string;
   description?: string;
   startDate: string;
-  endDate: string;
+  endDate?: string;
   budget: number;
 }

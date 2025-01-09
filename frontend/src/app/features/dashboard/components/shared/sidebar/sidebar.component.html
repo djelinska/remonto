@@ -10,29 +10,7 @@
   </div>
 
   <div class="p-4 mb-auto">
-    <h2>
-      <i class="bi bi-folder text-primary me-2"></i>
-      Projekty
-    </h2>
-    @if (projects$ | async; as projects) {
-    <ul class="my-3">
-      @for (project of projects; track project.id) {
-      <li class="py-3">
-        <a
-          [routerLink]="['/dashboard/projects', project.id]"
-          routerLinkActive="project-link-active"
-          class="project-link"
-        >
-          {{ project.name }}
-        </a>
-      </li>
-      }
-    </ul>
-    }
-    <button type="button" class="btn btn-primary w-100">
-      <i class="bi bi-plus"></i>
-      Utwórz nowy
-    </button>
+    <app-project-list></app-project-list>
   </div>
 
   <div class="p-4 border-top d-flex align-items-center">

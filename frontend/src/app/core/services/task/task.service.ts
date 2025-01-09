@@ -1,8 +1,6 @@
-import { MOCK_PROJECTS, MOCK_TASKS } from '../../../mock-data';
-import { Observable, of } from 'rxjs';
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Task } from 'zone.js/lib/zone-impl';
 
 @Injectable({
@@ -14,13 +12,9 @@ export class TaskService {
   constructor(private http: HttpClient) {}
 
   getTasksByProject(projectId: number): Observable<any[]> {
-    // return this.http.get<Task[]>(`${this.apiUrl}?projectId=${projectId}`, {
-    //   withCredentials: true,
-    // });
-    const tasksForProject = MOCK_TASKS.filter(
-      (task) => task.projectId === projectId
-    );
-    return of(tasksForProject);
+    return this.http.get<Task[]>(`${this.apiUrl}?projectId=${projectId}`, {
+      withCredentials: true,
+    });
   }
 
   getTaskById(id: number): Observable<Task> {
