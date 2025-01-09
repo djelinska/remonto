@@ -1,5 +1,5 @@
 export interface Element {
-  id: number;
+  id: string;
   name: string;
   imageUrl?: string;
   status?: string;
@@ -8,5 +8,5 @@ export interface Element {
   location?: string;
   link?: string;
   note?: string;
-  projectId: number;
+  projectId: string;
 }
