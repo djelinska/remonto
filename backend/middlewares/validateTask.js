@@ -1,5 +1,6 @@
 const { Task } = require("../models/taskModel");
 const { checkStartAndEndDate } = require("../utils/validation");
+const AppError = require('../utils/AppError');
 
 const validateTaskData = async (req, res, next) => {
     try {
@@ -8,7 +9,7 @@ const validateTaskData = async (req, res, next) => {
 
         if (taskData.startDate && taskData.endDate) {
             if (!checkStartAndEndDate(taskData.startDate)) {
-                throw new Error("ValidationError")
+                throw new AppError("ValidationError")
             }
         }
 

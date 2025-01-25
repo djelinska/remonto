@@ -1,11 +1,12 @@
 const { User } = require("../models/userModel");
 const { checkPassword } = require("../utils/validation");
+const AppError = require('../utils/AppError');
 
 const validateUserData = async (req, res, next) => {
     try {
         const userData = { ...req.body };
         if (!checkPassword(userData.password)) {
-            throw new Error("PasswordValidationError")
+            throw new AppError("PasswordValidationError")
         }
 
         const user = new User(userData);
