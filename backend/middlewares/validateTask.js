@@ -9,7 +9,7 @@ const validateTaskData = async (req, res, next) => {
 
         if (taskData.startDate && taskData.endDate) {
             if (!checkStartAndEndDate(taskData.startDate)) {
-                throw new AppError("ValidationError")
+                throw new AppError("DateValidationError", 400)
             }
         }
 
@@ -24,6 +24,12 @@ const validateTaskData = async (req, res, next) => {
             return res
                 .status(400)
                 .json({ message: "Validation error", details: errors });
+        }
+        if (error.message === "DateValidationError") {
+            const errors = Object.values(error.errors).map((err) => err.message);
+            return res
+                .status(400)
+                .json({ message: "Date validation error (start date cannot be after end date)", details: errors });
         }
 
         next(error);

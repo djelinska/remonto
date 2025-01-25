@@ -21,7 +21,7 @@ const validateUserData = async (req, res, next) => {
                 .status(400)
                 .json({ message: "Validation error", details: errors });
         }
-        if (error.name === "PasswordValidationError") {
+        if (error.message === "PasswordValidationError") {
             const errors = Object.values(error.errors).map((err) => err.message);
             return res
                 .status(400)
