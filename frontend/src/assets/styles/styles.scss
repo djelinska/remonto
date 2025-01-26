@@ -45,6 +45,8 @@ h2 {
 app-project-overview,
 app-user-profile {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .btn {
