@@ -23,7 +23,10 @@
         @if (todoTasks.length > 0) {
         <app-task-list
           [tasks]="todoTasks"
+          [projectId]="projectId"
           (taskDeleted)="deleteTask($event)"
+          (taskDeleted)="deleteTask($event)"
+          (taskUpdated)="refreshTasks()"
         ></app-task-list>
         } @else {
         <div class="alert alert-info">Brak zadań</div>
@@ -47,7 +50,9 @@
         @if (inProgressTasks.length > 0) {
         <app-task-list
           [tasks]="inProgressTasks"
+          [projectId]="projectId"
           (taskDeleted)="deleteTask($event)"
+          (taskUpdated)="refreshTasks()"
         ></app-task-list>
         } @else {
         <div class="alert alert-info">Brak zadań</div>
@@ -71,7 +76,9 @@
         @if (completedTasks.length > 0) {
         <app-task-list
           [tasks]="completedTasks"
+          [projectId]="projectId"
           (taskDeleted)="deleteTask($event)"
+          (taskUpdated)="refreshTasks()"
         ></app-task-list>
         } @else {
         <div class="alert alert-info">Brak zadań</div>

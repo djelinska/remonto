@@ -1,1 +1,16 @@
-<p>task-edit works!</p>
+<div class="modal-header">
+  <h4 class="modal-title">Edytuj zadanie</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    data-bs-dismiss="modal"
+    (click)="onCancel()"
+  ></button>
+</div>
+<div class="modal-body">
+  <app-task-form
+    [task]="task"
+    (formSubmit)="onTaskUpdated($event)"
+  ></app-task-form>
+</div>

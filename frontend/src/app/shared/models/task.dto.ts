@@ -1,4 +1,4 @@
-export interface TaskResponse {
+export interface TaskDto {
   id: string;
   name: string;
   description?: string;
@@ -9,5 +9,4 @@ export interface TaskResponse {
   priority?: string;
   cost: number;
   note?: string;
-  projectId: string;
 }

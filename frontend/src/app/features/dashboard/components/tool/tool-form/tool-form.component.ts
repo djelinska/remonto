@@ -28,7 +28,14 @@ export class ToolFormComponent {
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder) {
     this.form = this.fb.group({
-      name: ['', Validators.required],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),
+        ],
+      ],
       status: [null, Validators.required],
       cost: [0, Validators.min(0)],
       quantity: [0, Validators.min(0)],

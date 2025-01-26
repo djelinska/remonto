@@ -1,5 +1,4 @@
-export interface Task {
-  id: string;
+export interface TaskFormDto {
   name: string;
   description?: string;
   category: string;
@@ -9,5 +8,4 @@ export interface Task {
   priority?: string;
   cost: number;
   note?: string;
-  projectId: string;
 }

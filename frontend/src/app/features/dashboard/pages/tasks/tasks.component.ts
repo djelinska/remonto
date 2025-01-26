@@ -2,8 +2,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
-import { Task } from '../../../../shared/models/task.model';
 import { TaskAddComponent } from '../../components/task/task-add/task-add.component';
+import { TaskDto } from '../../../../shared/models/task.dto';
 import { TaskListComponent } from '../../components/task/task-list/task-list.component';
 import { TaskService } from '../../../../core/services/task/task.service';
 import { TaskStatus } from '../../../../shared/enums/task-status';
@@ -17,11 +17,11 @@ import { TaskStatus } from '../../../../shared/enums/task-status';
   styleUrl: './tasks.component.scss',
 })
 export class TasksComponent implements OnInit {
-  projectId: string | null = null;
-  tasks: Task[] = [];
-  todoTasks: Task[] = [];
-  inProgressTasks: Task[] = [];
-  completedTasks: Task[] = [];
+  projectId!: string;
+  tasks: TaskDto[] = [];
+  todoTasks: TaskDto[] = [];
+  inProgressTasks: TaskDto[] = [];
+  completedTasks: TaskDto[] = [];
   modalRef?: BsModalRef;
 
   constructor(
@@ -32,8 +32,11 @@ export class TasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.parent?.paramMap.subscribe((params) => {
-      this.projectId = params.get('id');
-      this.loadTasks();
+      const projectId = params.get('id');
+      if (projectId) {
+        this.projectId = projectId;
+        this.loadTasks();
+      }
     });
   }
 
@@ -59,7 +62,7 @@ export class TasksComponent implements OnInit {
   }
 
   openAddTaskModal(): void {
-    const initialState = { projectId: this.projectId ?? undefined };
+    const initialState = { projectId: this.projectId };
     const modalRef: BsModalRef = this.modalService.show(TaskAddComponent, {
       class: 'modal-md',
       backdrop: 'static',
@@ -83,5 +86,9 @@ export class TasksComponent implements OnInit {
         },
       });
     }
+  }
+
+  refreshTasks(): void {
+    this.loadTasks();
   }
 }

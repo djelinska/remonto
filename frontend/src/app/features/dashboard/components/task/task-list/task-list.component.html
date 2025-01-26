@@ -36,7 +36,13 @@
                 <a class="dropdown-item">Podgląd</a>
               </li>
               <li>
-                <a class="dropdown-item">Edytuj</a>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="openEditTaskModal(task)"
+                >
+                  Edytuj
+                </button>
               </li>
               <li>
                 <button

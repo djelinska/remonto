@@ -10,6 +10,20 @@
   <small class="text-danger">
     Minimalna wartość to {{ control.errors["min"].min }}.
   </small>
+  } @if (control.errors['max']) {
+  <small class="text-danger">
+    Maksymalna wartość to {{ control.errors["min"].min }}.
+  </small>
+  } @if (control.errors['minlength']) {
+  <small class="text-danger">
+    Minimalna długośc to
+    {{ control.errors["minlength"].requiredLength }} znaki.
+  </small>
+  } @if (control.errors['maxlength']) {
+  <small class="text-danger">
+    Maksymalna długość to
+    {{ control.errors["maxlength"].requiredLength }} znaków.
+  </small>
   }
 </div>
 }
