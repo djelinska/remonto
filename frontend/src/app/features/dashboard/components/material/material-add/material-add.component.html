@@ -1,1 +1,13 @@
-<p>material-add works!</p>
+<div class="modal-header">
+  <h4 class="modal-title">Dodaj nowy materiał</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    data-bs-dismiss="modal"
+    (click)="onCancel()"
+  ></button>
+</div>
+<div class="modal-body">
+  <app-material-form (formSubmit)="onMaterialAdded($event)"></app-material-form>
+</div>

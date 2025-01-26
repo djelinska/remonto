@@ -1,4 +1,4 @@
-export interface Element {
+export interface ElementDto {
   id: string;
   name: string;
   imageUrl?: string;
@@ -8,5 +8,4 @@ export interface Element {
   location?: string;
   link?: string;
   note?: string;
-  projectId: string;
 }

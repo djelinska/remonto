@@ -14,12 +14,21 @@
       </h2>
       <div id="materials" class="accordion-collapse collapse show my-4">
         @if (materials.length > 0) {
-        <app-material-list [materials]="materials"></app-material-list>
+        <app-material-list
+          [materials]="materials"
+          [projectId]="projectId"
+          (materialDeleted)="deleteMaterial($event)"
+          (materialUpdated)="refreshMaterials()"
+        ></app-material-list>
         } @else {
         <div class="alert alert-info">Brak materiałów</div>
         }
         <div class="d-flex justify-content-end mt-4">
-          <button type="button" class="btn btn-primary">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openAddMaterialModal()"
+          >
             <i class="bi bi-plus"></i>
             Dodaj materiał
           </button>

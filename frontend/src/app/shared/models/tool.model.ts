@@ -1,3 +1,3 @@
-import { Element } from './element.model';
+import { ElementDto } from './element.dto';
 
-export interface Tool extends Element {}
+export interface Tool extends ElementDto {}
