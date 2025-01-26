@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ToolDto } from '../../../shared/models/tool.dto';
+import { ToolFormDto } from './models/tool-form.dto';
 import { environment } from '../../../../environments/environment.development';
-import { Tool } from '../../../shared/models/tool.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,23 +12,20 @@ export class ToolService {
   private apiUrl = environment.apiUrl;
   constructor(private http: HttpClient) {}
 
-  getToolsByProject(projectId: string): Observable<any[]> {
-    return this.http.get<Tool[]>(`${this.apiUrl}/projects/${projectId}/tools`, {
-      withCredentials: true,
-    });
-  }
-
-  getToolByProject(projectId: string, toolId: string): Observable<any[]> {
-    return this.http.get<Tool[]>(
-      `${this.apiUrl}/projects/${projectId}/tools/${toolId}`,
-      {
-        withCredentials: true,
-      }
+  getToolsByProject(projectId: string): Observable<ToolDto[]> {
+    return this.http.get<ToolDto[]>(
+      `${this.apiUrl}/projects/${projectId}/tools`
     );
   }
 
-  addToolToProject(projectId: string, tool: Tool): Observable<Tool> {
-    return this.http.post<Tool>(
+  getToolByProject(projectId: string, toolId: string): Observable<ToolDto[]> {
+    return this.http.get<ToolDto[]>(
+      `${this.apiUrl}/projects/${projectId}/tools/${toolId}`
+    );
+  }
+
+  addToolToProject(projectId: string, tool: ToolFormDto): Observable<ToolDto> {
+    return this.http.post<ToolDto>(
       `${this.apiUrl}/projects/${projectId}/tools`,
       tool
     );
@@ -36,23 +34,17 @@ export class ToolService {
   updateToolInProject(
     projectId: string,
     toolId: string,
-    tool: Tool
-  ): Observable<Tool> {
-    return this.http.put<Tool>(
+    tool: ToolFormDto
+  ): Observable<ToolDto> {
+    return this.http.put<ToolDto>(
       `${this.apiUrl}/projects/${projectId}/tools/${toolId}`,
-      tool,
-      {
-        withCredentials: true,
-      }
+      tool
     );
   }
 
   deleteToolFromProject(projectId: string, toolId: string): Observable<void> {
     return this.http.delete<void>(
-      `${this.apiUrl}/projects/${projectId}/tools/${toolId}`,
-      {
-        withCredentials: true,
-      }
+      `${this.apiUrl}/projects/${projectId}/tools/${toolId}`
     );
   }
 }

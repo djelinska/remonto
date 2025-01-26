@@ -6,8 +6,8 @@ import { MaterialAddComponent } from '../../components/material/material-add/mat
 import { MaterialDto } from '../../../../shared/models/material.dto';
 import { MaterialListComponent } from '../../components/material/material-list/material-list.component';
 import { MaterialService } from '../../../../core/services/material/material.service';
-import { Tool } from '../../../../shared/models/tool.model';
 import { ToolAddComponent } from '../../components/tool/tool-add/tool-add.component';
+import { ToolDto } from '../../../../shared/models/tool.dto';
 import { ToolListComponent } from '../../components/tool/tool-list/tool-list.component';
 import { ToolService } from '../../../../core/services/tool/tool.service';
 
@@ -21,7 +21,7 @@ import { ToolService } from '../../../../core/services/tool/tool.service';
 })
 export class MaterialsToolsComponent {
   projectId!: string;
-  tools: Tool[] = [];
+  tools: ToolDto[] = [];
   materials: MaterialDto[] = [];
 
   constructor(
@@ -71,7 +71,7 @@ export class MaterialsToolsComponent {
   }
 
   openAddToolModal(): void {
-    const initialState = { projectId: this.projectId ?? undefined };
+    const initialState = { projectId: this.projectId };
     const modalRef: BsModalRef = this.modalService.show(ToolAddComponent, {
       class: 'modal-md',
       backdrop: 'static',
@@ -99,7 +99,24 @@ export class MaterialsToolsComponent {
     }
   }
 
+  deleteTool(toolId: string): void {
+    if (this.projectId) {
+      this.toolService.deleteToolFromProject(this.projectId, toolId).subscribe({
+        next: () => {
+          this.loadTools();
+        },
+        error: (error) => {
+          console.error('Error deleting tool:', error);
+        },
+      });
+    }
+  }
+
   refreshMaterials(): void {
     this.loadMaterials();
+  }
+
+  refreshTools(): void {
+    this.loadTools();
   }
 }

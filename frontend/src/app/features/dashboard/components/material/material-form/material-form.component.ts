@@ -50,8 +50,8 @@ export class MaterialFormComponent {
       const material: MaterialFormDto = {
         name: this.form.value.name,
         status: this.form.value.status,
-        cost: this.form.value.cost,
-        quantity: this.form.value.quantity,
+        cost: this.form.value.cost || 0,
+        quantity: this.form.value.quantity || 0,
         type: this.form.value.type,
         location: this.form.value.location,
         link: this.form.value.link,

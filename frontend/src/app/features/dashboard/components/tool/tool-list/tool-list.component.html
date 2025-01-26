@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div>
   <table class="table table-bordered align-middle">
     <thead>
       <tr>
@@ -39,10 +39,22 @@
                 <a class="dropdown-item">Podgląd</a>
               </li>
               <li>
-                <a class="dropdown-item">Edytuj</a>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="openEditToolModal(tool)"
+                >
+                  Edytuj
+                </button>
               </li>
               <li>
-                <button type="button" class="dropdown-item">Usuń</button>
+                <button
+                  type="button"
+                  class="dropdown-item text-danger"
+                  (click)="deleteTool(tool.id)"
+                >
+                  Usuń
+                </button>
               </li>
             </ul>
           </div>
