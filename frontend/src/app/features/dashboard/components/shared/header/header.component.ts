@@ -2,7 +2,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { of, switchMap } from 'rxjs';
 
-import { Project } from '../../../../../shared/models/project.model';
+import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectService } from '../../../../../core/services/project/project.service';
 import { ProjectStateService } from '../../../../../core/services/project/project-state.service';
 
@@ -15,7 +15,7 @@ import { ProjectStateService } from '../../../../../core/services/project/projec
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit {
-  selectedProject: Project | null = null;
+  selectedProject: ProjectDto | null = null;
 
   constructor(
     private projectService: ProjectService,

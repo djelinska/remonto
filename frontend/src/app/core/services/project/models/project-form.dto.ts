@@ -1,5 +1,4 @@
-export interface Project {
-  id: string;
+export interface ProjectFormDto {
   name: string;
   description?: string;
   startDate: string;

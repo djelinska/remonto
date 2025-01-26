@@ -1,4 +1,4 @@
-export interface ProjectResponse {
+export interface ProjectDto {
   id: string;
   name: string;
   description?: string;
