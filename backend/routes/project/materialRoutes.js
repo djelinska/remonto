@@ -8,6 +8,7 @@ const {
   deleteMaterial,
 } = require("../../services/materialService");
 const { checkIfCorrectId } = require("../../utils/validation");
+const validateMaterialData = require("../../middlewares/validateMaterial");
 
 const router = express.Router({ mergeParams: true }); 
 
@@ -54,7 +55,7 @@ router.get(
 
 router.post(
   "/",
-  authenticateUser,
+  [authenticateUser, validateMaterialData],
   async (req, res) => {
     try {
       const { projectId } = req.params;
@@ -74,7 +75,7 @@ router.post(
 
 router.put(
   "/:materialId",
-  authenticateUser,
+  [authenticateUser, validateMaterialData],
   async (req, res) => {
     try {
       const { projectId, materialId } = req.params;
