@@ -13,6 +13,7 @@ import { TaskDto } from '../../../../../shared/models/task.dto';
 import { TaskFormDto } from '../../../../../core/services/task/models/task-form.dto';
 import { TaskPriority } from '../../../../../shared/enums/task-priority';
 import { TaskStatus } from '../../../../../shared/enums/task-status';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-task-form',
@@ -49,8 +50,8 @@ export class formComponent {
       description: [''],
       category: [null, Validators.required],
       status: [null, Validators.required],
-      startTime: [''],
-      endTime: [''],
+      startTime: [null],
+      endTime: [null],
       priority: [null, Validators.required],
       cost: [0, Validators.min(0)],
       note: [''],
@@ -59,7 +60,25 @@ export class formComponent {
 
   ngOnInit(): void {
     if (this.task) {
-      this.form.patchValue(this.task);
+      const formattedTask = { ...this.task };
+
+      if (formattedTask.startTime) {
+        formattedTask.startTime = formatDate(
+          formattedTask.startTime,
+          'yyyy-MM-ddTHH:mm',
+          'pl'
+        );
+      }
+
+      if (formattedTask.endTime) {
+        formattedTask.endTime = formatDate(
+          formattedTask.endTime,
+          'yyyy-MM-ddTHH:mm',
+          'pl'
+        );
+      }
+
+      this.form.patchValue(formattedTask);
     }
   }
 
