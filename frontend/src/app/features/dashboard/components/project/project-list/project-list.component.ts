@@ -1,11 +1,11 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, OnInit } from '@angular/core';
-import { Observable, map, switchMap } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
-import { Project } from '../../../../../shared/models/project.model';
 import { ProjectAddComponent } from '../project-add/project-add.component';
+import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectStateService } from '../../../../../core/services/project/project-state.service';
 
 @Component({
@@ -16,7 +16,7 @@ import { ProjectStateService } from '../../../../../core/services/project/projec
   styleUrl: './project-list.component.scss',
 })
 export class ProjectListComponent implements OnInit {
-  projects$!: Observable<Project[]>;
+  projects$!: Observable<ProjectDto[]>;
   modalRef?: BsModalRef;
 
   constructor(

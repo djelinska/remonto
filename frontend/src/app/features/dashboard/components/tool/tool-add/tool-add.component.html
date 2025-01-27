@@ -1,1 +1,13 @@
-<p>tool-add works!</p>
+<div class="modal-header">
+  <h4 class="modal-title">Dodaj nowe narzędzie</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    data-bs-dismiss="modal"
+    (click)="onCancel()"
+  ></button>
+</div>
+<div class="modal-body">
+  <app-tool-form (formSubmit)="onToolAdded($event)"></app-tool-form>
+</div>

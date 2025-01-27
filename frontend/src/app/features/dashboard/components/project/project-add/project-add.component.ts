@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { Project } from '../../../../../shared/models/project.model';
 import { ProjectFormComponent } from '../project-form/project-form.component';
-import { ProjectRequest } from '../../../../../core/services/project/models/project-request';
+import { ProjectFormDto } from '../../../../../core/services/project/models/project-form.dto';
 import { ProjectService } from '../../../../../core/services/project/project.service';
 
 @Component({
@@ -21,7 +20,7 @@ export class ProjectAddComponent {
     private projectService: ProjectService
   ) {}
 
-  onProjectAdded(project: ProjectRequest): void {
+  onProjectAdded(project: ProjectFormDto): void {
     this.projectService.createProject(project).subscribe({
       next: () => {
         this.projectAdded.emit();

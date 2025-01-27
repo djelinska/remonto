@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TaskRequest } from './models/task-request';
-import { TaskResponse } from './models/task-response';
+import { TaskDto } from '../../../shared/models/task.dto';
+import { TaskFormDto } from './models/task-form.dto';
 import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
@@ -13,29 +13,26 @@ export class TaskService {
 
   constructor(private http: HttpClient) {}
 
-  getTasksByProject(projectId: string): Observable<TaskResponse[]> {
-    return this.http.get<TaskResponse[]>(`${this.apiUrl}/${projectId}/tasks`);
+  getTasksByProject(projectId: string): Observable<TaskDto[]> {
+    return this.http.get<TaskDto[]>(`${this.apiUrl}/${projectId}/tasks`);
   }
 
-  getTaskById(projectId: string, taskId: string): Observable<TaskResponse> {
-    return this.http.get<TaskResponse>(
+  getTaskById(projectId: string, taskId: string): Observable<TaskDto> {
+    return this.http.get<TaskDto>(
       `${this.apiUrl}/${projectId}/tasks/${taskId}`
     );
   }
 
-  createTask(projectId: string, task: TaskRequest): Observable<TaskResponse> {
-    return this.http.post<TaskResponse>(
-      `${this.apiUrl}/${projectId}/tasks`,
-      task
-    );
+  createTask(projectId: string, task: TaskFormDto): Observable<TaskDto> {
+    return this.http.post<TaskDto>(`${this.apiUrl}/${projectId}/tasks`, task);
   }
 
   updateTask(
     projectId: string,
     taskId: string,
-    task: TaskRequest
-  ): Observable<TaskResponse> {
-    return this.http.put<TaskResponse>(
+    task: TaskFormDto
+  ): Observable<TaskDto> {
+    return this.http.put<TaskDto>(
       `${this.apiUrl}/${projectId}/tasks/${taskId}`,
       task
     );

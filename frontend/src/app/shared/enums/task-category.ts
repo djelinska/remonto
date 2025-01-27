@@ -1,6 +1,6 @@
 export enum TaskCategory {
-  DESIGN = 'DESIGN',
-  PLANNING = 'PLANNING',
-  EXECUTION = 'EXECUTION',
-  REVIEW = 'REVIEW',
+  DESIGN = 'Projektowanie',
+  PLANNING = 'Planowanie',
+  EXECUTION = 'Realizacja',
+  REVIEW = 'Weryfikacja',
 }

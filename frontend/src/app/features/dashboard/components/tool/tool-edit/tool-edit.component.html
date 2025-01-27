@@ -1,1 +1,16 @@
-<p>tool-edit works!</p>
+<div class="modal-header">
+  <h4 class="modal-title">Edytuj narzędzie</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    data-bs-dismiss="modal"
+    (click)="onCancel()"
+  ></button>
+</div>
+<div class="modal-body">
+  <app-tool-form
+    [tool]="tool"
+    (formSubmit)="onToolUpdated($event)"
+  ></app-tool-form>
+</div>

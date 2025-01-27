@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { TaskRequest } from '../../../../../core/services/task/models/task-request';
+import { TaskFormDto } from '../../../../../core/services/task/models/task-form.dto';
 import { TaskService } from '../../../../../core/services/task/task.service';
 import { formComponent } from '../task-form/task-form.component';
 
@@ -15,11 +15,11 @@ import { formComponent } from '../task-form/task-form.component';
 export class TaskAddComponent {
   @Output() taskAdded = new EventEmitter<void>();
 
-  projectId?: string;
+  projectId!: string;
 
   constructor(public modalRef: BsModalRef, private taskService: TaskService) {}
 
-  onTaskAdded(task: TaskRequest): void {
+  onTaskAdded(task: TaskFormDto): void {
     if (this.projectId) {
       this.taskService.createTask(this.projectId, task).subscribe({
         next: () => {

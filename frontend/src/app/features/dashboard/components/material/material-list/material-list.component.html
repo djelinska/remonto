@@ -20,7 +20,7 @@
         <!-- <td>{{ material.imageUrl }}</td> -->
         <td>zdjęcie</td>
         <td>{{ material.name }}</td>
-        <td>{{ material.status }}</td>
+        <td>{{ statusLabels[material.status] }}</td>
         <td>{{ material.cost }}</td>
         <td>{{ material.quantity }}</td>
         <td>{{ material.type }}</td>
@@ -41,10 +41,22 @@
                 <a class="dropdown-item">Podgląd</a>
               </li>
               <li>
-                <a class="dropdown-item">Edytuj</a>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="openEditMaterialModal(material)"
+                >
+                  Edytuj
+                </button>
               </li>
               <li>
-                <button type="button" class="dropdown-item">Usuń</button>
+                <button
+                  type="button"
+                  class="dropdown-item text-danger"
+                  (click)="deleteMaterial(material.id)"
+                >
+                  Usuń
+                </button>
               </li>
             </ul>
           </div>

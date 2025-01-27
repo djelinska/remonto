@@ -1,14 +1,14 @@
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 import { Injectable } from '@angular/core';
-import { Project } from '../../../shared/models/project.model';
+import { ProjectDto } from '../../../shared/models/project.dto';
 import { ProjectService } from './project.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProjectStateService {
-  private projectsSubject = new BehaviorSubject<Project[] | null>(null);
+  private projectsSubject = new BehaviorSubject<ProjectDto[] | null>(null);
 
   projects$ = this.projectsSubject.asObservable();
 
@@ -20,7 +20,7 @@ export class ProjectStateService {
     });
   }
 
-  refreshProjects(): Observable<Project[]> {
+  refreshProjects(): Observable<ProjectDto[]> {
     return this.projectService
       .getProjects()
       .pipe(tap((projects) => this.projectsSubject.next(projects)));
