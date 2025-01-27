@@ -1,7 +1,9 @@
+import { ElementStatus } from '../../../../shared/enums/element-status';
+
 export interface MaterialFormDto {
   name: string;
   imageUrl?: string;
-  status?: string;
+  status: ElementStatus;
   cost?: number;
   quantity?: number;
   type?: string;

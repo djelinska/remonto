@@ -1,6 +1,7 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { ElementStatus } from '../../../../../shared/enums/element-status';
 import { MaterialDto } from '../../../../../shared/models/material.dto';
 import { MaterialEditComponent } from '../material-edit/material-edit.component';
 
@@ -16,6 +17,8 @@ export class MaterialListComponent {
   @Input() projectId!: string;
   @Output() materialDeleted = new EventEmitter<string>();
   @Output() materialUpdated = new EventEmitter<MaterialDto>();
+
+  statusLabels: Record<string, string> = ElementStatus;
 
   constructor(private modalService: BsModalService) {}
 

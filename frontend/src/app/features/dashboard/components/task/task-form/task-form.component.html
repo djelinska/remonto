@@ -25,9 +25,7 @@
     <select id="category" formControlName="category" class="form-select">
       <option value="null" disabled selected>Wybierz kategorię</option>
       @for (category of categories; track $index) {
-      <option [value]="category">
-        {{ category }}
-      </option>
+      <option [value]="category" [label]="categoryLabels[category]"></option>
       }
     </select>
     <shared-form-error [control]="form.get('category')"></shared-form-error>
@@ -38,9 +36,7 @@
     <select id="status" formControlName="status" class="form-select">
       <option value="null" disabled selected>Wybierz status</option>
       @for (status of statuses; track $index) {
-      <option [value]="status">
-        {{ status }}
-      </option>
+      <option [value]="status" [label]="statusLabels[status]"></option>
       }
     </select>
     <shared-form-error [control]="form.get('status')"></shared-form-error>
@@ -71,9 +67,7 @@
     <select id="priority" formControlName="priority" class="form-select">
       <option value="null" disabled selected>Wybierz priorytet</option>
       @for (priority of priorities; track $index) {
-      <option [value]="priority">
-        {{ priority }}
-      </option>
+      <option [value]="priority" [label]="priorityLabels[priority]"></option>
       }
     </select>
     <shared-form-error [control]="form.get('priority')"></shared-form-error>

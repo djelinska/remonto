@@ -24,6 +24,8 @@ export class TasksComponent implements OnInit {
   completedTasks: TaskDto[] = [];
   modalRef?: BsModalRef;
 
+  statusLabels: Record<string, string> = TaskStatus;
+
   constructor(
     private route: ActivatedRoute,
     private modalService: BsModalService,
@@ -51,13 +53,13 @@ export class TasksComponent implements OnInit {
 
   private filterTasksByStatus(): void {
     this.todoTasks = this.tasks.filter(
-      (task) => task.status === TaskStatus.NOT_STARTED
+      (task) => this.statusLabels[task.status] === TaskStatus.NOT_STARTED
     );
     this.inProgressTasks = this.tasks.filter(
-      (task) => task.status === TaskStatus.IN_PROGRESS
+      (task) => this.statusLabels[task.status] === TaskStatus.IN_PROGRESS
     );
     this.completedTasks = this.tasks.filter(
-      (task) => task.status === TaskStatus.COMPLETED
+      (task) => this.statusLabels[task.status] === TaskStatus.COMPLETED
     );
   }
 

@@ -1,6 +1,7 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { ElementStatus } from '../../../../../shared/enums/element-status';
 import { ToolDto } from '../../../../../shared/models/tool.dto';
 import { ToolEditComponent } from '../tool-edit/tool-edit.component';
 
@@ -16,6 +17,8 @@ export class ToolListComponent {
   @Input() projectId!: string;
   @Output() toolDeleted = new EventEmitter<string>();
   @Output() toolUpdated = new EventEmitter<ToolDto>();
+
+  statusLabels: Record<string, string> = ElementStatus;
 
   constructor(private modalService: BsModalService) {}
 

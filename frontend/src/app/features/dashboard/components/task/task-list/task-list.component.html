@@ -4,6 +4,7 @@
       <tr>
         <th class="col-2">Nazwa</th>
         <th>Status</th>
+        <th>Termin rozpoczęcia</th>
         <th>Termin wykonania</th>
         <th>Priorytet</th>
         <th>Koszt</th>
@@ -16,11 +17,12 @@
       @for (task of tasks; track task.id) {
       <tr>
         <td>{{ task.name }}</td>
-        <td>{{ task.status }}</td>
-        <td>{{ task.endTime }}</td>
-        <td>{{ task.priority }}</td>
+        <td class="text-nowrap">{{ statusLabels[task.status] }}</td>
+        <td class="text-nowrap">{{ task.startTime | date : "medium" }}</td>
+        <td class="text-nowrap">{{ task.endTime | date : "medium" }}</td>
+        <td>{{ priorityLabels[task.priority] }}</td>
         <td>{{ task.cost }}</td>
-        <td>{{ task.category }}</td>
+        <td>{{ categoryLabels[task.category] }}</td>
         <td>{{ task.note }}</td>
         <td class="text-center">
           <div class="dropdown">

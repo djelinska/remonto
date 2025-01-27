@@ -26,9 +26,15 @@ export class formComponent {
   @Output() formSubmit = new EventEmitter<TaskFormDto>();
 
   form: FormGroup;
-  categories = Object.values(TaskCategory);
-  priorities = Object.values(TaskPriority);
-  statuses = Object.values(TaskStatus);
+
+  categories = Object.keys(TaskCategory);
+  categoryLabels: Record<string, string> = TaskCategory;
+
+  statuses = Object.keys(TaskStatus);
+  statusLabels: Record<string, string> = TaskStatus;
+
+  priorities = Object.keys(TaskPriority);
+  priorityLabels: Record<string, string> = TaskPriority;
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder) {
     this.form = this.fb.group({

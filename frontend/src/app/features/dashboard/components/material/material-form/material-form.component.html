@@ -15,9 +15,7 @@
     <select id="status" formControlName="status" class="form-select">
       <option value="null" disabled selected>Wybierz status</option>
       @for (status of statuses; track $index) {
-      <option [value]="status">
-        {{ status }}
-      </option>
+      <option [value]="status" [label]="statusLabels[status]"></option>
       }
     </select>
     <shared-form-error [control]="form.get('status')"></shared-form-error>

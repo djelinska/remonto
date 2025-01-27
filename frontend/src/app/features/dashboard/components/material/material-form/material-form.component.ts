@@ -24,7 +24,8 @@ export class MaterialFormComponent {
   @Output() formSubmit = new EventEmitter<MaterialFormDto>();
 
   form: FormGroup;
-  statuses = Object.values(ElementStatus);
+  statuses = Object.keys(ElementStatus);
+  statusLabels: Record<string, string> = ElementStatus;
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder) {
     this.form = this.fb.group({
