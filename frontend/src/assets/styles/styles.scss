@@ -99,6 +99,7 @@ table.table {
 .card {
   border-radius: 0.25rem;
   border-color: var(--gray-200);
+
   .card-header {
     background-color: var(--gray-100);
     border-color: var(--gray-200);
@@ -125,4 +126,56 @@ table.table {
 
 .form-label {
   font-weight: 500;
+}
+
+.fc {
+  table th {
+    font-weight: bold;
+    font-size: 13px;
+    background-color: var(--gray-100);
+  }
+
+  a {
+    color: var(--gray-800);
+    text-decoration: none;
+
+    &.fc-event {
+      &.fc-daygrid-dot-event {
+        &:hover {
+          background-color: var(--gray-200);
+        }
+      }
+    }
+  }
+}
+
+.fc-day-today {
+  background-color: var(--gray-100) !important;
+}
+
+.fc-button-primary {
+  background-color: #fff !important;
+  border-color: var(--gray-300) !important;
+  color: var(--gray-800) !important;
+
+  &:hover,
+  &.fc-button-active {
+    background-color: var(--gray-100) !important;
+  }
+}
+
+.fc-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.fc-toolbar-title,
+.fc .fc-col-header-cell {
+  text-transform: capitalize;
+}
+
+.fc table,
+.fc table td,
+.fc table th {
+  border-color: var(--gray-200) !important;
 }

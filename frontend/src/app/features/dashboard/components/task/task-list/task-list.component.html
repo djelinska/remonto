@@ -18,8 +18,12 @@
       <tr>
         <td>{{ task.name }}</td>
         <td class="text-nowrap">{{ statusLabels[task.status] }}</td>
-        <td class="text-nowrap">{{ task.startTime | date : "medium" }}</td>
-        <td class="text-nowrap">{{ task.endTime | date : "medium" }}</td>
+        <td class="text-nowrap">
+          {{ task.startTime | date : (task.allDay ? "d MMM y" : "medium") }}
+        </td>
+        <td class="text-nowrap">
+          {{ task.endTime | date : (task.allDay ? "d MMM y" : "medium") }}
+        </td>
         <td>{{ priorityLabels[task.priority] }}</td>
         <td>{{ task.cost }}</td>
         <td>{{ categoryLabels[task.category] }}</td>
