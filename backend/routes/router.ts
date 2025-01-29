@@ -9,3 +9,4 @@ router.use(tokenDecode);
 router.use(projects);
 router.use(authRoutes);
 router.use(userRoutes);
+export default router

@@ -20,7 +20,7 @@ router.get(
             }
 
             if (!checkIfCorrectId(projectId)) throw new Error("Invalid Project ID");
-            const materials = await fetchProjectMaterials(new Types.ObjectId(userId), new Types.ObjectId(projectId));
+            const materials = await fetchProjectMaterials(new Types.ObjectId(projectId));
 
             res.status(200).json(materials);
         } catch (error: any) {
@@ -46,7 +46,7 @@ router.get(
                 throw new Error("Invalid IDs");
             }
 
-            const material = await fetchMaterialById(new Types.ObjectId(userId), new Types.ObjectId(projectId), new Types.ObjectId(materialId));
+            const material = await fetchMaterialById(new Types.ObjectId(projectId), new Types.ObjectId(materialId));
 
             res.status(200).json(material);
         } catch (error: any) {
@@ -63,13 +63,13 @@ router.post(
         try {
             const { projectId } = req.params;
             const userId = req.user?.id;
-            if (!projectId || !userId ) {
+            if (!projectId || !userId) {
                 throw new Error("Could not find ids in request");
             }
 
             if (!checkIfCorrectId(projectId)) throw new Error("Invalid Project ID");
 
-            const material = await createMaterial(new Types.ObjectId(userId), new Types.ObjectId(projectId), req.body);
+            const material = await createMaterial(new Types.ObjectId(projectId), req.body);
 
             res.status(201).json(material);
         } catch (error: any) {
@@ -95,7 +95,7 @@ router.put(
                 throw new Error("Invalid IDs");
             }
 
-            const updatedMaterial = await updateMaterial(new Types.ObjectId(userId), new Types.ObjectId(projectId), new Types.ObjectId(materialId), req.body);
+            const updatedMaterial = await updateMaterial(new Types.ObjectId(projectId), new Types.ObjectId(materialId), req.body);
 
             res.status(200).json(updatedMaterial);
         } catch (error: any) {
@@ -120,7 +120,7 @@ router.delete(
                 throw new Error("Invalid IDs");
             }
 
-            const result = await deleteMaterial(new Types.ObjectId(userId), new Types.ObjectId(projectId), new Types.ObjectId(materialId));
+            const result = await deleteMaterial(new Types.ObjectId(projectId), new Types.ObjectId(materialId));
 
             res.status(200).json(result);
         } catch (error: any) {

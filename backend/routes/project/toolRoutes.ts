@@ -26,7 +26,7 @@ router.get("/:toolId", [authenticateUser], async (req: ToolRequest, res: Respons
             throw new Error("Invalid IDs");
         }
 
-        const tool: Tool = await fetchToolById(new Types.ObjectId(userId), new Types.ObjectId(projectId), new Types.ObjectId(toolId));
+        const tool: Tool = await fetchToolById(new Types.ObjectId(projectId), new Types.ObjectId(toolId));
 
         res.status(200).json(tool);
     } catch (error: any) {
@@ -45,7 +45,7 @@ router.get("/", authenticateUser, async (req: ToolRequest, res: Response) => {
 
         if (!checkIfCorrectId(projectId)) throw new Error("Invalid Project ID");
 
-        const tools = await fetchProjectTools(new Types.ObjectId(userId), new Types.ObjectId(projectId));
+        const tools = await fetchProjectTools(new Types.ObjectId(projectId));
 
         res.status(200).json(tools);
     } catch (error: any) {
@@ -63,7 +63,7 @@ router.post("/", [authenticateUser, validateToolData], async (req: PostToolReque
 
         if (!checkIfCorrectId(projectId)) throw new Error("Invalid Project ID");
 
-        const tool = await createTool(new Types.ObjectId(userId), new Types.ObjectId(projectId), req.body);
+        const tool = await createTool(new Types.ObjectId(projectId), req.body);
 
         res.status(201).json(tool);
     } catch (error: any) {
@@ -84,7 +84,7 @@ router.put("/:toolId", [authenticateUser, validateToolData], async (req: PostToo
             throw new Error("Invalid IDs");
         }
 
-        const updatedTool = await updateTool(new Types.ObjectId(userId), new Types.ObjectId(projectId), new Types.ObjectId(toolId), req.body);
+        const updatedTool = await updateTool(new Types.ObjectId(projectId), new Types.ObjectId(toolId), req.body);
 
         res.status(200).json(updatedTool);
     } catch (error: any) {
@@ -105,7 +105,7 @@ router.delete("/:toolId", authenticateUser, async (req: ToolRequest, res: Respon
             throw new Error("Invalid IDs");
         }
 
-        const result = await deleteTool(new Types.ObjectId(userId), new Types.ObjectId(projectId), new Types.ObjectId(toolId));
+        const result = await deleteTool(new Types.ObjectId(projectId), new Types.ObjectId(toolId));
 
         res.status(200).json(result);
     } catch (error: any) {

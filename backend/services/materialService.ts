@@ -4,7 +4,7 @@ import { Material, MaterialData, MaterialDto } from "../types/models/material.dt
 import ReturnMessage from "../types/models/returnMessage.model";
 type ObjectId = Types.ObjectId
 
-export const fetchProjectMaterials = async ( projectId: ObjectId): Promise<Material[]> => {
+export const fetchProjectMaterials = async (projectId: ObjectId): Promise<Material[]> => {
     try {
         const materials: MaterialDto[] | null = await MaterialModel.find({ projectId });
 
@@ -30,7 +30,7 @@ export const fetchProjectMaterials = async ( projectId: ObjectId): Promise<Mater
     }
 };
 
-export const fetchMaterialById = async ( projectId: ObjectId, materialId: ObjectId): Promise<Material> => {
+export const fetchMaterialById = async (projectId: ObjectId, materialId: ObjectId): Promise<Material> => {
     try {
         const material: MaterialDto | null = await MaterialModel.findOne({ projectId, _id: materialId });
 
@@ -56,7 +56,7 @@ export const fetchMaterialById = async ( projectId: ObjectId, materialId: Object
     }
 };
 
-export const createMaterial = async ( projectId: ObjectId, materialData: MaterialData): Promise<Material> => {
+export const createMaterial = async (projectId: ObjectId, materialData: MaterialData): Promise<Material> => {
     try {
         const material = new MaterialModel({
             projectId,
@@ -91,7 +91,7 @@ export const createMaterial = async ( projectId: ObjectId, materialData: Materia
     }
 };
 
-export const updateMaterial = async ( projectId: ObjectId, materialId: ObjectId, materialData: MaterialData): Promise<Material> => {
+export const updateMaterial = async (projectId: ObjectId, materialId: ObjectId, materialData: MaterialData): Promise<Material> => {
     try {
         const material: MaterialDto | null = await MaterialModel.findOneAndUpdate({ projectId, _id: materialId }, { $set: materialData }, { new: true, runValidators: true });
 
@@ -117,7 +117,7 @@ export const updateMaterial = async ( projectId: ObjectId, materialId: ObjectId,
     }
 };
 
-export const deleteMaterial = async ( projectId: ObjectId, materialId: ObjectId): Promise<ReturnMessage>=> {
+export const deleteMaterial = async (projectId: ObjectId, materialId: ObjectId): Promise<ReturnMessage> => {
     try {
         const material: MaterialDto | null = await MaterialModel.findOneAndDelete({ projectId, _id: materialId });
 

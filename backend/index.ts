@@ -1,11 +1,11 @@
 import { MongooseError } from "mongoose";
+import express from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import routes from './routes/router'
+import cookieParser from 'cookie-parser'
+import mongoose from 'mongoose'
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
-const router = require('./routes/router.js');
 require('dotenv/config');
 
 const app = express();
@@ -23,11 +23,11 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use(bodyParser.json({ limit: '100mb' }));
 
 mongoose
-    .connect(process.env.DB_URI)
+    .connect(process.env.DB_URI as string)
     .then(() => console.log('DB Connected'))
     .catch((err: MongooseError) => console.log(err));
 
-app.use('/', router);
+app.use('/', routes);
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
