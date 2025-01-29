@@ -90,6 +90,7 @@ export class TaskFormComponent {
 
     this.form.get('allDay')?.valueChanges.subscribe((value) => {
       const startTimeControl = this.form.get('startTime');
+      const endTimeControl = this.form.get('endTime');
 
       if (value) {
         startTimeControl?.setValidators(Validators.required);
@@ -97,7 +98,11 @@ export class TaskFormComponent {
         startTimeControl?.removeValidators(Validators.required);
       }
 
+      startTimeControl?.setValue(null);
       startTimeControl?.updateValueAndValidity();
+
+      endTimeControl?.setValue(null);
+      endTimeControl?.updateValueAndValidity();
     });
   }
 

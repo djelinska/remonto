@@ -1,12 +1,13 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { CalendarOptions, EventApi } from '@fullcalendar/core';
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
-import { CalendarOptions } from '@fullcalendar/core';
 import { CommonModule } from '@angular/common';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { TaskAddComponent } from '../../components/task/task-add/task-add.component';
 import { TaskDto } from '../../../../shared/models/task.dto';
+import { TaskEditComponent } from '../../components/task/task-edit/task-edit.component';
 import { TaskService } from '../../../../core/services/task/task.service';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import plLocale from '@fullcalendar/core/locales/pl';
@@ -55,11 +56,9 @@ export class CalendarComponent implements OnInit {
         dayHeaderFormat: { weekday: 'long' },
       },
     },
-    eventBackgroundColor: '#e6edff',
-    eventBorderColor: '#ccdaff',
-    eventTextColor: '#1f2937',
     nowIndicator: true,
     height: 'auto',
+    eventClick: (info) => this.openEditTaskModal(info.event),
   };
 
   constructor(
@@ -105,6 +104,27 @@ export class CalendarComponent implements OnInit {
     });
 
     modalRef.content.taskAdded.subscribe(() => {
+      this.loadTasks();
+    });
+  }
+
+  private openEditTaskModal(event: EventApi): void {
+    const task = this.tasks.find((t) => t.id === event.id);
+
+    if (!task) return;
+
+    const initialState = {
+      task,
+      projectId: this.projectId,
+    };
+    const modalRef: BsModalRef = this.modalService.show(TaskEditComponent, {
+      class: 'modal-md',
+      backdrop: 'static',
+      keyboard: false,
+      initialState,
+    });
+
+    modalRef.content.taskUpdated.subscribe(() => {
       this.loadTasks();
     });
   }
