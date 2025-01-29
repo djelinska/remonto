@@ -3,6 +3,7 @@
 
 ### Environment ###
 .env
+uploads
 
 ### Node Modules ###
 node_modules
