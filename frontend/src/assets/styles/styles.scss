@@ -20,6 +20,28 @@
   --gray-800: #1f2937;
   --gray-900: #111827;
   --gray-950: #030712;
+
+  --fc-small-font-size: 0.929em;
+  --fc-page-bg-color: #f3f4f6;
+  --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
+  --fc-neutral-text-color: #808080;
+  --fc-border-color: #ddd;
+
+  --fc-button-text-color: #1f2937;
+  --fc-button-bg-color: #fff;
+  --fc-button-border-color: #d1d5db;
+  --fc-button-hover-bg-color: #f3f4f6;
+  --fc-button-hover-border-color: #d1d5db;
+  --fc-button-active-bg-color: #f3f4f6;
+  --fc-button-active-border-color: #d1d5db;
+
+  --fc-event-bg-color: #e6edff;
+  --fc-event-border-color: #ccdaff;
+  --fc-event-text-color: #1f2937;
+  --fc-event-selected-overlay-color: transparent;
+
+  --fc-today-bg-color: #f3f4f6;
+  --fc-now-indicator-color: #f7516b;
 }
 
 html,
@@ -99,6 +121,7 @@ table.table {
 .card {
   border-radius: 0.25rem;
   border-color: var(--gray-200);
+
   .card-header {
     background-color: var(--gray-100);
     border-color: var(--gray-200);
@@ -125,4 +148,35 @@ table.table {
 
 .form-label {
   font-weight: 500;
+}
+
+.fc {
+  a {
+    color: var(--gray-800);
+    text-decoration: none;
+  }
+
+  .fc-event {
+    cursor: pointer;
+
+    &:focus {
+      box-shadow: none !important;
+    }
+
+    &.fc-daygrid-dot-event {
+      &:hover {
+        background-color: var(--gray-200);
+      }
+    }
+  }
+
+  .fc-button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .fc-toolbar-title,
+  .fc-col-header-cell {
+    text-transform: capitalize;
+  }
 }

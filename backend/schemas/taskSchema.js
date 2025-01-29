@@ -9,10 +9,9 @@ const taskSchema = new mongoose.Schema({
 		required: true,
 	},
 	name: { type: String, required: true, minLength: 3, maxLength: 50 },
-	description: { type: String },
 	category: {
 		type: String,
-		enum: ['DESIGN', 'PLANNING', 'EXECUTION', 'REVIEW'],
+		enum: ['DESIGN', 'CONSTRUCTION', 'INSTALLATIONS', 'FINISHING', 'CARPENTRY', 'SMART_HOME', 'LOGISTICS', 'CLEANUP'],
 		default: 'PLANNING',
 		validate: {
 			validator: checkTaskCategory,
@@ -30,6 +29,7 @@ const taskSchema = new mongoose.Schema({
 	},
 	startTime: { type: Date },
 	endTime: { type: Date },
+	allDay: { type: Boolean, default: false },
 	priority: {
 		type: String,
 		enum: ['LOW', 'MEDIUM', 'HIGH'],
