@@ -20,10 +20,6 @@ const userSchema = new Schema<UserDto>({
     password: {
         type: String,
         required: true,
-        validate: {
-            validator: checkPassword,
-            message: (props:any) => `${props.value} is not a valid password`
-        }
     },
     email: {
         type: String,

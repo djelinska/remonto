@@ -31,10 +31,9 @@ const validateTaskData = async (req: PostTaskRequest, res: Response, next: NextF
                 .json({ message: "Validation error", details: errors });
         }
         if (error.message === "DateValidationError") {
-            const errors = Object.values(error.errors).map((err: any) => err.message);
             return res
                 .status(400)
-                .json({ message: "Date validation error (start date cannot be after end date)", details: errors });
+                .json({ message: "Date validation error (start date cannot be after end date)", details: error.message });
         }
 
         next(error);

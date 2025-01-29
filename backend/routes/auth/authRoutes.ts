@@ -25,6 +25,7 @@ router.post('/api/register', [validateUserData], async (req: RegisterRequest, re
         if (error instanceof AppError) {
             return res.status(error.statusCode).json({ message: error.message });
         }
+        console.log(error)
 
         res.status(500).json({ message: 'Błąd serwera' });
     }
