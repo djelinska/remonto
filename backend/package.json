@@ -23,8 +23,11 @@
     "devDependencies": {
         "@types/bcrypt": "^5.0.2",
         "@types/cors": "^2.8.17",
-        "@types/express": "^5.0.0",
-        "@types/jsonwebtoken": "^9.0.7",
-        "nodemon": "^3.1.9"
+        "@types/express": "^4.17.21",
+        "@types/jsonwebtoken": "^9.0.8",
+        "@types/mongoose": "^5.11.96",
+        "@types/node": "^22.10.10",
+        "nodemon": "^3.1.9",
+        "typescript": "^5.7.3"
     }
 }
