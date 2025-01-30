@@ -44,6 +44,7 @@ export const fetchUserProjectById = async (userId: ObjectId, projectId: ObjectId
 			startDate: project.startDate,
 			endDate: project.endDate,
 			budget: parseFloat(project.budget.toString()),
+			imageUrls: project.imageUrls,
 		};
 	} catch (error) {
 		console.error('Error fetching projects:', error);
@@ -60,6 +61,7 @@ export const createUserProject = async (userId: ObjectId, newProject: ProjectDat
 			startDate: newProject.startDate,
 			endDate: newProject.endDate,
 			budget: parseFloat(newProject.budget.toString()),
+			imageUrls: newProject.imageUrls,
 		});
 
 		await project.save();
@@ -71,6 +73,7 @@ export const createUserProject = async (userId: ObjectId, newProject: ProjectDat
 			startDate: project.startDate,
 			endDate: project.endDate,
 			budget: project.budget,
+			imageUrls: project.imageUrls,
 		};
 	} catch (error) {
 		console.error('Error creating project:', error);
@@ -93,6 +96,7 @@ export const updateUserProject = async (userId: ObjectId, projectId: ObjectId, u
 			startDate: project.startDate,
 			endDate: project.endDate,
 			budget: parseFloat(project.budget.toString()),
+			imageUrls: project.imageUrls,
 		};
 	} catch (error) {
 		console.error('Error updating project:', error);
@@ -145,5 +149,20 @@ export const fetchProjectBudget = async (userId: ObjectId, projectId: ObjectId) 
 	} catch (error) {
 		console.error('Error fetching project budget:', error);
 		throw new Error('Error fetching project budget');
+	}
+};
+
+export const addImageToProject = async (userId: ObjectId, projectId: ObjectId, imageUrl: string) => {
+	try {
+		const project = await ProjectModel.findByIdAndUpdate({ userId, _id: projectId }, { $push: { imageUrls: imageUrl } }, { new: true });
+
+		if (!project) {
+			throw new Error('Project not found or user not authorized');
+		}
+
+		return project.imageUrls;
+	} catch (error) {
+		console.error('Error adding project image:', error);
+		throw new Error('Error adding project image');
 	}
 };

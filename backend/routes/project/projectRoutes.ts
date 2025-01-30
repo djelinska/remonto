@@ -1,5 +1,5 @@
 import { PostProjectRequest, ProjectRequest } from '../../types/models/projectRequest.dto';
-import { createUserProject, deleteUserProject, fetchProjectBudget, fetchUserProjectById, fetchUserProjects, updateUserProject } from '../../services/projectService';
+import { addImageToProject, createUserProject, deleteUserProject, fetchProjectBudget, fetchUserProjectById, fetchUserProjects, updateUserProject } from '../../services/projectService';
 import express, { Response } from 'express';
 
 import { Types } from 'mongoose';
@@ -116,6 +116,29 @@ router.get('/api/projects/:projectId/budget', authenticateUser, async (req: Proj
 	} catch (error) {
 		console.error('Error fetching budget data:', error);
 		res.status(500).json({ message: 'Server error' });
+	}
+});
+
+router.patch('/api/projects/:projectId/images', authenticateUser, async (req: ProjectRequest, res: Response) => {
+	try {
+		const userId = req.user?.id;
+		const projectId = req.params.projectId;
+		const { imageUrl } = req.body;
+
+		if (!userId || !projectId) {
+			return res.status(400).json({ message: 'Invalid request parameters' });
+		}
+
+		if (!imageUrl) {
+			return res.status(400).json({ message: 'Image URL not found' });
+		}
+
+		const updatedImages = await addImageToProject(new Types.ObjectId(userId), new Types.ObjectId(projectId), imageUrl);
+
+		res.status(200).json({ imageUrls: updatedImages });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: 'Błąd serwera' });
 	}
 });
 

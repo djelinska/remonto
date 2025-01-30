@@ -5,4 +5,5 @@ export interface ProjectDto {
   startDate: string;
   endDate?: string;
   budget: number;
+  imageUrls: string[];
 }

@@ -74,6 +74,7 @@ export class ProjectFormComponent {
         startDate: this.form.value.startDate,
         endDate: this.form.value.endDate,
         budget: this.form.value.budget,
+        imageUrls: this.project?.imageUrls ? this.project?.imageUrls : [],
       };
       this.formSubmit.emit(project);
     }
