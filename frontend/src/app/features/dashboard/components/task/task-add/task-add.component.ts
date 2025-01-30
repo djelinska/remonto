@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 import { BsModalRef } from 'ngx-bootstrap/modal';
+import { TaskFormComponent } from '../task-form/task-form.component';
 import { TaskFormDto } from '../../../../../core/services/task/models/task-form.dto';
 import { TaskService } from '../../../../../core/services/task/task.service';
-import { formComponent } from '../task-form/task-form.component';
 
 @Component({
   selector: 'app-task-add',
   standalone: true,
-  imports: [formComponent],
+  imports: [TaskFormComponent],
   templateUrl: './task-add.component.html',
   styleUrl: './task-add.component.scss',
 })

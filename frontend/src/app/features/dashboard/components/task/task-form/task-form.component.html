@@ -11,16 +11,6 @@
   </div>
 
   <div class="mb-3">
-    <label for="description" class="form-label">Opis</label>
-    <textarea
-      id="description"
-      formControlName="description"
-      class="form-control"
-      placeholder="Opcjonalny opis"
-    ></textarea>
-  </div>
-
-  <div class="mb-3">
     <label for="category" class="form-label">Kategoria</label>
     <select id="category" formControlName="category" class="form-select">
       <option value="null" disabled selected>Wybierz kategorię</option>
@@ -42,21 +32,32 @@
     <shared-form-error [control]="form.get('status')"></shared-form-error>
   </div>
 
-  <div class="mb-3">
-    <label for="startTime" class="form-label">Czas rozpoczęcia</label>
+  <div class="mb-3 form-check">
     <input
-      id="startTime"
-      type="datetime-local"
-      formControlName="startTime"
-      class="form-control"
+      id="allDay"
+      type="checkbox"
+      formControlName="allDay"
+      class="form-check-input"
     />
+    <label for="allDay" class="form-check-label">Całodniowe zadanie</label>
   </div>
 
   <div class="mb-3">
-    <label for="endTime" class="form-label">Czas zakończenia</label>
+    <label for="startTime" class="form-label">Początek</label>
+    <input
+      id="startTime"
+      [type]="form.value.allDay ? 'date' : 'datetime-local'"
+      formControlName="startTime"
+      class="form-control"
+    />
+    <shared-form-error [control]="form.get('startTime')"></shared-form-error>
+  </div>
+
+  <div class="mb-3">
+    <label for="endTime" class="form-label">Koniec</label>
     <input
       id="endTime"
-      type="datetime-local"
+      [type]="form.value.allDay ? 'date' : 'datetime-local'"
       formControlName="endTime"
       class="form-control"
     />
@@ -65,9 +66,8 @@
   <div class="mb-3">
     <label for="priority" class="form-label">Priorytet</label>
     <select id="priority" formControlName="priority" class="form-select">
-      <option value="null" disabled selected>Wybierz priorytet</option>
       @for (priority of priorities; track $index) {
-      <option [value]="priority" [label]="priorityLabels[priority]"></option>
+      <option [ngValue]="priority" [label]="priorityLabels[priority]"></option>
       }
     </select>
     <shared-form-error [control]="form.get('priority')"></shared-form-error>
