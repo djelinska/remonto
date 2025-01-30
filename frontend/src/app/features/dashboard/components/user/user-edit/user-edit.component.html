@@ -1,16 +1,31 @@
-<div class="modal">
-    <h2>Edytuj profil</h2>
-    <label>Imię:</label>
-    <input [(ngModel)]="user.firstName" type="text" />
-  
-    <label>Nazwisko:</label>
-    <input [(ngModel)]="user.lastName" type="text" />
-  
-    <label>Email:</label>
-    <input [(ngModel)]="user.email" type="email" />
-  
-    <button class="btn btn-primary" (click)="saveChanges()" [disabled]="loading">
-      {{ loading ? 'Zapisywanie...' : 'Zapisz' }}
-    </button>
-    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Edytuj profil</h5>
+      <button type="button" class="btn-close" (click)="modalRef?.hide()"></button>
+    </div>
+    <div class="modal-body">
+      <label>Imię:</label>
+      <input [(ngModel)]="user.firstName" type="text" class="form-control" />
+      <p *ngIf="(user.firstName?.trim()?.length ?? 0) < 3" class="text-danger">
+        Imię musi mieć co najmniej 3 znaki.
+      </p>
+
+      <label>Nazwisko:</label>
+      <input [(ngModel)]="user.lastName" type="text" class="form-control" />
+      <p *ngIf="(user.lastName?.trim()?.length ?? 0) < 3" class="text-danger">
+        Nazwisko musi mieć co najmniej 3 znaki.
+      </p>
+
+      <label>Email:</label>
+      <input [(ngModel)]="user.email" type="email" class="form-control" />
+      <p *ngIf="!user.email?.includes('@')" class="text-danger">
+        Podaj prawidłowy adres email.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modalRef?.hide()">Anuluj</button>
+      <button type="button" class="btn btn-primary" (click)="saveChanges()">Zapisz zmiany</button>
+    </div>
   </div>
+</div>

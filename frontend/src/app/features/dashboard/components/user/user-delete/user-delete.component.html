@@ -1,8 +1,19 @@
-<div class="modal">
-    <h2>Usuń konto</h2>
-    <p>Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć.</p>
-    <button class="btn btn-danger" (click)="confirmDelete()" [disabled]="loading">
-      {{ loading ? 'Usuwanie...' : 'Usuń' }}
-    </button>
-    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Usuń konto</h5>
+      <button type="button" class="btn-close" (click)="modalRef?.hide()"></button>
+    </div>
+    <div class="modal-body">
+      <p>Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć.</p>
+      <p><strong>{{ user?.firstName }} {{ user?.lastName }}</strong></p>
+      <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="modalRef?.hide()">Anuluj</button>
+      <button class="btn btn-danger" (click)="confirmDelete()" [disabled]="loading">
+        {{ loading ? 'Usuwanie...' : 'Usuń' }}
+      </button>
+    </div>
   </div>
+</div>

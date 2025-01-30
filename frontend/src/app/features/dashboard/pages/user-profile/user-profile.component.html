@@ -20,19 +20,16 @@
         </div>
 
         <div class="d-flex justify-content-between w-100">
-          <button class="btn btn-primary" (click)="openEdit(user)">Edytuj profil</button>
-          <button class="btn btn-outline-danger" (click)="openDelete()">Usuń konto</button>
+          <button class="btn btn-primary" (click)="openEdit(user)">
+            <i class="bi bi-pencil"></i> Edytuj profil
+          </button>
+          <button class="btn btn-outline-danger" (click)="openDelete(user)">
+            <i class="bi bi-trash"></i> Usuń konto
+          </button>
         </div>
       </div>
-
-      <app-user-edit *ngIf="showEditModal && selectedUser" [user]="selectedUser!" (userUpdated)="onUserUpdated($event)">
-        <p>Edit Modal is visible</p>
-      </app-user-edit>
-      
-      <app-user-delete *ngIf="showDeleteModal" (userDeleted)="onUserDeleted()">
-        <p>Delete Modal is visible</p>
-      </app-user-delete>
-      
+      } @else {
+      <div class="alert alert-info text-center">Ładowanie profilu...</div>
       }
     </div>
   </div>
