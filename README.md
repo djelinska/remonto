@@ -11,8 +11,8 @@
 ## Tech Stack
 
 - 🖼 **Frontend**: Angular
-- ⚙️ **Backend**: Spring Boot (Maven)
-- 🗄 **Database**: PostgreSQL
+- ⚙️ **Backend**: TypeScript + Express.js
+- 🗄 **Database**: MongoDB
 
 ---
 
