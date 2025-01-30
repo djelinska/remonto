@@ -49,8 +49,8 @@ export class TaskFormComponent {
       ],
       category: [null, Validators.required],
       status: [null, Validators.required],
-      startTime: [null],
-      endTime: [null],
+      startDate: [null],
+      endDate: [null],
       allDay: [false],
       priority: ['LOW', Validators.required],
       cost: [0, Validators.min(0)],
@@ -76,12 +76,12 @@ export class TaskFormComponent {
         );
       };
 
-      formattedTask.startTime = formatTaskDate(
-        formattedTask.startTime,
+      formattedTask.startDate = formatTaskDate(
+        formattedTask.startDate,
         !!formattedTask.allDay
       );
-      formattedTask.endTime = formatTaskDate(
-        formattedTask.endTime,
+      formattedTask.endDate = formatTaskDate(
+        formattedTask.endDate,
         !!formattedTask.allDay
       );
 
@@ -89,20 +89,20 @@ export class TaskFormComponent {
     }
 
     this.form.get('allDay')?.valueChanges.subscribe((value) => {
-      const startTimeControl = this.form.get('startTime');
-      const endTimeControl = this.form.get('endTime');
+      const startDateControl = this.form.get('startDate');
+      const endDateControl = this.form.get('endDate');
 
       if (value) {
-        startTimeControl?.setValidators(Validators.required);
+        startDateControl?.setValidators(Validators.required);
       } else {
-        startTimeControl?.removeValidators(Validators.required);
+        startDateControl?.removeValidators(Validators.required);
       }
 
-      startTimeControl?.setValue(null);
-      startTimeControl?.updateValueAndValidity();
+      startDateControl?.setValue(null);
+      startDateControl?.updateValueAndValidity();
 
-      endTimeControl?.setValue(null);
-      endTimeControl?.updateValueAndValidity();
+      endDateControl?.setValue(null);
+      endDateControl?.updateValueAndValidity();
     });
   }
 
@@ -112,8 +112,8 @@ export class TaskFormComponent {
         name: this.form.value.name,
         category: this.form.value.category,
         status: this.form.value.status,
-        startTime: this.form.value.startTime,
-        endTime: this.form.value.endTime,
+        startDate: this.form.value.startDate,
+        endDate: this.form.value.endDate,
         allDay: this.form.value.allDay,
         priority: this.form.value.priority,
         cost: this.form.value.cost || 0,

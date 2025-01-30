@@ -7,8 +7,8 @@ export interface TaskDto {
   name: string;
   category: TaskCategory;
   status: TaskStatus;
-  startTime?: string;
-  endTime?: string;
+  startDate?: string;
+  endDate?: string;
   allDay: boolean;
   priority: TaskPriority;
   cost: number;

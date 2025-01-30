@@ -43,22 +43,22 @@
   </div>
 
   <div class="mb-3">
-    <label for="startTime" class="form-label">Początek</label>
+    <label for="startDate" class="form-label">Początek</label>
     <input
-      id="startTime"
+      id="startDate"
       [type]="form.value.allDay ? 'date' : 'datetime-local'"
-      formControlName="startTime"
+      formControlName="startDate"
       class="form-control"
     />
-    <shared-form-error [control]="form.get('startTime')"></shared-form-error>
+    <shared-form-error [control]="form.get('startDate')"></shared-form-error>
   </div>
 
   <div class="mb-3">
-    <label for="endTime" class="form-label">Koniec</label>
+    <label for="endDate" class="form-label">Koniec</label>
     <input
-      id="endTime"
+      id="endDate"
       [type]="form.value.allDay ? 'date' : 'datetime-local'"
-      formControlName="endTime"
+      formControlName="endDate"
       class="form-control"
     />
   </div>
