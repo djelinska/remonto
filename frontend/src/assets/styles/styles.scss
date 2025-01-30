@@ -101,6 +101,10 @@ table.table {
   thead th {
     background-color: var(--gray-100) !important;
 
+    &.th-image {
+      width: 70px;
+    }
+
     &.th-action {
       width: 50px;
     }

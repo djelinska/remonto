@@ -2,7 +2,7 @@
   <table class="table table-bordered align-middle">
     <thead>
       <tr>
-        <th>Zdjęcie</th>
+        <th class="th-image">Zdjęcie</th>
         <th class="col-2">Nazwa</th>
         <th>Status</th>
         <th>Koszt</th>
@@ -17,8 +17,11 @@
     <tbody>
       @for (material of materials; track material.id) {
       <tr>
-        <!-- <td>{{ material.imageUrl }}</td> -->
-        <td>zdjęcie</td>
+        <td>
+          @if (material.imageUrl) {
+          <img [src]="material.imageUrl" class="img-thumbnail" />
+          }
+        </td>
         <td>{{ material.name }}</td>
         <td>{{ statusLabels[material.status] }}</td>
         <td>{{ material.cost }}</td>
