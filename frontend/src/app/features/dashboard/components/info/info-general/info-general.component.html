@@ -1,0 +1,42 @@
+<div class="card">
+  <div class="card-body">
+    <h1 class="card-title">Informacje</h1>
+    @if (project) {
+    <div>
+      <span class="label">Nazwa:</span>
+      <p>{{ project.name }}</p>
+    </div>
+    <div>
+      <span class="label">Opis:</span>
+      <p>{{ project.description ? project.description : "Brak opisu" }}</p>
+    </div>
+    <div>
+      <span class="label">Data rozpoczęcia:</span>
+      <p>{{ project.startDate | date : "d MMMM yyyy" }}</p>
+    </div>
+    <div>
+      <span class="label">Planowana data zakończenia:</span>
+      <p>
+        {{
+          project.endDate
+            ? (project.endDate | date : "d MMMM yyyy")
+            : "Brak ustalonej daty"
+        }}
+      </p>
+    </div>
+    <div>
+      <span class="label">Budżet:</span>
+      <p class="mb-0">{{ project.budget }} zł</p>
+    </div>
+    <div class="mt-3">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openEditProjectModal()"
+      >
+        Edytuj
+      </button>
+    </div>
+    }
+  </div>
+</div>

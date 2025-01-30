@@ -10,6 +10,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { FormErrorComponent } from '../../../../../shared/components/form-error/form-error.component';
 import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectFormDto } from '../../../../../core/services/project/models/project-form.dto';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-project-form',
@@ -43,7 +44,25 @@ export class ProjectFormComponent {
 
   ngOnInit(): void {
     if (this.project) {
-      this.form.patchValue(this.project);
+      const formattedProject = { ...this.project };
+
+      if (formattedProject.startDate) {
+        formattedProject.startDate = formatDate(
+          formattedProject.startDate,
+          'yyyy-MM-dd',
+          'pl'
+        );
+      }
+
+      if (formattedProject.endDate) {
+        formattedProject.endDate = formatDate(
+          formattedProject.endDate,
+          'yyyy-MM-dd',
+          'pl'
+        );
+      }
+
+      this.form.patchValue(formattedProject);
     }
   }
 
