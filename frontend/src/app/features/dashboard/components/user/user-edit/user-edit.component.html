@@ -1,0 +1,16 @@
+<div class="modal">
+    <h2>Edytuj profil</h2>
+    <label>Imię:</label>
+    <input [(ngModel)]="user.firstName" type="text" />
+  
+    <label>Nazwisko:</label>
+    <input [(ngModel)]="user.lastName" type="text" />
+  
+    <label>Email:</label>
+    <input [(ngModel)]="user.email" type="email" />
+  
+    <button class="btn btn-primary" (click)="saveChanges()" [disabled]="loading">
+      {{ loading ? 'Zapisywanie...' : 'Zapisz' }}
+    </button>
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </div>

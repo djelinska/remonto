@@ -20,10 +20,19 @@
         </div>
 
         <div class="d-flex justify-content-between w-100">
-          <button class="btn btn-primary">Edytuj profil</button>
-          <button class="btn btn-outline-danger">Usuń konto</button>
+          <button class="btn btn-primary" (click)="openEdit(user)">Edytuj profil</button>
+          <button class="btn btn-outline-danger" (click)="openDelete()">Usuń konto</button>
         </div>
       </div>
+
+      <app-user-edit *ngIf="showEditModal && selectedUser" [user]="selectedUser!" (userUpdated)="onUserUpdated($event)">
+        <p>Edit Modal is visible</p>
+      </app-user-edit>
+      
+      <app-user-delete *ngIf="showDeleteModal" (userDeleted)="onUserDeleted()">
+        <p>Delete Modal is visible</p>
+      </app-user-delete>
+      
       }
     </div>
   </div>
