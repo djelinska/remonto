@@ -10,6 +10,7 @@ import ToolModel from '../models/toolModel';
 import { Types } from 'mongoose';
 import { UserDto } from '../types/models/user.dto';
 import UserModel from '../models/userModel';
+import { encryptPassword } from '../utils/validation';
 
 interface UserData {
 	tasks: Array<TaskDto & { projectName: string; type: 'task' }>;
@@ -75,9 +76,44 @@ const fetchAllUserData = async (userId: string): Promise<UserData> => {
 	}
 };
 
+const updateUserProfile = async (userId: string, updateData: Partial<UserDto>): Promise<UserDto> => {
+    const updateObj: Partial<UserDto> = {};
+
+    if (updateData.firstName !== undefined) {
+        updateObj.firstName = updateData.firstName;
+    }
+    if (updateData.lastName !== undefined) {
+        updateObj.lastName = updateData.lastName;
+    }
+    if (updateData.email !== undefined) {
+        updateObj.email = updateData.email;
+    }
+    if (updateData.password !== undefined) {
+        updateObj.password = await encryptPassword(updateData.password);
+    }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(new Types.ObjectId(userId), updateObj, { new: true }).select('-password');
+
+    if (!updatedUser) {
+        throw new AppError('Nie znaleziono użytkownika', 404);
+    }
+
+    return updatedUser;
+};
+
+
+const deleteUserProfile = async (userId: string): Promise<void> => {
+    const user = await UserModel.findByIdAndDelete(new Types.ObjectId(userId));
+    if (!user) {
+        throw new AppError('Nie znaleziono użytkownika', 404);
+    }
+};
+
 const userService = {
 	fetchUserProfile: fetchUserProfile,
 	fetchAllUserData: fetchAllUserData,
+	updateUserProfile: updateUserProfile,
+	deleteUserProfile: deleteUserProfile,
 };
 
 export default userService;
