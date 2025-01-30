@@ -13,10 +13,10 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUserProfile(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/users/profile`);
+    return this.http.get<User>(`${this.apiUrl}/user/profile`);
   }
 
   updateUserProfile(user: User): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/users/profile`, user);
+    return this.http.put<User>(`${this.apiUrl}/user/profile`, user);
   }
 }

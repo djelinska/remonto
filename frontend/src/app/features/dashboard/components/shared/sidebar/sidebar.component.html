@@ -6,7 +6,12 @@
   </div>
 
   <div class="p-4 border-bottom" id="search">
-    <input class="form-control" type="search" placeholder="Szukaj" />
+    <input
+      class="form-control"
+      type="text"
+      placeholder="Szukaj"
+      (click)="redirectToSearch()"
+    />
   </div>
 
   <div class="p-4 mb-auto">

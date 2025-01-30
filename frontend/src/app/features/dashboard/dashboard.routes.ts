@@ -1,5 +1,6 @@
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { DashboardComponent } from './dashboard.component';
+import { GlobalSearchComponent } from './pages/global-search/global-search.component';
 import { InfoComponent } from './pages/info/info.component';
 import { MaterialsToolsComponent } from './pages/materials-tools/materials-tools.component';
 import { ProjectOverviewComponent } from './pages/project-overview/project-overview.component';
@@ -15,7 +16,10 @@ export const DASHBOARD_ROUTES: Routes = [
       {
         path: 'profile',
         component: UserProfileComponent,
-        pathMatch: 'full',
+      },
+      {
+        path: 'search',
+        component: GlobalSearchComponent,
       },
       {
         path: 'projects/:id',
