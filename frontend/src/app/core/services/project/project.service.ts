@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ProjectBudgetDto } from './models/project-budget.dto';
 import { ProjectDto } from '../../../shared/models/project.dto';
 import { ProjectFormDto } from './models/project-form.dto';
 import { environment } from '../../../../environments/environment.development';
@@ -19,6 +20,10 @@ export class ProjectService {
 
   getProjectById(id: string): Observable<ProjectDto> {
     return this.http.get<ProjectDto>(`${this.apiUrl}/${id}`);
+  }
+
+  getProjectBudget(id: string): Observable<ProjectBudgetDto> {
+    return this.http.get<ProjectBudgetDto>(`${this.apiUrl}/${id}/budget`);
   }
 
   createProject(project: ProjectFormDto): Observable<ProjectDto> {

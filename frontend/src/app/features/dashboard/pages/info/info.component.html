@@ -1,7 +1,13 @@
 <div class="p-4">
   <div class="row row-cols-2">
     <div class="col">
-      <app-info-general></app-info-general>
+      <app-info-general
+        [project]="project"
+        (projectUpdated)="refreshProject()"
+      ></app-info-general>
+    </div>
+    <div class="col">
+      <app-info-budget [projectBudget]="projectBudget"></app-info-budget>
     </div>
   </div>
 </div>

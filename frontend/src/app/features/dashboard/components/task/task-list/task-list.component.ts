@@ -1,7 +1,7 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
-import { DatePipe } from '@angular/common';
 import { TaskCategory } from '../../../../../shared/enums/task-category';
 import { TaskDto } from '../../../../../shared/models/task.dto';
 import { TaskEditComponent } from '../task-edit/task-edit.component';
@@ -11,7 +11,7 @@ import { TaskStatus } from '../../../../../shared/enums/task-status';
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, CurrencyPipe],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss',
 })

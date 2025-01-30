@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="card-body">
+    <h1 class="card-title">Budżet</h1>
+    @if (projectBudget) {
+    <div class="mb-3">
+      <div>
+        <span class="label me-3">Zaplanowany budżet:</span>
+        <span>{{ projectBudget.budget | currency : "PLN" }}</span>
+      </div>
+      <div>
+        <span class="label me-3">Całkowite wydatki:</span>
+        <span
+          [ngClass]="{
+            'text-danger':
+              projectBudget.totalSpent > projectBudget.budget &&
+              projectBudget.budget !== 0
+          }"
+          >{{ projectBudget.totalSpent | currency : "PLN" }}</span
+        >
+      </div>
+    </div>
+    @if (projectBudget.totalSpent > 0) {
+    <canvas
+      baseChart
+      [data]="pieChartData"
+      [options]="pieChartOptions"
+      [type]="pieChartType"
+    >
+    </canvas
+    >} @else {
+    <div class="alert alert-info mb-0">Brak wydatków</div>
+    }}
+  </div>
+</div>
