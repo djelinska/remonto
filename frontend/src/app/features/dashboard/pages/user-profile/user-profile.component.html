@@ -20,10 +20,16 @@
         </div>
 
         <div class="d-flex justify-content-between w-100">
-          <button class="btn btn-primary">Edytuj profil</button>
-          <button class="btn btn-outline-danger">Usuń konto</button>
+          <button class="btn btn-primary" (click)="openEdit(user)">
+            <i class="bi bi-pencil"></i> Edytuj profil
+          </button>
+          <button class="btn btn-outline-danger" (click)="openDelete(user)">
+            <i class="bi bi-trash"></i> Usuń konto
+          </button>
         </div>
       </div>
+      } @else {
+      <div class="alert alert-info text-center">Ładowanie profilu...</div>
       }
     </div>
   </div>
