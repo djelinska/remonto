@@ -11,6 +11,20 @@
   </div>
 
   <div class="mb-3">
+    <label for="image" class="form-label">Zdjęcie</label>
+    <input type="file" class="form-control" (change)="onFileSelected($event)" />
+    @if (imagePreview) {
+    <div class="mt-3">
+      <img
+        [src]="imagePreview"
+        class="img-thumbnail"
+        style="max-height: 150px"
+      />
+    </div>
+    }
+  </div>
+
+  <div class="mb-3">
     <label for="status" class="form-label">Status</label>
     <select id="status" formControlName="status" class="form-select">
       <option value="null" disabled selected>Wybierz status</option>

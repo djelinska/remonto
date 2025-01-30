@@ -1,7 +1,9 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Observable, forkJoin, of, zip } from 'rxjs';
 
 import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
+import { ImageService } from '../../../../core/services/image/image.service';
 import { MaterialAddComponent } from '../../components/material/material-add/material-add.component';
 import { MaterialDto } from '../../../../shared/models/material.dto';
 import { MaterialListComponent } from '../../components/material/material-list/material-list.component';
@@ -28,7 +30,8 @@ export class MaterialsToolsComponent {
     private route: ActivatedRoute,
     private materialService: MaterialService,
     private toolService: ToolService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private imageService: ImageService
   ) {}
 
   ngOnInit(): void {
@@ -46,13 +49,32 @@ export class MaterialsToolsComponent {
     this.materialService
       .getMaterialsByProject(this.projectId)
       .subscribe((materials) => {
-        this.materials = materials;
+        const imageRequests = materials.map((material) =>
+          material.imageUrl
+            ? this.imageService.getImage(material.imageUrl)
+            : of(null)
+        );
+
+        zip(...imageRequests).subscribe((imageUrls) => {
+          this.materials = materials.map((material, index) => ({
+            ...material,
+            imageUrl: imageUrls[index] || '',
+          }));
+        });
       });
   }
 
   private loadTools(): void {
     this.toolService.getToolsByProject(this.projectId).subscribe((tools) => {
-      this.tools = tools;
+      const imageRequests = tools.map((tool) =>
+        tool.imageUrl ? this.imageService.getImage(tool.imageUrl) : of(null)
+      );
+      zip(...imageRequests).subscribe((imageUrls) => {
+        this.tools = tools.map((tool, index) => ({
+          ...tool,
+          imageUrl: imageUrls[index] || '',
+        }));
+      });
     });
   }
 
