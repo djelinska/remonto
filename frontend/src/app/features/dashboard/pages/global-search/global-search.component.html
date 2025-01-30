@@ -1,0 +1,36 @@
+<div class="p-4">
+  <h1>Szukaj w projektach</h1>
+
+  <input
+    #searchInput
+    type="text"
+    class="form-control mt-4 w-100"
+    placeholder="Szukaj zadań, materiałów, narzędzi..."
+    [formControl]="searchControl"
+  />
+
+  <div class="mt-4">
+    @for (result of results; track $index) {
+    <div class="d-flex justify-content-between py-3 border-bottom">
+      <div class="d-flex align-items-center">
+        <a
+          [routerLink]="getResultLink(result)"
+          class="name text-primary text-decoration-none"
+        >
+          {{ result.name }}
+        </a>
+        <span class="project ms-2">({{ result.projectName }})</span>
+      </div>
+      <div class="badge" [appHighlightType]="result.type">
+        {{ result.type }}
+      </div>
+    </div>
+    }
+  </div>
+
+  @if (!results.length && searchControl.value) {
+  <div class="alert alert-info">
+    Brak wyników dla frazy <strong>{{ searchControl.value }}</strong>
+  </div>
+  }
+</div>

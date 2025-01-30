@@ -12,9 +12,6 @@ import jwt from 'jsonwebtoken';
 
 const ObjectId = Types.ObjectId;
 
-
-
-
 export function checkIfCorrectId(id: string): boolean {
 	if (ObjectId.isValid(id)) {
 		if (String(new ObjectId(id)) === id) {
@@ -86,13 +83,18 @@ export function checkEmail(email: string): boolean {
 		return false;
 	}
 }
-export function checkStartAndEndDate(startDate: Date, endDate: Date): boolean {
-	if (startDate.getTime() < endDate.getTime()) {
-		return true;
-	} else {
-		return false;
+
+export function checkStartAndEndDate(startDate: string | Date, endDate: string | Date): boolean {
+	const start = typeof startDate === 'string' ? new Date(startDate) : startDate;
+	const end = typeof endDate === 'string' ? new Date(endDate) : endDate;
+
+	if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+		throw new Error('Invalid date format provided.');
 	}
+
+	return start.getTime() < end.getTime();
 }
+
 export function checkUserType(type: UserTypes): boolean {
 	if (type === 'USER' || type === 'ADMIN') {
 		return true;
@@ -100,6 +102,7 @@ export function checkUserType(type: UserTypes): boolean {
 		return false;
 	}
 }
+
 export function checkPassword(password: string): boolean {
 	const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 	if (pwdRegex.test(password)) {
@@ -108,11 +111,14 @@ export function checkPassword(password: string): boolean {
 		return false;
 	}
 }
+
 export async function comparePassword(password: string, hash: string): Promise<boolean> {
 	const match: boolean = await bcrypt.compare(password, hash);
 	return match;
 }
+
 const saltRounds: number = 10;
+
 export async function encryptPassword(password: string): Promise<string> {
 	const hash = await bcrypt
 		.genSalt(saltRounds)

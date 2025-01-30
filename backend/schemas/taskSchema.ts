@@ -17,7 +17,7 @@ const taskSchema = new Schema<TaskDto>({
 	category: {
 		type: String,
 		enum: ['DESIGN', 'CONSTRUCTION', 'INSTALLATIONS', 'FINISHING', 'CARPENTRY', 'SMART_HOME', 'LOGISTICS', 'CLEANUP'],
-		default: TaskCategory.PLANNING,
+		default: TaskCategory.DESIGN,
 		validate: {
 			validator: checkTaskCategory,
 			message: (props: any) => `${props.value} is not a valid task category`,

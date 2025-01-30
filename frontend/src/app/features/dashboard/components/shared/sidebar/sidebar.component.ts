@@ -37,4 +37,8 @@ export class SidebarComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/']);
   }
+
+  redirectToSearch(): void {
+    this.router.navigate(['/dashboard/search']);
+  }
 }
