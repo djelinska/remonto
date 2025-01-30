@@ -81,14 +81,14 @@ export class CalendarComponent implements OnInit {
     this.taskService.getTasksByProject(this.projectId).subscribe((tasks) => {
       this.tasks = tasks;
       this.tasksWithDates = tasks.filter(
-        (task) => task.startTime || task.endTime
+        (task) => task.startDate || task.endDate
       );
 
       this.calendarOptions.events = this.tasksWithDates.map((task) => ({
         id: task.id,
         title: task.name,
-        start: task.startTime,
-        end: task.endTime,
+        start: task.startDate,
+        end: task.endDate,
         allDay: task.allDay,
       }));
     });
