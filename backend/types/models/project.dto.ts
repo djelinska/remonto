@@ -8,7 +8,7 @@ export interface ProjectDto {
 	startDate: Date;
 	endDate?: Date;
 	budget: number;
-	imageUrls: string[];
+	imageUrls?: string[];
 }
 export type Project = Omit<ProjectDto, '_id' | 'userId'> & { id: Types.ObjectId };
 export type ProjectData = Omit<ProjectDto, '_id' | 'userId'>;

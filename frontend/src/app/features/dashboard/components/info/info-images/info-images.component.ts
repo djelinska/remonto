@@ -49,7 +49,7 @@ export class InfoImagesComponent implements OnInit {
     if (this.selectedFile) {
       this.imageService.uploadImage(this.selectedFile).subscribe((imageUrl) => {
         if (imageUrl) {
-          this.imageService
+          this.projectService
             .addImageToProject(this.projectId, imageUrl)
             .subscribe(() => {
               this.imagePreview = null;

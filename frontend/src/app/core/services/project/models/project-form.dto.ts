@@ -4,5 +4,4 @@ export interface ProjectFormDto {
   startDate: string;
   endDate?: string;
   budget: number;
-  imageUrls: string[];
 }

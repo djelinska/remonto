@@ -61,7 +61,6 @@ export const createUserProject = async (userId: ObjectId, newProject: ProjectDat
 			startDate: newProject.startDate,
 			endDate: newProject.endDate,
 			budget: parseFloat(newProject.budget.toString()),
-			imageUrls: newProject.imageUrls,
 		});
 
 		await project.save();
@@ -73,7 +72,6 @@ export const createUserProject = async (userId: ObjectId, newProject: ProjectDat
 			startDate: project.startDate,
 			endDate: project.endDate,
 			budget: project.budget,
-			imageUrls: project.imageUrls,
 		};
 	} catch (error) {
 		console.error('Error creating project:', error);
@@ -96,7 +94,6 @@ export const updateUserProject = async (userId: ObjectId, projectId: ObjectId, u
 			startDate: project.startDate,
 			endDate: project.endDate,
 			budget: parseFloat(project.budget.toString()),
-			imageUrls: project.imageUrls,
 		};
 	} catch (error) {
 		console.error('Error updating project:', error);

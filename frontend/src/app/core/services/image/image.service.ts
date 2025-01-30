@@ -26,10 +26,4 @@ export class ImageService {
       .get(imageUrl, { responseType: 'blob' })
       .pipe(map((blob) => URL.createObjectURL(blob)));
   }
-
-  addImageToProject(projectId: string, imageUrl: string): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/projects/${projectId}/images`, {
-      imageUrl,
-    });
-  }
 }
