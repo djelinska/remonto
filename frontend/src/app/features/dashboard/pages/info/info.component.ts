@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InfoBudgetComponent } from '../../components/info/info-budget/info-budget.component';
 import { InfoGeneralComponent } from '../../components/info/info-general/info-general.component';
 import { InfoImagesComponent } from '../../components/info/info-images/info-images.component';
+import { InfoNotesComponent } from '../../components/info/info-notes/info-notes.component';
 import { ProjectBudgetDto } from '../../../../core/services/project/models/project-budget.dto';
 import { ProjectDto } from '../../../../shared/models/project.dto';
 import { ProjectService } from '../../../../core/services/project/project.service';
@@ -11,7 +12,12 @@ import { ProjectService } from '../../../../core/services/project/project.servic
 @Component({
   selector: 'app-info',
   standalone: true,
-  imports: [InfoGeneralComponent, InfoBudgetComponent, InfoImagesComponent],
+  imports: [
+    InfoGeneralComponent,
+    InfoBudgetComponent,
+    InfoImagesComponent,
+    InfoNotesComponent,
+  ],
   templateUrl: './info.component.html',
   styleUrl: './info.component.scss',
 })

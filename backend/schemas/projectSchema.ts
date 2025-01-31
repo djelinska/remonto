@@ -19,6 +19,12 @@ const projectSchema = new Schema<ProjectDto>({
 		min: 0.0,
 	},
 	imageUrls: { type: [String], default: [] },
+	notes: [
+		{
+			content: { type: String, required: true },
+			createdAt: { type: Date, default: Date.now },
+		},
+	],
 });
 
 export default projectSchema;

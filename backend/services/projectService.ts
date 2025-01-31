@@ -1,11 +1,11 @@
-import { Project, ProjectData, ProjectDto } from '../types/models/project.dto';
+import { Project, ProjectData, ProjectDto, ProjectNoteData, ProjectNoteDto } from '../types/models/project.dto';
+import mongoose, { Types } from 'mongoose';
 
 import MaterialModel from '../models/materialModel';
 import ProjectModel from '../models/projectModel';
 import ReturnMessage from '../types/models/returnMessage.model';
 import TaskModel from '../models/taskModel';
 import ToolModel from '../models/toolModel';
-import { Types } from 'mongoose';
 
 type ObjectId = Types.ObjectId;
 
@@ -45,6 +45,7 @@ export const fetchUserProjectById = async (userId: ObjectId, projectId: ObjectId
 			endDate: project.endDate,
 			budget: parseFloat(project.budget.toString()),
 			imageUrls: project.imageUrls,
+			notes: project.notes,
 		};
 	} catch (error) {
 		console.error('Error fetching projects:', error);
@@ -151,7 +152,7 @@ export const fetchProjectBudget = async (userId: ObjectId, projectId: ObjectId) 
 
 export const addImageToProject = async (userId: ObjectId, projectId: ObjectId, imageUrl: string) => {
 	try {
-		const project = await ProjectModel.findByIdAndUpdate({ userId, _id: projectId }, { $push: { imageUrls: imageUrl } }, { new: true });
+		const project = await ProjectModel.findOneAndUpdate({ userId, _id: projectId }, { $push: { imageUrls: imageUrl } }, { new: true });
 
 		if (!project) {
 			throw new Error('Project not found or user not authorized');
@@ -161,5 +162,40 @@ export const addImageToProject = async (userId: ObjectId, projectId: ObjectId, i
 	} catch (error) {
 		console.error('Error adding project image:', error);
 		throw new Error('Error adding project image');
+	}
+};
+
+export const addNoteToProject = async (userId: ObjectId, projectId: ObjectId, note: string) => {
+	try {
+		const newNote: ProjectNoteData = {
+			content: note,
+			createdAt: new Date(),
+		};
+
+		const project = await ProjectModel.findOneAndUpdate({ userId, _id: projectId }, { $push: { notes: newNote } }, { new: true });
+
+		if (!project) {
+			throw new Error('Project not found or user not authorized');
+		}
+
+		return project.notes;
+	} catch (error) {
+		console.error('Error adding project note:', error);
+		throw new Error('Error adding project note');
+	}
+};
+
+export const deleteNoteFromProject = async (userId: ObjectId, projectId: ObjectId, noteId: ObjectId) => {
+	try {
+		const project = await ProjectModel.findOneAndUpdate({ userId, _id: projectId }, { $pull: { notes: { _id: noteId } } }, { new: true });
+
+		if (!project) {
+			throw new Error('Project not found or user not authorized');
+		}
+
+		return project.notes;
+	} catch (error) {
+		console.error('Error deleting project note:', error);
+		throw new Error('Error deleting project note');
 	}
 };

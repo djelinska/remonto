@@ -6,4 +6,11 @@ export interface ProjectDto {
   endDate?: string;
   budget: number;
   imageUrls?: string[];
+  notes?: ProjectNoteDto[];
+}
+
+export interface ProjectNoteDto {
+  _id: string;
+  content: string;
+  createdAt: string;
 }

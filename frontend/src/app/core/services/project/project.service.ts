@@ -38,9 +38,22 @@ export class ProjectService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  addImageToProject(projectId: string, imageUrl: string): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${projectId}/images`, {
+  addImageToProject(projectId: string, imageUrl: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${projectId}/images`, {
       imageUrl,
     });
+  }
+
+  addNoteToProject(projectId: string, note: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${projectId}/notes`, {
+      note,
+    });
+  }
+
+  deleteNoteFromProject(projectId: string, noteId: string): Observable<void> {
+    return this.http.patch<void>(
+      `${this.apiUrl}/${projectId}/notes/${noteId}`,
+      {}
+    );
   }
 }

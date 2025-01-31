@@ -1,5 +1,15 @@
 import { PostProjectRequest, ProjectRequest } from '../../types/models/projectRequest.dto';
-import { addImageToProject, createUserProject, deleteUserProject, fetchProjectBudget, fetchUserProjectById, fetchUserProjects, updateUserProject } from '../../services/projectService';
+import {
+	addImageToProject,
+	addNoteToProject,
+	createUserProject,
+	deleteNoteFromProject,
+	deleteUserProject,
+	fetchProjectBudget,
+	fetchUserProjectById,
+	fetchUserProjects,
+	updateUserProject,
+} from '../../services/projectService';
 import express, { Response } from 'express';
 
 import { Types } from 'mongoose';
@@ -138,7 +148,48 @@ router.patch('/api/projects/:projectId/images', authenticateUser, async (req: Pr
 		res.status(200).json({ imageUrls: updatedImages });
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ message: 'Błąd serwera' });
+		res.status(500).json({ message: 'Server error' });
+	}
+});
+
+router.patch('/api/projects/:projectId/notes', authenticateUser, async (req: ProjectRequest, res: Response) => {
+	try {
+		const userId = req.user?.id;
+		const projectId = req.params.projectId;
+		const { note } = req.body;
+
+		if (!userId || !projectId) {
+			return res.status(400).json({ message: 'Invalid request parameters' });
+		}
+
+		if (!note) {
+			return res.status(400).json({ message: 'Note not found' });
+		}
+
+		const updatedNotes = await addNoteToProject(new Types.ObjectId(userId), new Types.ObjectId(projectId), note);
+
+		res.status(200).json({ notes: updatedNotes });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: 'Server error' });
+	}
+});
+
+router.patch('/api/projects/:projectId/notes/:noteId', authenticateUser, async (req: ProjectRequest, res: Response) => {
+	try {
+		const userId = req.user?.id;
+		const { projectId, noteId } = req.params;
+
+		if (!userId || !projectId || !noteId) {
+			return res.status(400).json({ message: 'Invalid request parameters' });
+		}
+
+		const updatedNotes = await deleteNoteFromProject(new Types.ObjectId(userId), new Types.ObjectId(projectId), new Types.ObjectId(noteId));
+
+		res.status(200).json({ notes: updatedNotes });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: 'Server error' });
 	}
 });
 

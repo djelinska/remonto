@@ -75,8 +75,6 @@ export class InfoImagesComponent implements OnInit {
             (url): url is string => url !== null
           );
         });
-      } else {
-        this.projectImages = [];
       }
     });
   }
