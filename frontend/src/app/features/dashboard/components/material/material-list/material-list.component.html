@@ -24,7 +24,7 @@
         </td>
         <td>{{ material.name }}</td>
         <td>{{ statusLabels[material.status] }}</td>
-        <td>{{ material.cost }}</td>
+        <td>{{ material.cost | currency : "PLN" }}</td>
         <td>{{ material.quantity }}</td>
         <td>{{ material.type }}</td>
         <td>{{ material.location }}</td>

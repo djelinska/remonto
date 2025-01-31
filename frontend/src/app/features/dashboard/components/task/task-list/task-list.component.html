@@ -25,7 +25,7 @@
           {{ task.endDate | date : (task.allDay ? "d MMM y" : "medium") }}
         </td>
         <td>{{ priorityLabels[task.priority] }}</td>
-        <td>{{ task.cost }}</td>
+        <td>{{ task.cost | currency : "PLN" }}</td>
         <td>{{ categoryLabels[task.category] }}</td>
         <td>{{ task.note }}</td>
         <td class="text-center">

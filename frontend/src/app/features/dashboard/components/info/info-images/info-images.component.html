@@ -1,0 +1,44 @@
+<div class="card h-100">
+  <div class="card-body">
+    <h1 class="card-title">Galeria</h1>
+    <div class="mb-4">
+      <div class="d-flex align-items-end gap-3">
+        <div class="w-100">
+          <label for="image" class="form-label">Zdjęcie</label>
+          <input
+            #fileInput
+            type="file"
+            class="form-control"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="uploadImage()"
+          [disabled]="!selectedFile"
+        >
+          Dodaj
+        </button>
+      </div>
+      @if (imagePreview) {
+      <div class="mt-3">
+        <img
+          [src]="imagePreview"
+          class="img-thumbnail"
+          style="max-height: 150px"
+        />
+      </div>
+      }
+    </div>
+    @if (projectImages.length > 0) {
+    <div class="d-flex flex-wrap gap-2">
+      @for (image of projectImages; track $index) {
+      <img [src]="image" class="img-thumbnail" style="max-height: 120px" />
+      }
+    </div>
+    } @else {
+    <div class="alert alert-info mb-0">Brak zdjęć do wyświetlenia</div>
+    }
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { CurrencyPipe } from '@angular/common';
 import { ElementStatus } from '../../../../../shared/enums/element-status';
 import { ToolDto } from '../../../../../shared/models/tool.dto';
 import { ToolEditComponent } from '../tool-edit/tool-edit.component';
@@ -8,7 +9,7 @@ import { ToolEditComponent } from '../tool-edit/tool-edit.component';
 @Component({
   selector: 'app-tool-list',
   standalone: true,
-  imports: [],
+  imports: [CurrencyPipe],
   templateUrl: './tool-list.component.html',
   styleUrl: './tool-list.component.scss',
 })

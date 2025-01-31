@@ -1,6 +1,7 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+import { CurrencyPipe } from '@angular/common';
 import { ElementStatus } from '../../../../../shared/enums/element-status';
 import { MaterialDto } from '../../../../../shared/models/material.dto';
 import { MaterialEditComponent } from '../material-edit/material-edit.component';
@@ -8,7 +9,7 @@ import { MaterialEditComponent } from '../material-edit/material-edit.component'
 @Component({
   selector: 'app-material-list',
   standalone: true,
-  imports: [],
+  imports: [CurrencyPipe],
   templateUrl: './material-list.component.html',
   styleUrl: './material-list.component.scss',
 })

@@ -23,7 +23,7 @@
         </td>
         <td>{{ tool.name }}</td>
         <td>{{ statusLabels[tool.status] }}</td>
-        <td>{{ tool.cost }}</td>
+        <td>{{ tool.cost | currency : "PLN" }}</td>
         <td>{{ tool.quantity }}</td>
         <td>{{ tool.location }}</td>
         <td>{{ tool.link }}</td>

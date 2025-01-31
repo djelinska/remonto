@@ -1,0 +1,45 @@
+<div class="card h-100">
+  <div class="card-body">
+    <h1 class="card-title">Notatki</h1>
+    <form [formGroup]="form" (ngSubmit)="onAddNote()">
+      <div class="mb-4">
+        <div class="d-flex align-items-end gap-3">
+          <div class="w-100">
+            <label for="note" class="form-label">Notatka</label>
+            <textarea
+              id="note"
+              formControlName="note"
+              class="form-control"
+              placeholder="Notatka do projektu"
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Dodaj</button>
+        </div>
+        <shared-form-error [control]="form.get('note')"></shared-form-error>
+      </div>
+    </form>
+    @if (projectNotes.length > 0) {
+    <div class="d-flex flex-column gap-2">
+      @for (note of projectNotes; track note._id) {
+      <div
+        class="border rounded p-2 d-flex align-items-center justify-content-between"
+      >
+        <div class="me-3">
+          <span class="date">{{ note.createdAt | date : "short" }}</span>
+          <p class="mb-0">{{ note.content }}</p>
+        </div>
+        <button
+          type="button"
+          class="ms-auto btn btn-sm btn-light"
+          (click)="deleteNote(note._id)"
+        >
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="alert alert-info mb-0">Brak notatek do wyświetlenia</div>
+    }
+  </div>
+</div>

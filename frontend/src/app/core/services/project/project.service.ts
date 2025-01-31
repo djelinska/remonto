@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ProjectBudgetDto } from './models/project-budget.dto';
 import { ProjectDto } from '../../../shared/models/project.dto';
 import { ProjectFormDto } from './models/project-form.dto';
 import { environment } from '../../../../environments/environment.development';
@@ -21,6 +22,10 @@ export class ProjectService {
     return this.http.get<ProjectDto>(`${this.apiUrl}/${id}`);
   }
 
+  getProjectBudget(id: string): Observable<ProjectBudgetDto> {
+    return this.http.get<ProjectBudgetDto>(`${this.apiUrl}/${id}/budget`);
+  }
+
   createProject(project: ProjectFormDto): Observable<ProjectDto> {
     return this.http.post<ProjectDto>(this.apiUrl, project);
   }
@@ -31,5 +36,24 @@ export class ProjectService {
 
   deleteProject(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  addImageToProject(projectId: string, imageUrl: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${projectId}/images`, {
+      imageUrl,
+    });
+  }
+
+  addNoteToProject(projectId: string, note: string): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${projectId}/notes`, {
+      note,
+    });
+  }
+
+  deleteNoteFromProject(projectId: string, noteId: string): Observable<void> {
+    return this.http.patch<void>(
+      `${this.apiUrl}/${projectId}/notes/${noteId}`,
+      {}
+    );
   }
 }
