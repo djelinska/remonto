@@ -52,12 +52,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   openDelete(user: User): void {
-    const initialState = { user }; // Poprawione przekazywanie danych
+    const initialState = { user }; 
     this.modalRef = this.modalService.show(UserDeleteComponent, {
       class: 'modal-md',
       backdrop: 'static',
       keyboard: false,
-      initialState, // Teraz przekazuje user do komponentu
+      initialState, 
     });
   
     if (this.modalRef.content) {

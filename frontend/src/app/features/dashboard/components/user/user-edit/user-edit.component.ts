@@ -34,20 +34,11 @@ export class UserEditComponent {
     }
 
     const emailPattern =
-      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i; // Podstawowa walidacja maila
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!this.user.email || !emailPattern.test(this.user.email)) {
       this.errorMessage = 'Niepoprawny format emaila.';
       return false;
     }
-
-    const emailComplexPattern =
-      /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{4,}@.{1,}\..{2,}$/;
-    if (!emailComplexPattern.test(this.user.email)) {
-      this.errorMessage =
-        'Email musi zawierać co najmniej 1 wielką literę, 1 cyfrę i 1 znak specjalny oraz min. 4 znaki przed @.';
-      return false;
-    }
-
     return true;
   }
 

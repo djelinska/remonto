@@ -103,11 +103,26 @@ const updateUserProfile = async (userId: string, updateData: Partial<UserDto>): 
 
 
 const deleteUserProfile = async (userId: string): Promise<void> => {
-    const user = await UserModel.findByIdAndDelete(new Types.ObjectId(userId));
+    const user = await UserModel.findById(new Types.ObjectId(userId));
     if (!user) {
         throw new AppError('Nie znaleziono użytkownika', 404);
     }
+
+    const projects = await ProjectModel.find({ userId: new Types.ObjectId(userId) });
+
+    if (projects.length > 0) {
+        const projectIds = projects.map((project) => project._id);
+
+        await TaskModel.deleteMany({ projectId: { $in: projectIds } });
+        await MaterialModel.deleteMany({ projectId: { $in: projectIds } });
+        await ToolModel.deleteMany({ projectId: { $in: projectIds } });
+
+        await ProjectModel.deleteMany({ userId: new Types.ObjectId(userId) });
+    }
+
+    await UserModel.findByIdAndDelete(new Types.ObjectId(userId));
 };
+
 
 const userService = {
 	fetchUserProfile: fetchUserProfile,

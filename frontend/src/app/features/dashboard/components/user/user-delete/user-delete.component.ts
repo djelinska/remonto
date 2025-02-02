@@ -22,20 +22,18 @@ export class UserDeleteComponent {
   constructor(private userService: UserService, public modalRef: BsModalRef) {}
 
   confirmDelete() {
-    if (confirm(`Czy na pewno chcesz usunąć konto użytkownika ${this.user.firstName} ${this.user.lastName}?`)) {
-      this.loading = true;
-      this.userService.deleteUserProfile().subscribe({
-        next: () => {
-          this.loading = false;
-          this.userDeleted.emit();
-          this.modalRef?.hide();
-        },
-        error: (error) => {
-          this.loading = false;
-          this.errorMessage = 'Błąd podczas usuwania konta';
-          console.error(error);
-        },
-      });
-    }
-  }
+    this.loading = true;
+    this.userService.deleteUserProfile().subscribe({
+      next: () => {
+        this.loading = false;
+        this.userDeleted.emit();
+        this.modalRef?.hide();
+      },
+      error: (error) => {
+        this.loading = false;
+        this.errorMessage = 'Błąd podczas usuwania konta';
+        console.error(error);
+      },
+    });
+  }  
 }
