@@ -1,15 +1,19 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { CalendarOptions, EventApi } from '@fullcalendar/core';
+import { CalendarOptions, EventApi, EventInput } from '@fullcalendar/core';
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ElementStatus } from '../../../../shared/enums/element-status';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { MaterialService } from '../../../../core/services/material/material.service';
 import { TaskAddComponent } from '../../components/task/task-add/task-add.component';
 import { TaskDto } from '../../../../shared/models/task.dto';
 import { TaskEditComponent } from '../../components/task/task-edit/task-edit.component';
 import { TaskService } from '../../../../core/services/task/task.service';
+import { ToolService } from '../../../../core/services/tool/tool.service';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import { forkJoin } from 'rxjs';
 import plLocale from '@fullcalendar/core/locales/pl';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
@@ -64,6 +68,8 @@ export class CalendarComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private taskService: TaskService,
+    private materialService: MaterialService,
+    private toolService: ToolService,
     private modalService: BsModalService
   ) {}
 
@@ -73,6 +79,7 @@ export class CalendarComponent implements OnInit {
       if (projectId) {
         this.projectId = projectId;
         this.loadTasks();
+        this.loadMaterialsAndTools();
       }
     });
   }
@@ -84,14 +91,46 @@ export class CalendarComponent implements OnInit {
         (task) => task.startDate || task.endDate
       );
 
-      this.calendarOptions.events = this.tasksWithDates.map((task) => ({
+      const taskEvents = this.tasksWithDates.map((task) => ({
         id: task.id,
         title: task.name,
         start: task.startDate,
         end: task.endDate,
         allDay: task.allDay,
       }));
+
+      this.updateCalendarEvents(taskEvents);
     });
+  }
+
+  private loadMaterialsAndTools(): void {
+    forkJoin({
+      materials: this.materialService.getMaterialsByProject(this.projectId),
+      tools: this.toolService.getToolsByProject(this.projectId),
+    }).subscribe(({ materials, tools }) => {
+      const events = [...materials, ...tools]
+        .filter((item) => item.deliveryDate)
+        .map((item) => ({
+          id: item.id,
+          title: `${
+            item.status === 'READY_FOR_PICKUP' ? 'Odbiór' : 'Dostawa'
+          }: ${item.name}`,
+          start: item.deliveryDate,
+          allDay: item.allDay,
+        }));
+
+      this.updateCalendarEvents(events);
+    });
+  }
+
+  private updateCalendarEvents(newEvents: EventInput[]): void {
+    const currentEvents = Array.isArray(this.calendarOptions.events)
+      ? this.calendarOptions.events
+      : [];
+    this.calendarOptions = {
+      ...this.calendarOptions,
+      events: [...currentEvents, ...newEvents],
+    };
   }
 
   private openAddTaskModal(): void {

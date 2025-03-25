@@ -13,6 +13,7 @@ import { FormErrorComponent } from '../../../../../shared/components/form-error/
 import { ImageService } from '../../../../../core/services/image/image.service';
 import { MaterialDto } from '../../../../../shared/models/material.dto';
 import { MaterialFormDto } from '../../../../../core/services/material/models/material-form.dto';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-material-form',
@@ -47,6 +48,8 @@ export class MaterialFormComponent {
         ],
       ],
       status: [null, Validators.required],
+      deliveryDate: [null],
+      allDay: [false],
       cost: [0, Validators.min(0)],
       quantity: [0, Validators.min(0)],
       type: [''],
@@ -59,7 +62,7 @@ export class MaterialFormComponent {
 
   ngOnInit(): void {
     if (this.material) {
-      this.form.patchValue(this.material);
+      const formattedMaterial = { ...this.material };
 
       if (this.material.imageUrl) {
         this.imageService
@@ -68,7 +71,36 @@ export class MaterialFormComponent {
             this.imagePreview = imageUrl;
           });
       }
+
+      if (formattedMaterial.deliveryDate) {
+        formattedMaterial.deliveryDate = formatDate(
+          formattedMaterial.deliveryDate,
+          formattedMaterial.allDay ? 'yyyy-MM-dd' : 'yyyy-MM-ddTHH:mm',
+          'pl'
+        );
+      }
+
+      this.form.patchValue(formattedMaterial);
     }
+
+    this.form.get('status')?.valueChanges.subscribe((value) => {
+      if (value !== 'IN_DELIVERY' && value !== 'READY_FOR_PICKUP') {
+        this.form.patchValue({ deliveryDate: null, allDay: false });
+      }
+    });
+
+    this.form.get('allDay')?.valueChanges.subscribe((value) => {
+      const deliveryDateControl = this.form.get('deliveryDate');
+
+      if (value) {
+        deliveryDateControl?.setValidators(Validators.required);
+      } else {
+        deliveryDateControl?.removeValidators(Validators.required);
+      }
+
+      deliveryDateControl?.setValue(null);
+      deliveryDateControl?.updateValueAndValidity();
+    });
   }
 
   onFileSelected(event: any): void {
@@ -97,6 +129,8 @@ export class MaterialFormComponent {
         const material: MaterialFormDto = {
           name: this.form.value.name,
           status: this.form.value.status,
+          deliveryDate: this.form.value.deliveryDate,
+          allDay: this.form.value.deliveryDate ? this.form.value.allDay : false,
           cost: this.form.value.cost || 0,
           quantity: this.form.value.quantity || 0,
           type: this.form.value.type,
@@ -118,5 +152,9 @@ export class MaterialFormComponent {
 
   onCancel(): void {
     this.hideModal();
+  }
+
+  get status() {
+    return this.form.get('status')?.value;
   }
 }

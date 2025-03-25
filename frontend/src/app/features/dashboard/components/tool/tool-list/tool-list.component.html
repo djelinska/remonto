@@ -5,6 +5,7 @@
         <th class="th-image">Zdjęcie</th>
         <th class="col-2">Nazwa</th>
         <th>Status</th>
+        <th class="text-nowrap">Termin odbioru/dostawy</th>
         <th>Koszt</th>
         <th>Ilość</th>
         <th>Lokalizacja</th>
@@ -23,6 +24,9 @@
         </td>
         <td>{{ tool.name }}</td>
         <td>{{ statusLabels[tool.status] }}</td>
+        <td class="text-nowrap">
+          {{ tool.deliveryDate | date : (tool.allDay ? "d MMM y" : "medium") }}
+        </td>
         <td>{{ tool.cost | currency : "PLN" }}</td>
         <td>{{ tool.quantity }}</td>
         <td>{{ tool.location }}</td>
