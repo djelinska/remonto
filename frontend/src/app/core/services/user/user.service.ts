@@ -1,6 +1,7 @@
+import { Observable, Subject, tap } from 'rxjs';
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { User } from '../../../shared/models/user';
 import { environment } from '../../../../environments/environment.development';
 
@@ -9,6 +10,7 @@ import { environment } from '../../../../environments/environment.development';
 })
 export class UserService {
   private apiUrl = environment.apiUrl;
+  private userUpdated = new Subject<void>();
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +19,15 @@ export class UserService {
   }
 
   updateUserProfile(user: User): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/user/profile`, user);
+    return this.http.patch<User>(`${this.apiUrl}/user/profile`, user).pipe(
+      tap(() => {
+        this.userUpdated.next();
+      })
+    );
+  }
+
+  getUserUpdatedListener(): Observable<void> {
+    return this.userUpdated.asObservable();
   }
 
   deleteUserProfile(): Observable<{ message: string }> {

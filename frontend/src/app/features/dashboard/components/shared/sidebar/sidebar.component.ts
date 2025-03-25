@@ -30,6 +30,14 @@ export class SidebarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadUserProfile();
+
+    this.userService.getUserUpdatedListener().subscribe(() => {
+      this.loadUserProfile();
+    });
+  }
+
+  loadUserProfile(): void {
     this.user$ = this.userService.getUserProfile();
   }
 

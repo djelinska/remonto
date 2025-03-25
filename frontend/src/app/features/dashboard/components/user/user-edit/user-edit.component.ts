@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { User } from '../../../../../shared/models/user';
-import { UserService } from '../../../../../core/services/user/user.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { User } from '../../../../../shared/models/user';
+import { UserService } from '../../../../../core/services/user/user.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -33,8 +34,7 @@ export class UserEditComponent {
       return false;
     }
 
-    const emailPattern =
-      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!this.user.email || !emailPattern.test(this.user.email)) {
       this.errorMessage = 'Niepoprawny format emaila.';
       return false;
