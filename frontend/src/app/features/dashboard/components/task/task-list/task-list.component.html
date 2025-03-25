@@ -24,7 +24,9 @@
         <td class="text-nowrap">
           {{ task.endDate | date : (task.allDay ? "d MMM y" : "medium") }}
         </td>
-        <td>{{ priorityLabels[task.priority] }}</td>
+        <td>
+          <div [appPriorityBadge]="task.priority"></div>
+        </td>
         <td>{{ task.cost | currency : "PLN" }}</td>
         <td>{{ categoryLabels[task.category] }}</td>
         <td>{{ task.note }}</td>
