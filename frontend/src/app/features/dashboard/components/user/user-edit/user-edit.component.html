@@ -1,31 +1,33 @@
-<div class="modal-dialog">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title">Edytuj profil</h5>
-      <button type="button" class="btn-close" (click)="modalRef?.hide()"></button>
-    </div>
-    <div class="modal-body">
-      <label>Imię:</label>
-      <input [(ngModel)]="user.firstName" type="text" class="form-control" />
-      <p *ngIf="(user.firstName?.trim()?.length ?? 0) < 3" class="text-danger">
-        Imię musi mieć co najmniej 3 znaki.
-      </p>
-
-      <label>Nazwisko:</label>
-      <input [(ngModel)]="user.lastName" type="text" class="form-control" />
-      <p *ngIf="(user.lastName?.trim()?.length ?? 0) < 3" class="text-danger">
-        Nazwisko musi mieć co najmniej 3 znaki.
-      </p>
-
-      <label>Email:</label>
-      <input [(ngModel)]="user.email" type="email" class="form-control" />
-      <p *ngIf="!user.email?.includes('@')" class="text-danger">
-        Podaj prawidłowy adres email.
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modalRef?.hide()">Anuluj</button>
-      <button type="button" class="btn btn-primary" (click)="saveChanges()">Zapisz zmiany</button>
-    </div>
+<div class="modal-header">
+  <h4 class="modal-title">Edytuj profil</h4>
+  <button type="button" class="btn-close" (click)="modalRef.hide()"></button>
+</div>
+<div class="modal-body">
+  <div class="mb-3">
+    <label class="form-label">Imię:</label>
+    <input [(ngModel)]="user.firstName" type="text" class="form-control mb-1" />
+    @if ((user.firstName.trim().length) < 3) {
+    <small class="text-danger"> Imię musi mieć co najmniej 3 znaki.</small>}
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Nazwisko:</label>
+    <input [(ngModel)]="user.lastName" type="text" class="form-control mb-1" />
+    @if ((user.lastName.trim().length) < 3) {
+    <small class="text-danger"> Nazwisko musi mieć co najmniej 3 znaki. </small
+    >}
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Email:</label>
+    <input [(ngModel)]="user.email" type="email" class="form-control mb-1" />
+    @if (!user.email.includes('@')) {
+    <small class="text-danger"> Podaj prawidłowy adres email. </small>}
+  </div>
+  <div class="d-flex justify-content-between">
+    <button type="button" class="btn btn-light" (click)="modalRef.hide()">
+      Anuluj
+    </button>
+    <button type="button" class="btn btn-primary" (click)="saveChanges()">
+      Zapisz
+    </button>
   </div>
 </div>

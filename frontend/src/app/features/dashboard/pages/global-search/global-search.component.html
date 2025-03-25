@@ -12,31 +12,31 @@
   <div class="mt-3">
     <label class="me-2">Filtruj wyniki:</label>
     <div class="form-check form-check-inline">
-      <input 
-        class="form-check-input" 
-        type="checkbox" 
-        id="tasks" 
-        (change)="toggleFilter('task')" 
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="tasks"
+        (change)="toggleFilter('task')"
         [checked]="filterControl.value?.includes('task')"
       />
       <label class="form-check-label" for="tasks">Zadania</label>
     </div>
     <div class="form-check form-check-inline">
-      <input 
-        class="form-check-input" 
-        type="checkbox" 
-        id="materials" 
-        (change)="toggleFilter('material')" 
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="materials"
+        (change)="toggleFilter('material')"
         [checked]="filterControl.value?.includes('material')"
       />
       <label class="form-check-label" for="materials">Materiały</label>
     </div>
     <div class="form-check form-check-inline">
-      <input 
-        class="form-check-input" 
-        type="checkbox" 
-        id="tools" 
-        (change)="toggleFilter('tool')" 
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="tools"
+        (change)="toggleFilter('tool')"
         [checked]="filterControl.value?.includes('tool')"
       />
       <label class="form-check-label" for="tools">Narzędzia</label>
@@ -44,7 +44,7 @@
   </div>
 
   <div class="mt-4">
-    @for (result of results; track $index) {
+    @for (result of results; track result.name) {
     <div class="d-flex justify-content-between py-3 border-bottom">
       <div class="d-flex align-items-center">
         <a
