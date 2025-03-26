@@ -199,3 +199,24 @@ export const deleteNoteFromProject = async (userId: ObjectId, projectId: ObjectI
 		throw new Error('Error deleting project note');
 	}
 };
+
+export const removeImageFromProject = async (
+    userId: ObjectId, 
+    projectId: ObjectId, 
+    imageUrl: string
+): Promise<void> => {
+    try {
+        const project = await ProjectModel.findOneAndUpdate(
+            { userId, _id: projectId },
+            { $pull: { imageUrls: imageUrl } },
+            { new: true }
+        );
+
+        if (!project) {
+            throw new Error('Project not found or user not authorized');
+        }
+    } catch (error) {
+        console.error('Error removing image from project:', error);
+        throw new Error('Error removing image from project');
+    }
+};

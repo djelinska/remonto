@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@backend/*": ["backend/*"],
+      "@frontend/*": ["frontend/src/*"]
+    },
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["./backend/**/*", "./frontend/src/**/*", "./test/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

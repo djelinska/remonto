@@ -4,6 +4,9 @@ import MaterialModel from '../models/materialModel';
 import ReturnMessage from '../types/models/returnMessage.model';
 import {Types} from 'mongoose';
 
+import path from 'path';
+import fs from 'fs';
+
 type ObjectId = Types.ObjectId;
 
 export const fetchProjectMaterials = async (projectId: ObjectId): Promise<Material[]> => {
@@ -130,16 +133,39 @@ export const updateMaterial = async (projectId: ObjectId, materialId: ObjectId, 
 };
 
 export const deleteMaterial = async (projectId: ObjectId, materialId: ObjectId): Promise<ReturnMessage> => {
-	try {
-		const material: MaterialDto | null = await MaterialModel.findOneAndDelete({projectId, _id: materialId});
+    try {
+        const material: MaterialDto | null = await MaterialModel.findOne({
+            projectId,
+            _id: materialId
+        });
 
-		if (!material) {
-			throw new Error('Material not found or user not authorized');
-		}
+        if (!material) {
+            throw new Error('Material not found or user not authorized');
+        }
 
-		return {message: 'Material deleted successfully'};
-	} catch (error) {
-		console.error('Error deleting material:', error);
-		throw new Error('Error deleting material');
-	}
+        await MaterialModel.deleteOne({
+            projectId,
+            _id: materialId
+        });
+
+        if (material.imageUrl) {
+            try {
+                const filename = material.imageUrl.split('/').pop();
+                if (filename) {
+                    const filePath = path.join(__dirname, '../../uploads/', filename);
+                    if (fs.existsSync(filePath)) {
+                        fs.unlinkSync(filePath);
+                        console.log(`Deleted image file: ${filename}`);
+                    }
+                }
+            } catch (fileError) {
+                console.error('Error deleting image file:', fileError);
+            }
+        }
+
+        return { message: 'Material and associated image (if any) deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting material:', error);
+        throw new Error('Error deleting material');
+    }
 };
