@@ -13,6 +13,7 @@ import { FormErrorComponent } from '../../../../../shared/components/form-error/
 import { ImageService } from '../../../../../core/services/image/image.service';
 import { ToolDto } from '../../../../../shared/models/tool.dto';
 import { ToolFormDto } from '../../../../../core/services/tool/models/tool-form.dto';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-tool-form',
@@ -47,6 +48,8 @@ export class ToolFormComponent {
         ],
       ],
       status: [null, Validators.required],
+      deliveryDate: [null],
+      allDay: [false],
       cost: [0, Validators.min(0)],
       quantity: [0, Validators.min(0)],
       type: [''],
@@ -59,14 +62,42 @@ export class ToolFormComponent {
 
   ngOnInit(): void {
     if (this.tool) {
-      this.form.patchValue(this.tool);
+      const formattedTool = { ...this.tool };
 
       if (this.tool.imageUrl) {
         this.imageService.getImage(this.tool.imageUrl).subscribe((imageUrl) => {
           this.imagePreview = imageUrl;
         });
       }
+      if (formattedTool.deliveryDate) {
+        formattedTool.deliveryDate = formatDate(
+          formattedTool.deliveryDate,
+          formattedTool.allDay ? 'yyyy-MM-dd' : 'yyyy-MM-ddTHH:mm',
+          'pl'
+        );
+      }
+
+      this.form.patchValue(formattedTool);
     }
+
+    this.form.get('status')?.valueChanges.subscribe((value) => {
+      if (value !== 'IN_DELIVERY' && value !== 'READY_FOR_PICKUP') {
+        this.form.patchValue({ deliveryDate: null, allDay: false });
+      }
+    });
+
+    this.form.get('allDay')?.valueChanges.subscribe((value) => {
+      const deliveryDateControl = this.form.get('deliveryDate');
+
+      if (value) {
+        deliveryDateControl?.setValidators(Validators.required);
+      } else {
+        deliveryDateControl?.removeValidators(Validators.required);
+      }
+
+      deliveryDateControl?.setValue(null);
+      deliveryDateControl?.updateValueAndValidity();
+    });
   }
 
   onFileSelected(event: any): void {
@@ -95,6 +126,8 @@ export class ToolFormComponent {
         const material: ToolFormDto = {
           name: this.form.value.name,
           status: this.form.value.status,
+          deliveryDate: this.form.value.deliveryDate,
+          allDay: this.form.value.deliveryDate ? this.form.value.allDay : false,
           cost: this.form.value.cost || 0,
           quantity: this.form.value.quantity || 0,
           location: this.form.value.location,
@@ -115,5 +148,9 @@ export class ToolFormComponent {
 
   onCancel(): void {
     this.hideModal();
+  }
+
+  get status() {
+    return this.form.get('status')?.value;
   }
 }

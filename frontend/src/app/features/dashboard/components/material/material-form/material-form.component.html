@@ -35,6 +35,32 @@
     <shared-form-error [control]="form.get('status')"></shared-form-error>
   </div>
 
+  @if (status === 'IN_DELIVERY' || status === 'READY_FOR_PICKUP') {
+  <div class="mb-3">
+    <label for="deliveryDate" class="form-label">{{
+      status === "READY_FOR_PICKUP" ? "Termin odbioru" : "Termin dostawy"
+    }}</label>
+    <div class="d-flex align-items-center gap-2">
+      <input
+        id="deliveryDate"
+        [type]="form.value.allDay ? 'date' : 'datetime-local'"
+        formControlName="deliveryDate"
+        class="form-control"
+      />
+      <div class="form-check">
+        <input
+          id="allDay"
+          type="checkbox"
+          formControlName="allDay"
+          class="form-check-input"
+        />
+        <label class="form-check-label" for="allDay">Całodniowe</label>
+      </div>
+    </div>
+    <shared-form-error [control]="form.get('deliveryDate')"></shared-form-error>
+  </div>
+  }
+
   <div class="mb-3 d-flex gap-2">
     <div class="w-100">
       <label for="cost" class="form-label">Koszt</label>

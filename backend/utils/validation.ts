@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import mongoose, { Types } from 'mongoose';
+import {Request, Response} from 'express';
+import mongoose, {Types} from 'mongoose';
 
-import { ElementStatus } from '../types/enums/element-status';
-import { TaskCategory } from '../types/enums/task-category';
-import { TaskPriority } from '../types/enums/task-priority';
-import { TaskStatus } from '../types/enums/task-status';
-import { User } from '../types/models/user.dto';
-import { UserTypes } from '../types/enums/user-types';
+import {ElementStatus} from '../types/enums/element-status';
+import {TaskCategory} from '../types/enums/task-category';
+import {TaskPriority} from '../types/enums/task-priority';
+import {TaskStatus} from '../types/enums/task-status';
+import {User} from '../types/models/user.dto';
+import {UserTypes} from '../types/enums/user-types';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -58,7 +58,7 @@ export function checkTaskPriority(priority: TaskPriority): boolean {
 }
 
 export function checkToolsMaterialsStatus(status: ElementStatus): boolean {
-	const statuses = ['NOT_ORDERED', 'ORDERED', 'RECEIVED'];
+	const statuses = ['NOT_ORDERED', 'ORDERED', 'IN_DELIVERY', 'READY_FOR_PICKUP', 'RECEIVED'];
 	if (statuses.includes(status)) {
 		return true;
 	} else {

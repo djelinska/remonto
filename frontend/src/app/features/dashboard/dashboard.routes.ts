@@ -29,7 +29,7 @@ export const DASHBOARD_ROUTES: Routes = [
           { path: 'tasks', component: TasksComponent },
           { path: 'materials-tools', component: MaterialsToolsComponent },
           { path: 'info', component: InfoComponent },
-          { path: '', redirectTo: 'calendar', pathMatch: 'full' },
+          { path: '', redirectTo: 'tasks', pathMatch: 'full' },
         ],
       },
     ],

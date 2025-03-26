@@ -4,7 +4,11 @@
 >
   <h1>{{ selectedProject?.name }}</h1>
 
-  <button type="button" class="btn btn-light" (click)="deleteProject()">
+  <button
+    type="button"
+    class="btn btn-outline-danger"
+    (click)="onDeleteProject()"
+  >
     <i class="bi bi-trash"></i>
     Usuń projekt
   </button>

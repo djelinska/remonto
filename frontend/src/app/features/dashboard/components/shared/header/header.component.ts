@@ -1,7 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, OnInit } from '@angular/core';
 import { of, switchMap } from 'rxjs';
 
+import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
 import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectService } from '../../../../../core/services/project/project.service';
 import { ProjectStateService } from '../../../../../core/services/project/project-state.service';
@@ -16,10 +18,12 @@ import { ProjectStateService } from '../../../../../core/services/project/projec
 })
 export class HeaderComponent implements OnInit {
   selectedProject: ProjectDto | null = null;
+  modalRef?: BsModalRef;
 
   constructor(
     private projectService: ProjectService,
     private projectStateService: ProjectStateService,
+    private modalService: BsModalService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -42,6 +46,20 @@ export class HeaderComponent implements OnInit {
           console.error('Error fetching project:', error);
         },
       });
+  }
+
+  onDeleteProject(): void {
+    this.modalRef = this.modalService.show(ConfirmModalComponent, {
+      initialState: {
+        title: 'Usuń projekt',
+        message:
+          'Czy na pewno chcesz usunąć ten projekt? Wszystkie dane zostaną trwale usunięte.',
+        btnTitle: 'Usuń',
+        confirmCallback: () => {
+          this.deleteProject();
+        },
+      },
+    });
   }
 
   deleteProject(): void {

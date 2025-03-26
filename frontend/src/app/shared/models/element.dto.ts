@@ -5,6 +5,8 @@ export interface ElementDto {
   name: string;
   imageUrl?: string;
   status: ElementStatus;
+  deliveryDate?: string;
+  allDay: boolean;
   cost: number;
   quantity: number;
   location?: string;
