@@ -1,25 +1,8 @@
-<div class="d-flex flex-column border-end" id="sidebar">
+<div class="d-flex justify-content-between w-100 border-bottom" id="topbar">
   <div class="p-4 border-bottom" id="logo">
-    <a [routerLink]="['/dashboard']"
+    <a routerLink="/admin/templates"
       ><img src="/assets/images/remonto_logo.svg" alt="Remonto"
     /></a>
-  </div>
-
-  <div class="p-4 border-bottom" id="search">
-    <input
-      class="form-control"
-      type="text"
-      placeholder="Szukaj"
-      (click)="redirectToSearch()"
-    />
-  </div>
-
-  <div class="p-4 mb-auto">
-    <app-project-list></app-project-list>
-  </div>
-
-  <div class="p-4">
-    <a routerLink="/admin/templates">Panel administratora</a>
   </div>
 
   <div class="p-4 border-top d-flex align-items-center">
@@ -27,14 +10,11 @@
     @if (user$ | async; as user) {
     <div class="ms-2 me-auto">{{ user.firstName + " " + user.lastName }}</div>
     }
-    <div class="dropdown">
+    <div class="dropdown ms-4">
       <button class="btn btn-light" type="button" data-bs-toggle="dropdown">
         <i class="bi bi-three-dots"></i>
       </button>
       <ul class="dropdown-menu">
-        <li>
-          <a class="dropdown-item" [routerLink]="['./profile']">Profil</a>
-        </li>
         <li>
           <button type="button" class="dropdown-item" (click)="logout()">
             Wyloguj się
