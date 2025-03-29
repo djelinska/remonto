@@ -1,0 +1,51 @@
+<div [formGroup]="taskForm">
+  <div class="mb-3">
+    <label [for]="'name-' + taskIndex" class="form-label">Nazwa</label>
+    <input
+      [id]="'name-' + taskIndex"
+      formControlName="name"
+      class="form-control"
+      placeholder="Wprowadź nazwę zadania"
+    />
+    <shared-form-error [control]="taskForm.get('name')"></shared-form-error>
+  </div>
+
+  <div class="mb-3">
+    <label [for]="'category-' + taskIndex" class="form-label">Kategoria</label>
+    <select
+      [id]="'category-' + taskIndex"
+      formControlName="category"
+      class="form-select"
+    >
+      <option value="null" disabled selected>Wybierz kategorię</option>
+      @for (category of categories; track $index) {
+      <option [value]="category" [label]="categoryLabels[category]"></option>
+      }
+    </select>
+    <shared-form-error [control]="taskForm.get('category')"></shared-form-error>
+  </div>
+
+  <div class="mb-3">
+    <label [for]="'priority-' + taskIndex" class="form-label">Priorytet</label>
+    <select
+      [id]="'priority-' + taskIndex"
+      formControlName="priority"
+      class="form-select"
+    >
+      @for (priority of priorities; track $index) {
+      <option [ngValue]="priority" [label]="priorityLabels[priority]"></option>
+      }
+    </select>
+    <shared-form-error [control]="taskForm.get('priority')"></shared-form-error>
+  </div>
+
+  <div class="mb-3">
+    <label [for]="'note-' + taskIndex" class="form-label">Notatka</label>
+    <textarea
+      [id]="'note-' + taskIndex"
+      formControlName="note"
+      class="form-control"
+      placeholder="Opcjonalna notatka"
+    ></textarea>
+  </div>
+</div>
