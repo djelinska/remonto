@@ -1,5 +1,9 @@
 export enum ElementStatus {
-  ORDERED = 'ORDERED',
-  NOT_ORDERED = 'NOT_ORDERED',
-  RECEIVED = 'RECEIVED',
+	NOT_ORDERED = 'Niezamówione',
+	ORDERED = 'Zamówione',
+	IN_DELIVERY = 'W dostawie',
+	READY_FOR_PICKUP = 'Do odbioru',
+	RECEIVED = 'Odebrane',
+	AVAILABLE = 'Dostępne',
+	REQUIRED = 'Wymagane',
 }

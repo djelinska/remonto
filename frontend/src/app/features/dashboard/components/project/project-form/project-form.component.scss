@@ -1,0 +1,29 @@
+.separator {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  border-top: 1px solid var(--gray-200);
+}
+
+.separator::before {
+  left: 0;
+}
+
+.separator::after {
+  right: 0;
+}
+
+.separator-text {
+  display: inline-block;
+  padding: 0 10px;
+  color: var(--gray-400);
+  font-weight: 500;
+}

@@ -1,6 +1,7 @@
 import { ElementStatus } from '../../../../shared/enums/element-status';
 import { TaskCategory } from '../../../../shared/enums/task-category';
 import { TaskPriority } from '../../../../shared/enums/task-priority';
+import { TaskStatus } from '../../../../shared/enums/task-status';
 
 export interface ProjectFormDto {
   name: string;
@@ -10,6 +11,7 @@ export interface ProjectFormDto {
 
 export interface TaskFormDto {
   name: string;
+  status?: TaskStatus;
   category: TaskCategory;
   priority: TaskPriority;
   note?: string;
@@ -17,7 +19,7 @@ export interface TaskFormDto {
 
 export interface MaterialFormDto {
   name: string;
-  status: ElementStatus;
+  status?: ElementStatus;
   quantity: number;
   type?: string;
   note?: string;
@@ -25,7 +27,7 @@ export interface MaterialFormDto {
 
 export interface ToolFormDto {
   name: string;
-  status: ElementStatus;
+  status?: ElementStatus;
   quantity: number;
   note?: string;
 }

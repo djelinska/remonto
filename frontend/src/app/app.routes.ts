@@ -1,4 +1,3 @@
-import { AdminComponent } from './features/admin/admin.component';
 import { HomeComponent } from './features/home/home.component';
 import { LoginComponent } from './features/auth/pages/login/login.component';
 import { NotFoundComponent } from './features/error/not-found/not-found.component';

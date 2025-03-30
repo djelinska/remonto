@@ -10,6 +10,7 @@
 </div>
 <div class="modal-body">
   <app-project-form
+    [isEditMode]="true"
     [project]="project"
     (formSubmit)="onProjectUpdated($event)"
   ></app-project-form>

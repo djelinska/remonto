@@ -1,6 +1,7 @@
 import { ElementStatus } from '../enums/element-status';
 import { TaskCategory } from '../enums/task-category';
 import { TaskPriority } from '../enums/task-priority';
+import { TaskStatus } from '../enums/task-status';
 
 export interface ProjectDto {
   name: string;
@@ -9,26 +10,27 @@ export interface ProjectDto {
 }
 
 export interface TaskDto {
-  id: string;
+  id?: string;
   name: string;
+  status?: TaskStatus | string;
   category: TaskCategory | string;
   priority: TaskPriority | string;
   note?: string;
 }
 
 export interface MaterialDto {
-  id: string;
+  id?: string;
   name: string;
-  status: ElementStatus | string;
+  status?: ElementStatus | string;
   quantity: number;
   type?: string;
   note?: string;
 }
 
 export interface ToolDto {
-  id: string;
+  id?: string;
   name: string;
-  status: ElementStatus | string;
+  status?: ElementStatus | string;
   quantity: number;
   note?: string;
 }

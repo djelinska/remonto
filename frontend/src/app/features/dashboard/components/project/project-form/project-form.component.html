@@ -1,4 +1,27 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  @if (!isEditMode) {
+  <div class="mb-3">
+    <label for="template" class="form-label">Wybierz szablon</label>
+    <select
+      id="template"
+      class="form-select"
+      formControlName="template"
+      (change)="onTemplateSelect($event)"
+    >
+      <option value="null" disabled selected>Wybierz szablon</option>
+      @for (template of templates; track template.id) {
+      <option [value]="template.id">
+        {{ template.project.name }}
+      </option>
+      }
+    </select>
+  </div>
+
+  <div class="separator">
+    <span class="separator-text">LUB</span>
+  </div>
+  }
+
   <div class="mb-3">
     <label for="name" class="form-label">Nazwa</label>
     <input
@@ -60,8 +83,6 @@
     <button type="button" class="btn btn-light" (click)="onCancel()">
       Anuluj
     </button>
-    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
-      Zapisz
-    </button>
+    <button type="submit" class="btn btn-primary">Zapisz</button>
   </div>
 </form>

@@ -4,4 +4,6 @@ export enum ElementStatus {
   IN_DELIVERY = 'W dostawie',
   READY_FOR_PICKUP = 'Do odbioru',
   RECEIVED = 'Odebrane',
+  AVAILABLE = 'Dostępne',
+  REQUIRED = 'Wymagane',
 }
