@@ -121,6 +121,7 @@ export class TaskFormComponent {
       };
       this.formSubmit.emit(task);
     }
+    this.form.markAllAsTouched();
   }
 
   hideModal(): void {

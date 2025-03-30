@@ -61,8 +61,8 @@
   </div>
   }
 
-  <div class="mb-3 d-flex gap-2">
-    <div class="w-100">
+  <div class="mb-3 row g-2">
+    <div class="col-4">
       <label for="cost" class="form-label">Koszt</label>
       <div class="input-group">
         <input
@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <div>
+    <div class="col-3">
       <label for="quantity" class="form-label">Ilość</label>
       <input
         type="number"
@@ -85,6 +85,17 @@
         formControlName="quantity"
         step="1"
       />
+    </div>
+
+    <div class="col-5">
+      <label for="unit" class="form-label">Jednostka</label>
+      <select id="unit" formControlName="unit" class="form-select">
+        <option value="null" selected>Wybierz jednostkę</option>
+        @for (unit of units; track $index) {
+        <option [value]="unit" [label]="unitLabels[unit]"></option>
+        }
+      </select>
+      <shared-form-error [control]="form.get('unit')"></shared-form-error>
     </div>
   </div>
 
@@ -120,8 +131,6 @@
     <button type="button" class="btn btn-light" (click)="onCancel()">
       Anuluj
     </button>
-    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
-      Zapisz
-    </button>
+    <button type="submit" class="btn btn-primary">Zapisz</button>
   </div>
 </form>

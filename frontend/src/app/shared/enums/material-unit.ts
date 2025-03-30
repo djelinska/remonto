@@ -1,0 +1,15 @@
+export enum MaterialUnit {
+  KILOGRAM = 'kg',
+  GRAM = 'g',
+  TON = 't',
+  LITER = 'l',
+  MILLILITER = 'ml',
+  CUBIC_METER = 'm³',
+  METER = 'm',
+  CENTIMETER = 'cm',
+  SQUARE_METER = 'm²',
+  PIECE = 'szt.',
+  PACKAGE = 'opak.',
+  ROLL = 'rolka',
+  LINEAR_METER = 'mb',
+}

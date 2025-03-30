@@ -160,6 +160,7 @@ export class ProjectFormComponent {
       name: [material.name, [Validators.required]],
       status: [material.status, [Validators.required]],
       quantity: [material.quantity, [Validators.required]],
+      unit: [material.unit],
       type: [material.type],
       note: [material.note],
     });

@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 
 import { FormErrorComponent } from '../../../../../shared/components/form-error/form-error.component';
+import { MaterialUnit } from '../../../../../shared/enums/material-unit';
 
 @Component({
   selector: 'app-material-form',
@@ -20,6 +21,9 @@ export class MaterialFormComponent {
   @Input() materialIndex!: number;
   @Output() removeMaterial = new EventEmitter<void>();
 
+  units = Object.keys(MaterialUnit);
+  unitLabels: Record<string, string> = MaterialUnit;
+
   static createMaterialForm(): FormGroup {
     return new FormBuilder().group({
       name: [
@@ -31,6 +35,7 @@ export class MaterialFormComponent {
         ],
       ],
       quantity: [0, Validators.min(0)],
+      unit: [null],
       type: [''],
       note: [''],
     });

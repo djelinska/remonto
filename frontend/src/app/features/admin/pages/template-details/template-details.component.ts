@@ -4,6 +4,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { ConfirmModalComponent } from '../../../../shared/components/confirm-modal/confirm-modal.component';
 import { CurrencyPipe } from '@angular/common';
+import { MaterialUnit } from '../../../../shared/enums/material-unit';
 import { PriorityBadgeDirective } from '../../../../shared/directives/priority-badge.directive';
 import { TaskCategory } from '../../../../shared/enums/task-category';
 import { TemplateDto } from '../../../../shared/models/template.dto';
@@ -23,6 +24,8 @@ export class TemplateDetailsComponent implements OnInit {
   modalRef!: BsModalRef;
 
   categoryLabels: Record<string, string> = TaskCategory;
+  units = Object.keys(MaterialUnit);
+  unitLabels: Record<string, string> = MaterialUnit;
 
   constructor(
     private route: ActivatedRoute,

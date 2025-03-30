@@ -1,3 +1,21 @@
 <div class="p-4">
   <full-calendar [options]="calendarOptions"></full-calendar>
+
+  @if (visible) {
+  <div class="popover" [ngStyle]="{ top: top + 'px', left: left + 'px' }">
+    <h3 class="popover-header">{{ title }}</h3>
+    <div class="popover-body">
+      <p>
+        <span> <i class="bi bi-hourglass-top me-1"></i> Początek: </span>
+        {{ startDate | date : (allDay ? "d MMM y" : "medium") }}
+      </p>
+      @if (endDate) {
+      <p class="mt-3">
+        <span> <i class="bi bi-hourglass-bottom me-1"></i> Koniec: </span>
+        {{ endDate | date : (allDay ? "d MMM y" : "medium") }}
+      </p>
+      }
+    </div>
+  </div>
+  }
 </div>
