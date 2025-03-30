@@ -1,12 +1,12 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CalendarOptions, EventApi, EventInput } from '@fullcalendar/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { ElementStatus } from '../../../../shared/enums/element-status';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { MaterialService } from '../../../../core/services/material/material.service';
+import { ProjectService } from '../../../../core/services/project/project.service';
 import { TaskAddComponent } from '../../components/task/task-add/task-add.component';
 import { TaskDto } from '../../../../shared/models/task.dto';
 import { TaskEditComponent } from '../../components/task/task-edit/task-edit.component';
@@ -20,7 +20,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule],
+  imports: [CommonModule, FullCalendarModule, DatePipe],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
 })
@@ -63,10 +63,21 @@ export class CalendarComponent implements OnInit {
     nowIndicator: true,
     height: 'auto',
     eventClick: (info) => this.openEditTaskModal(info.event),
+    eventMouseEnter: this.onEventHover.bind(this),
+    eventMouseLeave: this.onEventLeave.bind(this),
   };
+
+  title: string = '';
+  startDate: string = '';
+  endDate: string | null = null;
+  allDay: boolean = false;
+  visible: boolean = false;
+  top: number = 0;
+  left: number = 0;
 
   constructor(
     private route: ActivatedRoute,
+    private projectSerivce: ProjectService,
     private taskService: TaskService,
     private materialService: MaterialService,
     private toolService: ToolService,
@@ -80,6 +91,7 @@ export class CalendarComponent implements OnInit {
         this.projectId = projectId;
         this.loadTasks();
         this.loadMaterialsAndTools();
+        this.loadProjectDates();
       }
     });
   }
@@ -123,6 +135,31 @@ export class CalendarComponent implements OnInit {
     });
   }
 
+  private loadProjectDates(): void {
+    this.projectSerivce.getProjectById(this.projectId).subscribe((project) => {
+      const events: EventInput[] = [
+        {
+          id: `creation-${project.id}`,
+          title: 'Data rozpoczęcia',
+          start: project.startDate,
+          allDay: true,
+        },
+        ...(project.endDate
+          ? [
+              {
+                id: `planned-end-${project.id}`,
+                title: 'Planowana data zakończenia',
+                start: project.endDate,
+                allDay: true,
+              },
+            ]
+          : []),
+      ];
+
+      this.updateCalendarEvents(events);
+    });
+  }
+
   private updateCalendarEvents(newEvents: EventInput[]): void {
     const currentEvents = Array.isArray(this.calendarOptions.events)
       ? this.calendarOptions.events
@@ -131,6 +168,24 @@ export class CalendarComponent implements OnInit {
       ...this.calendarOptions,
       events: [...currentEvents, ...newEvents],
     };
+  }
+
+  private onEventHover(info: any): void {
+    this.title = info.event.title;
+    this.startDate = new Date(info.event.start).toISOString();
+    this.endDate = info.event.end
+      ? new Date(info.event.end).toISOString()
+      : null;
+    this.allDay = info.event.allDay;
+    this.visible = true;
+
+    const rect = info.el.getBoundingClientRect();
+    this.top = rect.top + rect.height + 8;
+    this.left = rect.left + rect.width / 2 - 50;
+  }
+
+  private onEventLeave(): void {
+    this.visible = false;
   }
 
   private openAddTaskModal(): void {
