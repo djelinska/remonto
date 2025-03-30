@@ -5,6 +5,8 @@ import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectService } from '../../../../../core/services/project/project.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-info-images',
@@ -27,7 +29,8 @@ export class InfoImagesComponent implements OnInit {
 
   constructor(
     private imageService: ImageService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private modalService: BsModalService
   ) {}
 
   ngOnInit(): void {
@@ -75,7 +78,15 @@ export class InfoImagesComponent implements OnInit {
   }
 
   deleteImage(imageUrl: string): void {
-    if (confirm('Are you sure you want to delete this image?')) {
+    const modalRef = this.modalService.show(ConfirmModalComponent, {
+      initialState: {
+        title: 'Usuń zdjęcie',
+        message: 'Czy na pewno chcesz usunąć to zdjęcie?',
+        btnTitle: 'Usuń'
+      }
+    });
+  
+    modalRef.content!.confirmCallback = () => {
       this.deletingImage = imageUrl;
       this.imageService.deleteImage(imageUrl).subscribe({
         next: () => {
@@ -97,7 +108,11 @@ export class InfoImagesComponent implements OnInit {
           this.deletingImage = null;
         }
       });
-    }
+    };
+  
+    modalRef.content!.cancelCallback = () => {
+      this.deletingImage = null;
+    };
   }
 
   private loadProjectImages(): void {
