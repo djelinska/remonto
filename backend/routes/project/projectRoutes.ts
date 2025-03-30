@@ -13,6 +13,7 @@ import {
 	removeImageFromProject
 } from '../../services/projectService';
 import express, { Response } from 'express';
+import { deleteFileByUrl } from '../../utils/fileUtils';
 
 import { Types } from 'mongoose';
 import authenticateUser from '../../middlewares/authenticateUser';
@@ -20,9 +21,6 @@ import materialRoutes from './materialRoutes';
 import taskRoutes from './taskRoutes';
 import toolRoutes from './toolRoutes';
 import validateProjectData from '../../middlewares/validateProject';
-
-import fs from 'fs';
-import path from 'path';
 
 const router = express.Router();
 
@@ -218,13 +216,7 @@ router.delete(
                 decodedImageUrl
             );
 
-            const filename = decodedImageUrl.split('/').pop();
-            if (filename) {
-                const filePath = path.join(__dirname, '../../uploads/', filename);
-                if (fs.existsSync(filePath)) {
-                    fs.unlinkSync(filePath);
-                }
-            }
+            deleteFileByUrl(decodedImageUrl);
 
             res.status(204).end();
         } catch (error: any) {

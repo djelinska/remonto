@@ -1,11 +1,9 @@
 import {Material, MaterialData, MaterialDto} from '../types/models/material.dto';
+import {deleteFileByUrl} from '../utils/fileUtils';
 
 import MaterialModel from '../models/materialModel';
 import ReturnMessage from '../types/models/returnMessage.model';
 import {Types} from 'mongoose';
-
-import path from 'path';
-import fs from 'fs';
 
 type ObjectId = Types.ObjectId;
 
@@ -106,11 +104,17 @@ export const createMaterial = async (projectId: ObjectId, materialData: Material
 
 export const updateMaterial = async (projectId: ObjectId, materialId: ObjectId, materialData: MaterialData): Promise<Material> => {
 	try {
+		const currentMaterial = await MaterialModel.findOne({projectId, _id: materialId});
 		const material: MaterialDto | null = await MaterialModel.findOneAndUpdate({projectId, _id: materialId}, {$set: materialData}, {new: true, runValidators: true});
 
-		if (!material) {
-			throw new Error('Material not found or user not authorized');
-		}
+
+        if (!material) {
+            throw new Error('Material not found or user not authorized');
+        }
+
+        if (currentMaterial?.imageUrl && currentMaterial.imageUrl !== material.imageUrl) {
+            deleteFileByUrl(currentMaterial.imageUrl);
+        }
 
 		return {
 			id: material._id,
@@ -149,18 +153,7 @@ export const deleteMaterial = async (projectId: ObjectId, materialId: ObjectId):
         });
 
         if (material.imageUrl) {
-            try {
-                const filename = material.imageUrl.split('/').pop();
-                if (filename) {
-                    const filePath = path.join(__dirname, '../../uploads/', filename);
-                    if (fs.existsSync(filePath)) {
-                        fs.unlinkSync(filePath);
-                        console.log(`Deleted image file: ${filename}`);
-                    }
-                }
-            } catch (fileError) {
-                console.error('Error deleting image file:', fileError);
-            }
+            deleteFileByUrl(material.imageUrl);
         }
 
         return { message: 'Material and associated image (if any) deleted successfully' };

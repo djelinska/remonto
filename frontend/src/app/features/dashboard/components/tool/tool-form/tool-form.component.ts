@@ -122,23 +122,26 @@ export class ToolFormComponent {
 
   onSubmit(): void {
     if (this.form.valid) {
-      this.uploadImage().subscribe((imageUrl) => {
-        const material: ToolFormDto = {
-          name: this.form.value.name,
-          status: this.form.value.status,
-          deliveryDate: this.form.value.deliveryDate,
-          allDay: this.form.value.deliveryDate ? this.form.value.allDay : false,
-          cost: this.form.value.cost || 0,
-          quantity: this.form.value.quantity || 0,
-          location: this.form.value.location,
-          link: this.form.value.link,
-          note: this.form.value.note,
-          imageUrl: imageUrl || this.form.value.imageUrl,
-        };
-        this.formSubmit.emit(material);
-      });
+        if (!this.imagePreview && this.tool?.imageUrl) {
+            this.uploadImage().subscribe((imageUrl) => {
+                const tool: ToolFormDto = {
+                    ...this.form.value,
+                    imageUrl: null 
+                };
+                this.formSubmit.emit(tool);
+            });
+        } 
+        else {
+            this.uploadImage().subscribe((imageUrl) => {
+                const tool: ToolFormDto = {
+                    ...this.form.value,
+                    imageUrl: imageUrl || this.form.value.imageUrl
+                };
+                this.formSubmit.emit(tool);
+            });
+        }
     }
-  }
+}
 
   hideModal(): void {
     if (this.modalRef) {
@@ -153,4 +156,10 @@ export class ToolFormComponent {
   get status() {
     return this.form.get('status')?.value;
   }
+
+  removeImage(): void {
+    this.imagePreview = null;
+    this.selectedFile = null;
+    this.form.patchValue({ imageUrl: null }); 
+}
 }
