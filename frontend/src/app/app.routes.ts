@@ -35,5 +35,11 @@ export const routes: Routes = [
         (r) => r.DASHBOARD_ROUTES
       ),
   },
+  {
+    path: 'admin',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      import('./features/admin/admin.routes').then((r) => r.ADMIN_ROUTES),
+  },
   { path: '**', component: NotFoundComponent },
 ];

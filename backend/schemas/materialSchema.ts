@@ -14,7 +14,7 @@ const materialSchema = new Schema<MaterialDto>({
 	imageUrl: {type: String},
 	status: {
 		type: String,
-		enum: ['NOT_ORDERED', 'ORDERED', 'IN_DELIVERY', 'READY_FOR_PICKUP', 'RECEIVED'],
+		enum: ['NOT_ORDERED', 'ORDERED', 'IN_DELIVERY', 'READY_FOR_PICKUP', 'RECEIVED', 'AVAILABLE', 'REQUIRED'],
 		validate: {
 			validator: checkToolsMaterialsStatus,
 			message: (props: any) => `${props.value} is not a valid material status`,

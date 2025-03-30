@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-between w-100 border-bottom" id="topbar">
+  <div class="p-4 border-bottom" id="logo">
+    <a routerLink="/admin/templates"
+      ><img src="/assets/images/remonto_logo.svg" alt="Remonto"
+    /></a>
+  </div>
+
+  <div class="p-4 border-top d-flex align-items-center">
+    <i class="bi bi-person-circle" id="profile-icon"></i>
+    @if (user$ | async; as user) {
+    <div class="ms-2 me-auto">{{ user.firstName + " " + user.lastName }}</div>
+    }
+    <div class="dropdown ms-4">
+      <button class="btn btn-light" type="button" data-bs-toggle="dropdown">
+        <i class="bi bi-three-dots"></i>
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <button type="button" class="dropdown-item" (click)="logout()">
+            Wyloguj się
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
