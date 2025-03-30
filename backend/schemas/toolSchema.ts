@@ -22,7 +22,7 @@ const toolSchema = new Schema<ToolDto>({
 	deliveryDate: {type: Date},
 	allDay: {type: Boolean, default: false},
 	cost: {type: mongoose.Schema.Types.Number, default: 0.0, min: 0.0},
-	quantity: {type: Number, default: 0, min: 0},
+	quantity: {type: Number, default: 1, min: 1},
 	location: {type: String},
 	link: {type: String},
 	note: {type: String},

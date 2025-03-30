@@ -51,7 +51,7 @@ export class ToolFormComponent {
       deliveryDate: [null],
       allDay: [false],
       cost: [0, Validators.min(0)],
-      quantity: [0, Validators.min(0)],
+      quantity: [1, Validators.min(1)],
       type: [''],
       location: [''],
       link: [''],
@@ -129,7 +129,7 @@ export class ToolFormComponent {
           deliveryDate: this.form.value.deliveryDate,
           allDay: this.form.value.deliveryDate ? this.form.value.allDay : false,
           cost: this.form.value.cost || 0,
-          quantity: this.form.value.quantity || 0,
+          quantity: this.form.value.quantity || 1,
           location: this.form.value.location,
           link: this.form.value.link,
           note: this.form.value.note,
@@ -138,6 +138,7 @@ export class ToolFormComponent {
         this.formSubmit.emit(material);
       });
     }
+    this.form.markAllAsTouched();
   }
 
   hideModal(): void {

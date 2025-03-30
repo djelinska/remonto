@@ -1,4 +1,5 @@
 import { ElementStatus } from '../../../../shared/enums/element-status';
+import { MaterialUnit } from '../../../../shared/enums/material-unit';
 import { TaskCategory } from '../../../../shared/enums/task-category';
 import { TaskPriority } from '../../../../shared/enums/task-priority';
 import { TaskStatus } from '../../../../shared/enums/task-status';
@@ -21,6 +22,7 @@ export interface MaterialFormDto {
   name: string;
   status?: ElementStatus;
   quantity: number;
+  unit?: MaterialUnit;
   type?: string;
   note?: string;
 }

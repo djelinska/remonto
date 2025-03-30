@@ -24,6 +24,10 @@ const materialSchema = new Schema<MaterialDto>({
 	allDay: {type: Boolean, default: false},
 	cost: {type: mongoose.Schema.Types.Number, default: 0.0, min: 0.0},
 	quantity: {type: Number, default: 0, min: 0},
+	unit: {
+		type: String,
+		enum: ['KILOGRAM', 'GRAM', 'TON', 'LITER', 'MILLILITER', 'CUBIC_METER', 'METER', 'CENTIMETER', 'SQUARE_METER', 'PIECE', 'PACKAGE', 'ROLL', 'LINEAR_METER'],
+	},
 	location: {type: String},
 	link: {type: String},
 	note: {type: String},

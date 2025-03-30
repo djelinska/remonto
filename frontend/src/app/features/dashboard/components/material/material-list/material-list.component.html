@@ -1,4 +1,4 @@
-<div>
+<div class="table-responsive">
   <table class="table table-bordered align-middle">
     <thead>
       <tr>
@@ -32,7 +32,10 @@
           }}
         </td>
         <td>{{ material.cost | currency : "PLN" }}</td>
-        <td>{{ material.quantity }}</td>
+        <td class="text-nowrap">
+          {{ material.quantity }}
+          {{ material.unit ? unitLabels[material.unit] : "" }}
+        </td>
         <td>{{ material.type }}</td>
         <td>{{ material.location }}</td>
         <td>{{ material.link }}</td>
