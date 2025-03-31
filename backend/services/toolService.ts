@@ -1,4 +1,5 @@
 import {ToolData, ToolDto} from '../types/models/tool.dto';
+import { deleteFileByUrl } from '../utils/fileUtils';
 
 import ReturnMessage from '../types/models/returnMessage.model';
 import {Tool} from '../types/models/tool.dto';
@@ -97,43 +98,76 @@ export const createTool = async (projectId: ObjectId, toolData: ToolData): Promi
 };
 
 export const updateTool = async (projectId: ObjectId, toolId: ObjectId, toolData: ToolData): Promise<Tool> => {
-	try {
-		const tool: ToolDto | null = await ToolModel.findOneAndUpdate({projectId, _id: toolId}, {$set: toolData}, {new: true, runValidators: true});
+    try {
+        const currentTool = await ToolModel.findOne({ projectId, _id: toolId });
+        
+        if (!currentTool) {
+            throw new Error('Tool not found or user not authorized');
+        }
 
-		if (!tool) {
-			throw new Error('Tool not found or user not authorized');
-		}
+        const tool: ToolDto | null = await ToolModel.findOneAndUpdate(
+            { projectId, _id: toolId }, 
+            { $set: toolData }, 
+            { new: true, runValidators: true }
+        );
 
-		return {
-			id: tool._id,
-			name: tool.name,
-			imageUrl: tool.imageUrl,
-			status: tool.status,
-			deliveryDate: tool.deliveryDate,
-			allDay: tool.allDay,
-			cost: parseFloat(tool.cost.toString()),
-			quantity: tool.quantity,
-			location: tool.location,
-			link: tool.link,
-			note: tool.note,
-		};
-	} catch (error) {
-		console.error('Error updating tool:', error);
-		throw new Error('Error updating tool');
-	}
+        if (!tool) {
+            throw new Error('Tool not found or user not authorized');
+        }
+
+        if (currentTool.imageUrl) {
+            if (!toolData.imageUrl || currentTool.imageUrl !== toolData.imageUrl) {
+                console.log('Deleting old tool image:', currentTool.imageUrl);
+                deleteFileByUrl(currentTool.imageUrl);
+            }
+        }
+
+        return {
+            id: tool._id,
+            name: tool.name,
+            imageUrl: tool.imageUrl,
+            status: tool.status,
+            deliveryDate: tool.deliveryDate,
+            allDay: tool.allDay,
+            cost: parseFloat(tool.cost.toString()),
+            quantity: tool.quantity,
+            location: tool.location,
+            link: tool.link,
+            note: tool.note,
+        };
+    } catch (error) {
+        console.error('Error updating tool:', error);
+        throw new Error('Error updating tool');
+    }
 };
 
 export const deleteTool = async (projectId: ObjectId, toolId: ObjectId): Promise<ReturnMessage> => {
-	try {
-		const tool: ToolDto | null = await ToolModel.findOneAndDelete({projectId, _id: toolId});
+    try {
+        const tool: ToolDto | null = await ToolModel.findOne({
+            projectId,
+            _id: toolId
+        });
 
-		if (!tool) {
-			throw new Error('Tool not found or user not authorized');
-		}
+        if (!tool) {
+            throw new Error('Tool not found or user not authorized');
+        }
 
-		return {message: 'Tool deleted successfully'};
-	} catch (error) {
-		console.error('Error deleting tool:', error);
-		throw new Error('Error deleting tool');
-	}
+        await ToolModel.deleteOne({
+            projectId,
+            _id: toolId
+        });
+
+        if (tool.imageUrl) {
+            const deletionResult = deleteFileByUrl(tool.imageUrl);
+			if (deletionResult == false) {
+				console.error('Error deleting image file');
+        		throw new Error('Error deleting tool image file');
+			}
+        }
+
+        return { message: 'Tool and associated image (if any) deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting tool:', error);
+        throw new Error('Error deleting tool');
+    }
 };

@@ -1,4 +1,5 @@
 import { PostProjectRequest, ProjectRequest } from '../../types/models/projectRequest.dto';
+import { ProjectImageRequest } from '../../types/models/projectImageRequest.dto';
 import {
 	addImageToProject,
 	addNoteToProject,
@@ -9,8 +10,10 @@ import {
 	fetchUserProjectById,
 	fetchUserProjects,
 	updateUserProject,
+	removeImageFromProject
 } from '../../services/projectService';
 import express, { Response } from 'express';
+import { deleteFileByUrl } from '../../utils/fileUtils';
 
 import { Types } from 'mongoose';
 import authenticateUser from '../../middlewares/authenticateUser';
@@ -192,6 +195,39 @@ router.patch('/api/projects/:projectId/notes/:noteId', authenticateUser, async (
 		res.status(500).json({ message: 'Server error' });
 	}
 });
+
+router.delete(
+    '/api/projects/:projectId/images/:imageUrl',
+    authenticateUser,
+    async (req: ProjectImageRequest, res: Response) => {
+        try {
+            const userId = req.user?.id;
+            const { projectId, imageUrl } = req.params;
+            
+            if (!userId || !projectId || !imageUrl) {
+                return res.status(400).json({ message: 'Invalid request parameters' });
+            }
+
+            const decodedImageUrl = decodeURIComponent(imageUrl);
+
+            await removeImageFromProject(
+                new Types.ObjectId(userId),
+                new Types.ObjectId(projectId),
+                decodedImageUrl
+            );
+
+            deleteFileByUrl(decodedImageUrl);
+
+            res.status(204).end();
+        } catch (error: any) {
+            console.error(error);
+            if (error.message.includes('not found')) {
+                return res.status(404).json({ message: error.message });
+            }
+            res.status(500).json({ message: 'Server error' });
+        }
+    }
+);
 
 // Task, materials and tools routes
 router.use('/api/projects/:projectId/tasks', taskRoutes);

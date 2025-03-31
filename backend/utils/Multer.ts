@@ -1,4 +1,5 @@
 import { FileFilterCallback, Multer } from "multer";
+import path from 'path';
 import { Request } from "express";
 export type DestinationCallback = (
     error: Error | null,
@@ -8,22 +9,24 @@ export type FileNameCallback = (error: Error | null, filename: string) => void;
 import { v4 as uuidv4 } from 'uuid';
 const multer = require("multer"); // do not convert to import statement, typescript errors out for some reason
 
+const uploadsDir = path.join(process.cwd(), 'uploads');
 export const storage: Multer = multer.diskStorage({
     destination: function(
         _: Request,
         __: Express.Multer.File,
         cb: DestinationCallback
     ): void {
-        cb(null, "./uploads/");
+        require('fs').mkdirSync(uploadsDir, { recursive: true });
+        cb(null, uploadsDir);
     },
     filename: function(
         req: Request,
         file: Express.Multer.File,
-        cb: DestinationCallback
+        cb: FileNameCallback  
     ): void {
         cb(
             null,
-            `${uuidv4()}.${file.originalname.split(".").slice(-1).join("")}`
+            `${uuidv4()}.${file.originalname.split(".").pop()}`
         );
     },
 });

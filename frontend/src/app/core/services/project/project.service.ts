@@ -44,6 +44,12 @@ export class ProjectService {
     });
   }
 
+  deleteImageFromProject(projectId: string, imageUrl: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${projectId}/images/${encodeURIComponent(imageUrl)}`
+    );
+  }
+
   addNoteToProject(projectId: string, note: string): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${projectId}/notes`, {
       note,

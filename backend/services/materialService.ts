@@ -1,4 +1,5 @@
 import {Material, MaterialData, MaterialDto} from '../types/models/material.dto';
+import {deleteFileByUrl} from '../utils/fileUtils';
 
 import MaterialModel from '../models/materialModel';
 import ReturnMessage from '../types/models/returnMessage.model';
@@ -107,11 +108,17 @@ export const createMaterial = async (projectId: ObjectId, materialData: Material
 
 export const updateMaterial = async (projectId: ObjectId, materialId: ObjectId, materialData: MaterialData): Promise<Material> => {
 	try {
+		const currentMaterial = await MaterialModel.findOne({projectId, _id: materialId});
 		const material: MaterialDto | null = await MaterialModel.findOneAndUpdate({projectId, _id: materialId}, {$set: materialData}, {new: true, runValidators: true});
 
-		if (!material) {
-			throw new Error('Material not found or user not authorized');
-		}
+
+        if (!material) {
+            throw new Error('Material not found or user not authorized');
+        }
+
+        if (currentMaterial?.imageUrl && currentMaterial.imageUrl !== material.imageUrl) {
+            deleteFileByUrl(currentMaterial.imageUrl);
+        }
 
 		return {
 			id: material._id,
@@ -135,16 +142,28 @@ export const updateMaterial = async (projectId: ObjectId, materialId: ObjectId, 
 };
 
 export const deleteMaterial = async (projectId: ObjectId, materialId: ObjectId): Promise<ReturnMessage> => {
-	try {
-		const material: MaterialDto | null = await MaterialModel.findOneAndDelete({projectId, _id: materialId});
+    try {
+        const material: MaterialDto | null = await MaterialModel.findOne({
+            projectId,
+            _id: materialId
+        });
 
-		if (!material) {
-			throw new Error('Material not found or user not authorized');
-		}
+        if (!material) {
+            throw new Error('Material not found or user not authorized');
+        }
 
-		return {message: 'Material deleted successfully'};
-	} catch (error) {
-		console.error('Error deleting material:', error);
-		throw new Error('Error deleting material');
-	}
+        await MaterialModel.deleteOne({
+            projectId,
+            _id: materialId
+        });
+
+        if (material.imageUrl) {
+            deleteFileByUrl(material.imageUrl);
+        }
+
+        return { message: 'Material and associated image (if any) deleted successfully' };
+    } catch (error) {
+        console.error('Error deleting material:', error);
+        throw new Error('Error deleting material');
+    }
 };

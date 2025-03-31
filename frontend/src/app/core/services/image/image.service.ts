@@ -26,4 +26,11 @@ export class ImageService {
       .get(imageUrl, { responseType: 'blob' })
       .pipe(map((blob) => URL.createObjectURL(blob)));
   }
+
+  deleteImage(imageUrl: string): Observable<{ message: string }> {
+    const filename = imageUrl.split('/').pop() || '';
+    return this.http.delete<{ message: string }>(
+      `${this.apiUrl}/images/${filename}`
+    );
+  }
 }
