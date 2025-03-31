@@ -13,6 +13,7 @@ import { FormErrorComponent } from '../../../../../shared/components/form-error/
 import { ImageService } from '../../../../../core/services/image/image.service';
 import { MaterialDto } from '../../../../../shared/models/material.dto';
 import { MaterialFormDto } from '../../../../../core/services/material/models/material-form.dto';
+import { MaterialUnit } from '../../../../../shared/enums/material-unit';
 import { formatDate } from '@angular/common';
 
 @Component({
@@ -29,6 +30,8 @@ export class MaterialFormComponent {
   form: FormGroup;
   statuses = Object.keys(ElementStatus);
   statusLabels: Record<string, string> = ElementStatus;
+  units = Object.keys(MaterialUnit);
+  unitLabels: Record<string, string> = MaterialUnit;
 
   imagePreview: string | null = null;
   selectedFile: File | null = null;
@@ -52,6 +55,7 @@ export class MaterialFormComponent {
       allDay: [false],
       cost: [0, Validators.min(0)],
       quantity: [0, Validators.min(0)],
+      unit: [null],
       type: [''],
       location: [''],
       link: [''],
@@ -140,7 +144,6 @@ export class MaterialFormComponent {
                 this.formSubmit.emit(material);
             });
         } 
-        
         else {
             this.uploadImage().subscribe((imageUrl) => {
                 const material: MaterialFormDto = {
@@ -151,7 +154,8 @@ export class MaterialFormComponent {
             });
         }
     }
-}
+    this.form.markAllAsTouched();  
+  }
 
   hideModal(): void {
     if (this.modalRef) {

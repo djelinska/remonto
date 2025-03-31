@@ -14,7 +14,7 @@ const materialSchema = new Schema<MaterialDto>({
 	imageUrl: {type: String},
 	status: {
 		type: String,
-		enum: ['NOT_ORDERED', 'ORDERED', 'IN_DELIVERY', 'READY_FOR_PICKUP', 'RECEIVED'],
+		enum: ['NOT_ORDERED', 'ORDERED', 'IN_DELIVERY', 'READY_FOR_PICKUP', 'RECEIVED', 'AVAILABLE', 'REQUIRED'],
 		validate: {
 			validator: checkToolsMaterialsStatus,
 			message: (props: any) => `${props.value} is not a valid material status`,
@@ -24,6 +24,10 @@ const materialSchema = new Schema<MaterialDto>({
 	allDay: {type: Boolean, default: false},
 	cost: {type: mongoose.Schema.Types.Number, default: 0.0, min: 0.0},
 	quantity: {type: Number, default: 0, min: 0},
+	unit: {
+		type: String,
+		enum: ['KILOGRAM', 'GRAM', 'TON', 'LITER', 'MILLILITER', 'CUBIC_METER', 'METER', 'CENTIMETER', 'SQUARE_METER', 'PIECE', 'PACKAGE', 'ROLL', 'LINEAR_METER'],
+	},
 	location: {type: String},
 	link: {type: String},
 	note: {type: String},

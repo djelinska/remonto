@@ -58,7 +58,7 @@ export function checkTaskPriority(priority: TaskPriority): boolean {
 }
 
 export function checkToolsMaterialsStatus(status: ElementStatus): boolean {
-	const statuses = ['NOT_ORDERED', 'ORDERED', 'IN_DELIVERY', 'READY_FOR_PICKUP', 'RECEIVED'];
+	const statuses = ['NOT_ORDERED', 'ORDERED', 'IN_DELIVERY', 'READY_FOR_PICKUP', 'RECEIVED', 'AVAILABLE', 'REQUIRED'];
 	if (statuses.includes(status)) {
 		return true;
 	} else {

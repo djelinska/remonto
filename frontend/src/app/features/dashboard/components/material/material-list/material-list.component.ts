@@ -5,6 +5,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ElementStatus } from '../../../../../shared/enums/element-status';
 import { MaterialDto } from '../../../../../shared/models/material.dto';
 import { MaterialEditComponent } from '../material-edit/material-edit.component';
+import { MaterialUnit } from '../../../../../shared/enums/material-unit';
 
 @Component({
   selector: 'app-material-list',
@@ -20,6 +21,8 @@ export class MaterialListComponent {
   @Output() materialUpdated = new EventEmitter<MaterialDto>();
 
   statusLabels: Record<string, string> = ElementStatus;
+  units = Object.keys(MaterialUnit);
+  unitLabels: Record<string, string> = MaterialUnit;
 
   constructor(private modalService: BsModalService) {}
 

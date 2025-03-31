@@ -51,7 +51,7 @@ export class ToolFormComponent {
       deliveryDate: [null],
       allDay: [false],
       cost: [0, Validators.min(0)],
-      quantity: [0, Validators.min(0)],
+      quantity: [1, Validators.min(1)],
       type: [''],
       location: [''],
       link: [''],
@@ -126,6 +126,7 @@ export class ToolFormComponent {
             this.uploadImage().subscribe((imageUrl) => {
                 const tool: ToolFormDto = {
                     ...this.form.value,
+                    quantity: this.form.value.quantity || 1,  
                     imageUrl: null 
                 };
                 this.formSubmit.emit(tool);
@@ -135,13 +136,15 @@ export class ToolFormComponent {
             this.uploadImage().subscribe((imageUrl) => {
                 const tool: ToolFormDto = {
                     ...this.form.value,
+                    quantity: this.form.value.quantity || 1, 
                     imageUrl: imageUrl || this.form.value.imageUrl
                 };
                 this.formSubmit.emit(tool);
             });
         }
     }
-}
+    this.form.markAllAsTouched();  
+  }
 
   hideModal(): void {
     if (this.modalRef) {

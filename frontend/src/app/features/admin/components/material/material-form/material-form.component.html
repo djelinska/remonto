@@ -1,0 +1,66 @@
+<div [formGroup]="materialForm">
+  <div class="mb-3">
+    <label [for]="'name-' + materialIndex" class="form-label">Nazwa</label>
+    <input
+      [id]="'name-' + materialIndex"
+      formControlName="name"
+      class="form-control"
+      placeholder="Wprowadź nazwę materiału"
+    />
+    <shared-form-error [control]="materialForm.get('name')"></shared-form-error>
+  </div>
+
+  <div class="mb-3 row g-2">
+    <div class="col-4">
+      <label [for]="'quantity-' + materialIndex" class="form-label">
+        Ilość
+      </label>
+      <input
+        type="number"
+        [id]="'quantity-' + materialIndex"
+        class="form-control"
+        formControlName="quantity"
+        step="1"
+      />
+    </div>
+
+    <div class="col-8">
+      <label [for]="'unit-' + materialIndex" class="form-label">
+        Jednostka
+      </label>
+      <select
+        [id]="'quantity-' + materialIndex"
+        formControlName="unit"
+        class="form-select"
+      >
+        <option value="null" selected>Wybierz jednostkę</option>
+        @for (unit of units; track $index) {
+        <option [value]="unit" [label]="unitLabels[unit]"></option>
+        }
+      </select>
+      <shared-form-error
+        [control]="materialForm.get('unit')"
+      ></shared-form-error>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label [for]="'type-' + materialIndex" class="form-label">Typ</label>
+    <input
+      [id]="'type-' + materialIndex"
+      formControlName="type"
+      class="form-control"
+    />
+    <shared-form-error [control]="materialForm.get('type')"></shared-form-error>
+  </div>
+
+  <div class="mb-3">
+    <label [for]="'note-' + materialIndex" class="form-label">Notatka</label>
+    <textarea
+      [id]="'note-' + materialIndex"
+      formControlName="note"
+      class="form-control"
+      placeholder="Opcjonalna notatka"
+    ></textarea>
+  </div>
+</div>

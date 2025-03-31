@@ -9,5 +9,8 @@
   ></button>
 </div>
 <div class="modal-body">
-  <app-project-form (formSubmit)="onProjectAdded($event)"></app-project-form>
+  <app-project-form
+    [isEditMode]="false"
+    (formSubmit)="onProjectAdded($event)"
+  ></app-project-form>
 </div>

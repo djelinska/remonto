@@ -1,0 +1,13 @@
+#topbar {
+  height: 80px;
+  background-color: var(--gray-100);
+
+  #logo {
+    height: 80px;
+  }
+
+  #profile-icon {
+    font-size: 2rem;
+    color: var(--gray-300);
+  }
+}

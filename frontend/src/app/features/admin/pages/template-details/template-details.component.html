@@ -1,0 +1,161 @@
+@if (template) {
+<div>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>
+      <i class="bi bi-journal text-primary me-2"></i>
+      Szczegóły szablonu
+    </h1>
+    <button
+      type="button"
+      class="btn btn-primary ms-auto me-2"
+      (click)="openEditTemplateModal(template)"
+    >
+      <i class="bi bi-pencil me-1"></i>
+      Edytuj
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      (click)="onDeleteTemplate()"
+    >
+      <i class="bi bi-trash me-1"></i>
+      Usuń
+    </button>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h2>
+        <i class="bi bi-file-text text-primary me-2"></i>
+        Informacje o projekcie
+      </h2>
+    </div>
+
+    <div class="card-body">
+      <p><span>Nazwa:</span>{{ template.project.name }}</p>
+      <p><span>Opis:</span>{{ template.project.description }}</p>
+      <p>
+        <span>Budżet:</span>
+        {{ template.project.budget | currency : "PLN" }}
+      </p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h2>
+        <i class="bi bi-file-earmark-text text-primary me-2"></i>
+        Zadania do zrealizowania
+      </h2>
+    </div>
+
+    <div class="card-body">
+      @if (template.tasks.length > 0) {
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead>
+            <tr>
+              <th class="col-4">Nazwa</th>
+              <th class="th-priority">Priorytet</th>
+              <th>Kategoria</th>
+              <th class="col-5">Notatka</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (task of template.tasks; track task.id) {
+            <tr>
+              <td>{{ task.name }}</td>
+              <td>
+                <div [appPriorityBadge]="task.priority"></div>
+              </td>
+              <td>{{ categoryLabels[task.category] }}</td>
+              <td>{{ task.note }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      } @else {
+      <div class="alert alert-info">Brak zadań</div>
+      }
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h2>
+        <i class="bi bi-layers text-primary me-2"></i>
+        Potrzebne materiały
+      </h2>
+    </div>
+
+    <div class="card-body">
+      @if (template.materials.length > 0) {
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead>
+            <tr>
+              <th class="col-4">Nazwa</th>
+              <th>Ilość</th>
+              <th>Typ</th>
+              <th class="col-5">Notatka</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (material of template.materials; track material.id) {
+            <tr>
+              <td>{{ material.name }}</td>
+              <td class="text-nowrap">
+                {{ material.quantity }}
+                {{ material.unit ? unitLabels[material.unit] : "" }}
+              </td>
+              <td>{{ material.type }}</td>
+              <td>{{ material.note }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      } @else {
+      <div class="alert alert-info">Brak materiałów</div>
+      }
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h2>
+        <i class="bi bi-hammer text-primary me-2"></i>
+        Potrzebne narzędzia
+      </h2>
+    </div>
+
+    <div class="card-body">
+      @if (template.tools.length > 0) {
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <thead>
+            <tr>
+              <th class="col-4">Nazwa</th>
+              <th>Ilość</th>
+              <th class="col-5">Notatka</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (tool of template.tools; track tool.id) {
+            <tr>
+              <td>{{ tool.name }}</td>
+              <td>{{ tool.quantity }}</td>
+              <td>{{ tool.note }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      } @else {
+      <div class="alert alert-info">Brak narzędzi</div>
+      }
+    </div>
+  </div>
+</div>
+}
