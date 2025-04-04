@@ -39,8 +39,6 @@ export class TaskListComponent {
     };
     const modalRef: BsModalRef = this.modalService.show(TaskEditComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 

@@ -34,8 +34,6 @@ export class ToolListComponent {
     };
     const modalRef: BsModalRef = this.modalService.show(ToolEditComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 

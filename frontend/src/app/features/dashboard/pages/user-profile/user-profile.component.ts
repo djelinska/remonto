@@ -40,8 +40,6 @@ export class UserProfileComponent implements OnInit {
     const initialState = { user: { ...user } }; // Kopia obiektu użytkownika
     this.modalRef = this.modalService.show(UserEditComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 
@@ -56,8 +54,6 @@ export class UserProfileComponent implements OnInit {
     const initialState = { user };
     this.modalRef = this.modalService.show(UserDeleteComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 

@@ -67,8 +67,6 @@ export class TasksComponent implements OnInit {
     const initialState = { projectId: this.projectId };
     const modalRef: BsModalRef = this.modalService.show(TaskAddComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 

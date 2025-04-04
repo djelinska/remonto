@@ -60,8 +60,6 @@ export class TemplateDetailsComponent implements OnInit {
     };
     const modalRef: BsModalRef = this.modalService.show(TemplateEditComponent, {
       class: 'modal-lg',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 

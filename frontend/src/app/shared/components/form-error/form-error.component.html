@@ -24,6 +24,10 @@
     Maksymalna długość to
     {{ control.errors["maxlength"].requiredLength }} znaków.
   </small>
+  } @if (control.errors['endDateInvalid']) {
+  <small class="text-danger">
+    Data zakończenia nie może być wcześniejsza niż data rozpoczęcia.
+  </small>
   }
 </div>
 }
