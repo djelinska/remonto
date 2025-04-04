@@ -183,13 +183,31 @@ table.table {
     }
   }
 
-  .fc-button:focus {
-    outline: none !important;
-    box-shadow: none !important;
+  .fc-button {
+    &.fc-addTask-button {
+      margin-left: 0 !important;
+    }
+
+    &:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
   }
 
   .fc-toolbar-title,
   .fc-col-header-cell {
     text-transform: capitalize;
+  }
+
+  .fc-header-toolbar {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .fc-toolbar-chunk {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 }

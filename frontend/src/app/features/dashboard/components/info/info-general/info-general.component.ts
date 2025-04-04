@@ -26,8 +26,6 @@ export class InfoGeneralComponent {
     };
     const modalRef: BsModalRef = this.modalService.show(ProjectEditComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 

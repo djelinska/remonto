@@ -35,8 +35,6 @@ export class ProjectListComponent implements OnInit {
   openAddProjectModal(): void {
     const modalRef: BsModalRef = this.modalService.show(ProjectAddComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
     });
 
     modalRef.content.projectAdded.subscribe(() => {

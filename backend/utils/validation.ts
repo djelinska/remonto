@@ -92,7 +92,7 @@ export function checkStartAndEndDate(startDate: string | Date, endDate: string |
 		throw new Error('Invalid date format provided.');
 	}
 
-	return start.getTime() < end.getTime();
+	return start.getTime() <= end.getTime();
 }
 
 export function checkUserType(type: UserTypes): boolean {

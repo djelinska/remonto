@@ -82,8 +82,6 @@ export class MaterialsToolsComponent {
     const initialState = { projectId: this.projectId };
     const modalRef: BsModalRef = this.modalService.show(MaterialAddComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 
@@ -96,8 +94,6 @@ export class MaterialsToolsComponent {
     const initialState = { projectId: this.projectId };
     const modalRef: BsModalRef = this.modalService.show(ToolAddComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 

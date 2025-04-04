@@ -30,8 +30,6 @@ export class TemplatesComponent implements OnInit {
   openAddMaterialModal(): void {
     const modalRef: BsModalRef = this.modalService.show(TemplateAddComponent, {
       class: 'modal-lg',
-      backdrop: 'static',
-      keyboard: false,
     });
 
     modalRef.content.templateAdded.subscribe(() => {

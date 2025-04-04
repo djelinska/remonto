@@ -37,8 +37,6 @@ export class MaterialListComponent {
     };
     const modalRef: BsModalRef = this.modalService.show(MaterialEditComponent, {
       class: 'modal-md',
-      backdrop: 'static',
-      keyboard: false,
       initialState,
     });
 

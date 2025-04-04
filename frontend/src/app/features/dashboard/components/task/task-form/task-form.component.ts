@@ -13,6 +13,7 @@ import { TaskDto } from '../../../../../shared/models/task.dto';
 import { TaskFormDto } from '../../../../../core/services/task/models/task-form.dto';
 import { TaskPriority } from '../../../../../shared/enums/task-priority';
 import { TaskStatus } from '../../../../../shared/enums/task-status';
+import { dateRangeValidator } from '../../../../../shared/validators/date-range.validator';
 import { formatDate } from '@angular/common';
 
 @Component({
@@ -48,9 +49,9 @@ export class TaskFormComponent {
         ],
       ],
       category: [null, Validators.required],
-      status: [null, Validators.required],
+      status: ['NOT_STARTED', Validators.required],
       startDate: [null],
-      endDate: [null],
+      endDate: [null, dateRangeValidator('startDate')],
       allDay: [false],
       priority: ['LOW', Validators.required],
       cost: [0, Validators.min(0)],

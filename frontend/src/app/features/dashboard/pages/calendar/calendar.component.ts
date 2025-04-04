@@ -1,7 +1,13 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CalendarOptions, EventApi, EventInput } from '@fullcalendar/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 import { FullCalendarModule } from '@fullcalendar/angular';
@@ -25,6 +31,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
   styleUrl: './calendar.component.scss',
 })
 export class CalendarComponent implements OnInit {
+  @ViewChild('popoverElement') popoverElementRef!: ElementRef;
+
   projectId!: string;
   tasks: TaskDto[] = [];
   tasksWithDates: TaskDto[] = [];
@@ -72,8 +80,6 @@ export class CalendarComponent implements OnInit {
   endDate: string | null = null;
   allDay: boolean = false;
   visible: boolean = false;
-  top: number = 0;
-  left: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -81,7 +87,8 @@ export class CalendarComponent implements OnInit {
     private taskService: TaskService,
     private materialService: MaterialService,
     private toolService: ToolService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit(): void {
@@ -180,8 +187,45 @@ export class CalendarComponent implements OnInit {
     this.visible = true;
 
     const rect = info.el.getBoundingClientRect();
-    this.top = rect.top + rect.height + 8;
-    this.left = rect.left + rect.width / 2 - 50;
+    const popoverWidth = 200;
+
+    setTimeout(() => {
+      if (this.popoverElementRef) {
+        const popoverHeight = this.popoverElementRef.nativeElement.offsetHeight;
+        const spaceBelow = window.innerHeight - rect.bottom;
+
+        const calculatedTop =
+          spaceBelow < popoverHeight + 8
+            ? rect.top - popoverHeight - 8
+            : rect.top + rect.height + 8;
+
+        let calculatedLeft = rect.left + rect.width / 2 - popoverWidth / 2;
+
+        if (calculatedLeft + popoverWidth > window.innerWidth) {
+          calculatedLeft = rect.left + rect.width / 2 - popoverWidth;
+        } else if (calculatedLeft < 0) {
+          calculatedLeft = rect.left + rect.width / 2;
+        }
+
+        this.renderer.setStyle(
+          this.popoverElementRef.nativeElement,
+          'top',
+          `${calculatedTop}px`
+        );
+
+        this.renderer.setStyle(
+          this.popoverElementRef.nativeElement,
+          'left',
+          `${calculatedLeft}px`
+        );
+
+        this.renderer.setStyle(
+          this.popoverElementRef.nativeElement,
+          'opacity',
+          '100'
+        );
+      }
+    }, 0);
   }
 
   private onEventLeave(): void {
