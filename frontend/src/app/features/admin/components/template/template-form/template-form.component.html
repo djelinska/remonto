@@ -7,7 +7,9 @@
 
   <div formGroupName="project">
     <div class="mb-3">
-      <label for="name" class="form-label">Nazwa</label>
+      <label for="name" class="form-label">
+        Nazwa <span class="text-danger">*</span>
+      </label>
       <input
         id="name"
         formControlName="name"
@@ -25,7 +27,7 @@
         id="description"
         class="form-control"
         formControlName="description"
-        placeholder="Opcjonalny opis"
+        placeholder="Opis"
       ></textarea>
     </div>
 
@@ -41,9 +43,6 @@
         />
         <span class="input-group-text">zł</span>
       </div>
-      <shared-form-error
-        [control]="form.get('project.budget')"
-      ></shared-form-error>
     </div>
   </div>
 

@@ -4,20 +4,20 @@
 </div>
 <div class="modal-body">
   <div class="mb-3">
-    <label class="form-label">Imię:</label>
+    <label class="form-label">Imię</label>
     <input [(ngModel)]="user.firstName" type="text" class="form-control mb-1" />
     @if ((user.firstName.trim().length) < 3) {
     <small class="text-danger"> Imię musi mieć co najmniej 3 znaki.</small>}
   </div>
   <div class="mb-3">
-    <label class="form-label">Nazwisko:</label>
+    <label class="form-label">Nazwisko</label>
     <input [(ngModel)]="user.lastName" type="text" class="form-control mb-1" />
     @if ((user.lastName.trim().length) < 3) {
     <small class="text-danger"> Nazwisko musi mieć co najmniej 3 znaki. </small
     >}
   </div>
   <div class="mb-3">
-    <label class="form-label">Email:</label>
+    <label class="form-label">Email</label>
     <input [(ngModel)]="user.email" type="email" class="form-control mb-1" />
     @if (!user.email.includes('@')) {
     <small class="text-danger"> Podaj prawidłowy adres email. </small>}

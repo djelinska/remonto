@@ -23,7 +23,7 @@
           }
         </td>
         <td>{{ tool.name }}</td>
-        <td>{{ statusLabels[tool.status] }}</td>
+        <td class="text-nowrap">{{ statusLabels[tool.status] }}</td>
         <td class="text-nowrap">
           {{ tool.deliveryDate | date : (tool.allDay ? "d MMM y" : "medium") }}
         </td>

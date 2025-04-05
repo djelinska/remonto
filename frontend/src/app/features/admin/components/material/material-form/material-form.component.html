@@ -1,6 +1,8 @@
 <div [formGroup]="materialForm">
   <div class="mb-3">
-    <label [for]="'name-' + materialIndex" class="form-label">Nazwa</label>
+    <label [for]="'name-' + materialIndex" class="form-label">
+      Nazwa <span class="text-danger">*</span>
+    </label>
     <input
       [id]="'name-' + materialIndex"
       formControlName="name"
@@ -50,6 +52,7 @@
       [id]="'type-' + materialIndex"
       formControlName="type"
       class="form-control"
+      placeholder="Typ materiału"
     />
     <shared-form-error [control]="materialForm.get('type')"></shared-form-error>
   </div>
@@ -60,7 +63,7 @@
       [id]="'note-' + materialIndex"
       formControlName="note"
       class="form-control"
-      placeholder="Opcjonalna notatka"
+      placeholder="Notatka"
     ></textarea>
   </div>
 </div>

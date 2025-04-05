@@ -6,6 +6,7 @@ import { MaterialService } from '../../../../../core/services/material/material.
 import { ProjectFormComponent } from '../project-form/project-form.component';
 import { ProjectFormDto } from '../../../../../core/services/project/models/project-form.dto';
 import { ProjectService } from '../../../../../core/services/project/project.service';
+import { Router } from '@angular/router';
 import { TaskFormDto } from '../../../../../core/services/task/models/task-form.dto';
 import { TaskService } from '../../../../../core/services/task/task.service';
 import { ToolFormDto } from '../../../../../core/services/tool/models/tool-form.dto';
@@ -22,6 +23,7 @@ export class ProjectAddComponent {
   @Output() projectAdded = new EventEmitter<void>();
 
   constructor(
+    public router: Router,
     public modalRef: BsModalRef,
     private projectService: ProjectService,
     private taskService: TaskService,
@@ -32,9 +34,9 @@ export class ProjectAddComponent {
   onProjectAdded(project: ProjectFormDto): void {
     this.projectService.createProject(project).subscribe({
       next: (createdProject) => {
-        if (project.template) {
-          const projectId = createdProject.id;
+        const projectId = createdProject.id;
 
+        if (project.template) {
           const tasks = project.tasks;
           tasks?.forEach((task: TaskFormDto) => {
             this.taskService.createTask(projectId, task).subscribe();
@@ -55,6 +57,7 @@ export class ProjectAddComponent {
 
         this.projectAdded.emit();
         this.hideModal();
+        this.router.navigate(['dashboard/projects/', projectId]);
       },
       error: (error) => {
         console.error('Error adding project:', error);

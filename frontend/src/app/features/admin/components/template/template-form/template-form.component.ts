@@ -51,7 +51,7 @@ export class TemplateFormComponent implements OnInit {
           ],
         ],
         description: [''],
-        budget: [0, [Validators.required, Validators.min(0)]],
+        budget: [0, Validators.min(0)],
       }),
       tasks: this.fb.array([]),
       materials: this.fb.array([]),
@@ -61,12 +61,10 @@ export class TemplateFormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.template) {
-      // Patchowanie pól projektu
       this.form.patchValue({
         project: this.template.project,
       });
 
-      // Wypełnienie FormArray dla zadań, materiałów i narzędzi
       this.setFormArray(
         'tasks',
         this.template.tasks,
@@ -188,15 +186,19 @@ export class TemplateFormComponent implements OnInit {
         project: {
           name: this.form.value.project.name,
           description: this.form.value.project.description,
-          budget: this.form.value.project.budget,
+          budget: this.form.value.project.budget || 0,
         },
         tasks: this.form.value.tasks.map((task: TaskFormDto) => ({ ...task })),
         materials: this.form.value.materials.map(
           (material: MaterialFormDto) => ({
             ...material,
+            quantity: material.quantity || 0,
           })
         ),
-        tools: this.form.value.tools.map((tool: ToolFormDto) => ({ ...tool })),
+        tools: this.form.value.tools.map((tool: ToolFormDto) => ({
+          ...tool,
+          quantity: tool.quantity || 1,
+        })),
       };
       this.formSubmit.emit(template);
     }
