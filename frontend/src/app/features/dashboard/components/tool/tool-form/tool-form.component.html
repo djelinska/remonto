@@ -1,6 +1,8 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="mb-3">
-    <label for="name" class="form-label">Nazwa</label>
+    <label for="name" class="form-label">
+      Nazwa <span class="text-danger">*</span>
+    </label>
     <input
       id="name"
       formControlName="name"
@@ -20,15 +22,21 @@
         class="img-thumbnail"
         style="max-height: 150px"
       />
-      <button type="button" class="btn btn-sm btn-danger mt-2" (click)="removeImage()">
+      <button
+        type="button"
+        class="btn btn-sm btn-danger mt-2"
+        (click)="removeImage()"
+      >
         Usuń zdjęcie
-    </button>
+      </button>
     </div>
     }
   </div>
 
   <div class="mb-3">
-    <label for="status" class="form-label">Status</label>
+    <label for="status" class="form-label">
+      Status <span class="text-danger">*</span>
+    </label>
     <select id="status" formControlName="status" class="form-select">
       <option value="null" disabled selected>Wybierz status</option>
       @for (status of statuses; track $index) {
@@ -40,9 +48,12 @@
 
   @if (status === 'IN_DELIVERY' || status === 'READY_FOR_PICKUP') {
   <div class="mb-3">
-    <label for="deliveryDate" class="form-label">{{
-      status === "READY_FOR_PICKUP" ? "Termin odbioru" : "Termin dostawy"
-    }}</label>
+    <label for="deliveryDate" class="form-label"
+      >{{
+        status === "READY_FOR_PICKUP" ? "Termin odbioru" : "Termin dostawy"
+      }}
+      @if (form.value.allDay) {<span class="text-danger">*</span>}
+    </label>
     <div class="d-flex align-items-center gap-2">
       <input
         id="deliveryDate"
@@ -93,13 +104,23 @@
 
   <div class="mb-3">
     <label for="location" class="form-label">Lokalizacja</label>
-    <input id="location" formControlName="location" class="form-control" />
+    <input
+      id="location"
+      formControlName="location"
+      class="form-control"
+      placeholder="Miejsce przechowywania/odbioru"
+    />
     <shared-form-error [control]="form.get('location')"></shared-form-error>
   </div>
 
   <div class="mb-3">
     <label for="link" class="form-label">Link</label>
-    <input id="link" formControlName="link" class="form-control" />
+    <input
+      id="link"
+      formControlName="link"
+      class="form-control"
+      placeholder="Link do produktu"
+    />
     <shared-form-error [control]="form.get('link')"></shared-form-error>
   </div>
 
@@ -109,7 +130,7 @@
       id="note"
       formControlName="note"
       class="form-control"
-      placeholder="Opcjonalna notatka"
+      placeholder="Notatka"
     ></textarea>
   </div>
 

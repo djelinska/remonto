@@ -1,6 +1,8 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="mb-3">
-    <label for="name" class="form-label">Nazwa</label>
+    <label for="name" class="form-label">
+      Nazwa <span class="text-danger">*</span>
+    </label>
     <input
       id="name"
       formControlName="name"
@@ -11,7 +13,9 @@
   </div>
 
   <div class="mb-3">
-    <label for="category" class="form-label">Kategoria</label>
+    <label for="category" class="form-label">
+      Kategoria <span class="text-danger">*</span>
+    </label>
     <select id="category" formControlName="category" class="form-select">
       <option value="null" disabled selected>Wybierz kategorię</option>
       @for (category of categories; track $index) {
@@ -43,7 +47,9 @@
   </div>
 
   <div class="mb-3">
-    <label for="startDate" class="form-label">Początek</label>
+    <label for="startDate" class="form-label">
+      Początek @if (form.value.allDay) {<span class="text-danger">*</span>}
+    </label>
     <input
       id="startDate"
       [type]="form.value.allDay ? 'date' : 'datetime-local'"
@@ -61,7 +67,13 @@
       formControlName="endDate"
       class="form-control"
     />
-    <shared-form-error [control]="form.get('endDate')"></shared-form-error>
+    @if (form.errors?.['endDateInvalid'] && form.touched) {
+    <div class="form-error mt-1">
+      <small class="text-danger">
+        Data zakończenia nie może być wcześniejsza niż data rozpoczęcia.
+      </small>
+    </div>
+    }
   </div>
 
   <div class="mb-3">
@@ -94,7 +106,7 @@
       id="note"
       formControlName="note"
       class="form-control"
-      placeholder="Opcjonalna notatka"
+      placeholder="Notatka"
     ></textarea>
   </div>
 

@@ -48,7 +48,7 @@ export class ToolFormComponent {
         ],
       ],
       status: [null, Validators.required],
-      deliveryDate: [null],
+      deliveryDate: [''],
       allDay: [false],
       cost: [0, Validators.min(0)],
       quantity: [1, Validators.min(1)],
@@ -61,42 +61,61 @@ export class ToolFormComponent {
   }
 
   ngOnInit(): void {
-    if (this.tool) {
-      const formattedTool = { ...this.tool };
+    this.loadToolData();
+    this.handleStatusChange();
+    this.handleAllDayToggle();
+  }
 
-      if (this.tool.imageUrl) {
-        this.imageService.getImage(this.tool.imageUrl).subscribe((imageUrl) => {
-          this.imagePreview = imageUrl;
-        });
-      }
-      if (formattedTool.deliveryDate) {
-        formattedTool.deliveryDate = formatDate(
-          formattedTool.deliveryDate,
-          formattedTool.allDay ? 'yyyy-MM-dd' : 'yyyy-MM-ddTHH:mm',
-          'pl'
-        );
-      }
+  private formatDateForInput(
+    dateStr: string | Date,
+    isAllDay: boolean
+  ): string {
+    return formatDate(
+      dateStr,
+      isAllDay ? 'yyyy-MM-dd' : 'yyyy-MM-ddTHH:mm',
+      'pl'
+    );
+  }
 
-      this.form.patchValue(formattedTool);
+  private loadToolData(): void {
+    if (!this.tool) return;
+
+    const formatted = { ...this.tool };
+
+    if (this.tool.imageUrl) {
+      this.imageService.getImage(this.tool.imageUrl).subscribe((imageUrl) => {
+        this.imagePreview = imageUrl;
+      });
     }
 
+    if (formatted.deliveryDate) {
+      formatted.deliveryDate = this.formatDateForInput(
+        formatted.deliveryDate,
+        !!formatted.allDay
+      );
+    }
+
+    this.form.patchValue(formatted);
+  }
+
+  private handleStatusChange(): void {
     this.form.get('status')?.valueChanges.subscribe((value) => {
       if (value !== 'IN_DELIVERY' && value !== 'READY_FOR_PICKUP') {
         this.form.patchValue({ deliveryDate: null, allDay: false });
       }
     });
+  }
 
-    this.form.get('allDay')?.valueChanges.subscribe((value) => {
-      const deliveryDateControl = this.form.get('deliveryDate');
+  private handleAllDayToggle(): void {
+    this.form.get('allDay')?.valueChanges.subscribe((allDay: boolean) => {
+      const deliveryDate = this.form.get('deliveryDate');
 
-      if (value) {
-        deliveryDateControl?.setValidators(Validators.required);
-      } else {
-        deliveryDateControl?.removeValidators(Validators.required);
-      }
+      allDay
+        ? deliveryDate?.setValidators([Validators.required])
+        : deliveryDate?.removeValidators(Validators.required);
 
-      deliveryDateControl?.setValue(null);
-      deliveryDateControl?.updateValueAndValidity();
+      deliveryDate?.setValue('');
+      deliveryDate?.updateValueAndValidity({ emitEvent: false });
     });
   }
 
@@ -122,28 +141,29 @@ export class ToolFormComponent {
 
   onSubmit(): void {
     if (this.form.valid) {
-        if (!this.imagePreview && this.tool?.imageUrl) {
-            this.uploadImage().subscribe((imageUrl) => {
-                const tool: ToolFormDto = {
-                    ...this.form.value,
-                    quantity: this.form.value.quantity || 1,  
-                    imageUrl: null 
-                };
-                this.formSubmit.emit(tool);
-            });
-        } 
-        else {
-            this.uploadImage().subscribe((imageUrl) => {
-                const tool: ToolFormDto = {
-                    ...this.form.value,
-                    quantity: this.form.value.quantity || 1, 
-                    imageUrl: imageUrl || this.form.value.imageUrl
-                };
-                this.formSubmit.emit(tool);
-            });
-        }
+      if (!this.imagePreview && this.tool?.imageUrl) {
+        this.uploadImage().subscribe(() => {
+          const tool: ToolFormDto = {
+            ...this.form.value,
+            cost: this.form.value.cost || 0,
+            quantity: this.form.value.quantity || 1,
+            imageUrl: null,
+          };
+          this.formSubmit.emit(tool);
+        });
+      } else {
+        this.uploadImage().subscribe((imageUrl) => {
+          const tool: ToolFormDto = {
+            ...this.form.value,
+            cost: this.form.value.cost || 0,
+            quantity: this.form.value.quantity || 1,
+            imageUrl: imageUrl || this.form.value.imageUrl,
+          };
+          this.formSubmit.emit(tool);
+        });
+      }
     }
-    this.form.markAllAsTouched();  
+    this.form.markAllAsTouched();
   }
 
   hideModal(): void {
@@ -163,6 +183,6 @@ export class ToolFormComponent {
   removeImage(): void {
     this.imagePreview = null;
     this.selectedFile = null;
-    this.form.patchValue({ imageUrl: null }); 
-}
+    this.form.patchValue({ imageUrl: null });
+  }
 }

@@ -39,71 +39,142 @@ export class TaskFormComponent {
   priorityLabels: Record<string, string> = TaskPriority;
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder) {
-    this.form = this.fb.group({
-      name: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(50),
+    this.form = this.fb.group(
+      {
+        name: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(3),
+            Validators.maxLength(50),
+          ],
         ],
-      ],
-      category: [null, Validators.required],
-      status: ['NOT_STARTED', Validators.required],
-      startDate: [null],
-      endDate: [null, dateRangeValidator('startDate')],
-      allDay: [false],
-      priority: ['LOW', Validators.required],
-      cost: [0, Validators.min(0)],
-      note: [''],
-    });
+        category: [null, Validators.required],
+        status: ['NOT_STARTED', Validators.required],
+        startDate: [''],
+        endDate: [''],
+        allDay: [false],
+        priority: ['LOW', Validators.required],
+        cost: [0, Validators.min(0)],
+        note: [''],
+      },
+      { validators: dateRangeValidator }
+    );
   }
 
   ngOnInit(): void {
-    if (this.task) {
-      const formattedTask = { ...this.task };
+    this.loadTaskData();
+    this.handleAllDayToggle();
+    this.handleStartDateChange();
+    this.handleEndDateChange();
+  }
 
-      const formatTaskDate = (
-        date: string | undefined,
-        isAllDay: boolean
-      ): string | undefined => {
-        if (!date) {
-          return undefined;
-        }
-        return formatDate(
-          date,
-          isAllDay ? 'yyyy-MM-dd' : 'yyyy-MM-ddTHH:mm',
-          'pl'
-        );
-      };
-
-      formattedTask.startDate = formatTaskDate(
-        formattedTask.startDate,
-        !!formattedTask.allDay
-      );
-      formattedTask.endDate = formatTaskDate(
-        formattedTask.endDate,
-        !!formattedTask.allDay
-      );
-
-      this.form.patchValue(formattedTask);
+  private formatDateForInput(
+    dateStr: string | undefined,
+    isAllDay: boolean
+  ): string | undefined {
+    if (!dateStr) {
+      return undefined;
     }
+    return formatDate(
+      dateStr,
+      isAllDay ? 'yyyy-MM-dd' : 'yyyy-MM-ddTHH:mm',
+      'pl'
+    );
+  }
 
-    this.form.get('allDay')?.valueChanges.subscribe((value) => {
-      const startDateControl = this.form.get('startDate');
-      const endDateControl = this.form.get('endDate');
+  private loadTaskData(): void {
+    if (!this.task) return;
 
-      if (value) {
-        startDateControl?.setValidators(Validators.required);
-      } else {
-        startDateControl?.removeValidators(Validators.required);
+    const formatted = { ...this.task };
+
+    formatted.startDate = this.formatDateForInput(
+      formatted.startDate,
+      !!formatted.allDay
+    );
+    formatted.endDate = this.formatDateForInput(
+      formatted.endDate,
+      !!formatted.allDay
+    );
+
+    this.form.patchValue(formatted);
+  }
+
+  private handleAllDayToggle(): void {
+    this.form.get('allDay')?.valueChanges.subscribe((allDay: boolean) => {
+      const start = this.form.get('startDate');
+      const end = this.form.get('endDate');
+
+      allDay
+        ? start?.setValidators([Validators.required])
+        : start?.removeValidators(Validators.required);
+
+      start?.setValue('');
+      end?.setValue('');
+
+      start?.updateValueAndValidity({ emitEvent: false });
+      end?.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
+  private handleStartDateChange(): void {
+    this.form.get('startDate')?.valueChanges.subscribe(() => {
+      const start = this.form.get('startDate');
+      const end = this.form.get('endDate');
+      const allDay = this.form.get('allDay');
+
+      if (!start || !end) return;
+
+      if (allDay?.value && !start.hasValidator(Validators.required)) {
+        start.setValidators([Validators.required]);
+        start.updateValueAndValidity({ emitEvent: false });
       }
 
-      startDateControl?.setValue(null);
-      startDateControl?.updateValueAndValidity();
+      const startDate = start.value ? new Date(start.value) : '';
+      const endDate = end.value ? new Date(end.value) : '';
 
-      endDateControl?.setValue(null);
-      endDateControl?.updateValueAndValidity();
+      if (!startDate) return;
+
+      const startFormatted = this.formatDateForInput(
+        startDate.toISOString(),
+        allDay?.value
+      );
+      const endFormatted = endDate
+        ? this.formatDateForInput(endDate.toISOString(), allDay?.value)
+        : null;
+
+      if (allDay?.value) {
+        if (!end?.value || end.value === start.value) {
+          end.setValue(start.value, {
+            emitEvent: false,
+          });
+        }
+      } else {
+        const oneHourLater = new Date(startDate);
+        oneHourLater.setHours(oneHourLater.getHours() + 1);
+
+        if (!endDate || startFormatted === endFormatted) {
+          end.setValue(
+            this.formatDateForInput(oneHourLater.toISOString(), false),
+            {
+              emitEvent: false,
+            }
+          );
+        }
+      }
+
+      end.markAsTouched();
+      end.markAsDirty();
+      end.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
+  private handleEndDateChange(): void {
+    this.form.get('endDate')?.valueChanges.subscribe(() => {
+      const end = this.form.get('endDate');
+      end?.markAsTouched();
+      end?.markAsDirty();
+      end?.updateValueAndValidity({ emitEvent: false });
     });
   }
 

@@ -1,6 +1,8 @@
 <div [formGroup]="toolForm">
   <div class="mb-3">
-    <label [for]="'name-' + toolIndex" class="form-label">Nazwa</label>
+    <label [for]="'name-' + toolIndex" class="form-label">
+      Nazwa <span class="text-danger">*</span>
+    </label>
     <input
       [id]="'name-' + toolIndex"
       formControlName="name"
@@ -27,7 +29,7 @@
       [id]="'note-' + toolIndex"
       formControlName="note"
       class="form-control"
-      placeholder="Opcjonalna notatka"
+      placeholder="Notatka"
     ></textarea>
   </div>
 </div>

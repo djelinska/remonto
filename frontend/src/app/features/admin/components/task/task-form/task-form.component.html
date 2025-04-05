@@ -1,6 +1,8 @@
 <div [formGroup]="taskForm">
   <div class="mb-3">
-    <label [for]="'name-' + taskIndex" class="form-label">Nazwa</label>
+    <label [for]="'name-' + taskIndex" class="form-label">
+      Nazwa <span class="text-danger">*</span>
+    </label>
     <input
       [id]="'name-' + taskIndex"
       formControlName="name"
@@ -11,7 +13,9 @@
   </div>
 
   <div class="mb-3">
-    <label [for]="'category-' + taskIndex" class="form-label">Kategoria</label>
+    <label [for]="'category-' + taskIndex" class="form-label">
+      Kategoria <span class="text-danger">*</span>
+    </label>
     <select
       [id]="'category-' + taskIndex"
       formControlName="category"
@@ -45,7 +49,7 @@
       [id]="'note-' + taskIndex"
       formControlName="note"
       class="form-control"
-      placeholder="Opcjonalna notatka"
+      placeholder="Notatka"
     ></textarea>
   </div>
 </div>
