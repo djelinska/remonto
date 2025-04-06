@@ -31,7 +31,7 @@
         <div class="mt-3">
           <img
             [src]="imagePreview"
-            class="img-thumbnail"
+            class="img-thumbnail border-0 p-0"
             style="max-height: 150px"
           />
         </div>
@@ -46,8 +46,8 @@
     } @else if (projectImages.length > 0) {
       <div class="d-flex flex-wrap gap-3">
         @for (image of projectImages; track $index) {
-          <div class="position-relative">
-            <img [src]="image.preview" class="img-thumbnail" style="max-height: 120px" />
+          <div class="position-relative" style="line-height: 0;">
+            <img [src]="image.preview" class="img-thumbnail border-0 p-0" style="max-height: 120px" />
             <button
               class="btn btn-light btn-sm position-absolute top-0 end-0 m-1"
               (click)="deleteImage(image.url)"

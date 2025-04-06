@@ -16,18 +16,18 @@
     <label for="image" class="form-label">Zdjęcie</label>
     <input #fileInput type="file" class="form-control" (change)="onFileSelected($event)" />
     @if (imagePreview) {
-    <div class="mt-3">
+    <div class="mt-3 position-relative" style="display: inline-block;">
       <img
         [src]="imagePreview"
         class="img-thumbnail"
-        style="max-height: 150px"
-      />
+        style="max-height: 150px; display: block; padding: 0; border: none;"
+      /> 
       <button
         type="button"
-        class="btn btn-sm btn-outline-danger mt-2"
+        class="btn btn-sm btn-light position-absolute top-0 end-0 m-1"
         (click)="removeImage()"
       >
-        Usuń zdjęcie
+        <i class="bi bi-trash"></i>
       </button>
     </div>
     }
