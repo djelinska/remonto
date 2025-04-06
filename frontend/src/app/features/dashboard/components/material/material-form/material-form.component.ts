@@ -15,6 +15,7 @@ import { MaterialDto } from '../../../../../shared/models/material.dto';
 import { MaterialFormDto } from '../../../../../core/services/material/models/material-form.dto';
 import { MaterialUnit } from '../../../../../shared/enums/material-unit';
 import { formatDate } from '@angular/common';
+import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-material-form',
@@ -26,6 +27,7 @@ import { formatDate } from '@angular/common';
 export class MaterialFormComponent {
   @Input() material: MaterialDto | null = null;
   @Output() formSubmit = new EventEmitter<MaterialFormDto>();
+  @ViewChild('fileInput') fileInput!: ElementRef;
 
   form: FormGroup;
   statuses = Object.keys(ElementStatus);
@@ -141,6 +143,10 @@ export class MaterialFormComponent {
     this.imagePreview = null;
     this.selectedFile = null;
     this.form.patchValue({ imageUrl: null });
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }
 
   uploadImage(): Observable<string | null> {
