@@ -14,7 +14,7 @@
 
   <div class="mb-3">
     <label for="image" class="form-label">Zdjęcie</label>
-    <input type="file" class="form-control" (change)="onFileSelected($event)" />
+    <input #fileInput type="file" class="form-control" (change)="onFileSelected($event)" />
     @if (imagePreview) {
     <div class="mt-3">
       <img
@@ -24,7 +24,7 @@
       />
       <button
         type="button"
-        class="btn btn-sm btn-danger mt-2"
+        class="btn btn-sm btn-outline-danger mt-2"
         (click)="removeImage()"
       >
         Usuń zdjęcie
