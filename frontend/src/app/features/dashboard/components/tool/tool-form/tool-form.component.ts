@@ -14,6 +14,7 @@ import { ImageService } from '../../../../../core/services/image/image.service';
 import { ToolDto } from '../../../../../shared/models/tool.dto';
 import { ToolFormDto } from '../../../../../core/services/tool/models/tool-form.dto';
 import { formatDate } from '@angular/common';
+import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-tool-form',
@@ -25,6 +26,7 @@ import { formatDate } from '@angular/common';
 export class ToolFormComponent {
   @Input() tool: ToolDto | null = null;
   @Output() formSubmit = new EventEmitter<ToolFormDto>();
+  @ViewChild('fileInput') fileInput!: ElementRef;
 
   form: FormGroup;
   statuses = Object.keys(ElementStatus);
@@ -184,5 +186,8 @@ export class ToolFormComponent {
     this.imagePreview = null;
     this.selectedFile = null;
     this.form.patchValue({ imageUrl: null });
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 }
