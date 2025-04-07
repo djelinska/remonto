@@ -4,7 +4,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 
 import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectEditComponent } from '../../project/project-edit/project-edit.component';
-import { ProjectService } from '../../../../../core/services/project/project.service';
+import { ProjectStateService } from '../../../../../core/services/project/project-state.service';
 
 @Component({
   selector: 'app-info-general',
@@ -17,7 +17,10 @@ export class InfoGeneralComponent {
   @Input() project!: ProjectDto;
   @Output() projectUpdated = new EventEmitter<void>();
 
-  constructor(private modalService: BsModalService) {}
+  constructor(
+    private modalService: BsModalService,
+    private projectStateService: ProjectStateService
+  ) {}
 
   openEditProjectModal(): void {
     const initialState = {

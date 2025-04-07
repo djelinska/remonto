@@ -9,8 +9,10 @@ import { ProjectService } from './project.service';
 })
 export class ProjectStateService {
   private projectsSubject = new BehaviorSubject<ProjectDto[] | null>(null);
-
   projects$ = this.projectsSubject.asObservable();
+
+  private selectedProjectSubject = new BehaviorSubject<ProjectDto | null>(null);
+  selectedProject$ = this.selectedProjectSubject.asObservable();
 
   constructor(private projectService: ProjectService) {}
 
@@ -24,5 +26,13 @@ export class ProjectStateService {
     return this.projectService
       .getProjects()
       .pipe(tap((projects) => this.projectsSubject.next(projects)));
+  }
+
+  setSelectedProject(project: ProjectDto): void {
+    this.selectedProjectSubject.next(project);
+  }
+
+  getSelectedProject(): ProjectDto | null {
+    return this.selectedProjectSubject.value;
   }
 }

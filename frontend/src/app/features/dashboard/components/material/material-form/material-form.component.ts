@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ElementRef, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Observable, finalize, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ElementStatus } from '../../../../../shared/enums/element-status';
@@ -14,8 +15,8 @@ import { ImageService } from '../../../../../core/services/image/image.service';
 import { MaterialDto } from '../../../../../shared/models/material.dto';
 import { MaterialFormDto } from '../../../../../core/services/material/models/material-form.dto';
 import { MaterialUnit } from '../../../../../shared/enums/material-unit';
+import { fileSizeValidator } from '../../../../../shared/validators/file-size.validator';
 import { formatDate } from '@angular/common';
-import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-material-form',
@@ -36,7 +37,6 @@ export class MaterialFormComponent {
   unitLabels: Record<string, string> = MaterialUnit;
 
   imagePreview: string | null = null;
-  selectedFile: File | null = null;
 
   constructor(
     public modalRef: BsModalRef,
@@ -63,6 +63,7 @@ export class MaterialFormComponent {
       link: [''],
       note: [''],
       imageUrl: [''],
+      image: [null, [fileSizeValidator(2 * 1024 * 1024)]],
     });
   }
 
@@ -129,8 +130,13 @@ export class MaterialFormComponent {
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
+
     if (file) {
-      this.selectedFile = file;
+      const imageControl = this.form.get('image');
+      imageControl?.setValue(file);
+      imageControl?.markAsTouched();
+      imageControl?.updateValueAndValidity();
+
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
@@ -141,20 +147,22 @@ export class MaterialFormComponent {
 
   removeImage(): void {
     this.imagePreview = null;
-    this.selectedFile = null;
+    this.form.get('image')?.setValue(null);
     this.form.patchValue({ imageUrl: null });
-    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
   }
 
   uploadImage(): Observable<string | null> {
-    if (!this.selectedFile) {
+    if (!this.form.value.image) {
       return of(null);
     }
 
-    return this.imageService.uploadImage(this.selectedFile);
+    return this.imageService.uploadImage(this.form.value.image);
   }
 
   onSubmit(): void {

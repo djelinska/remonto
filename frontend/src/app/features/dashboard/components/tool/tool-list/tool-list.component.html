@@ -19,7 +19,11 @@
       <tr>
         <td>
           @if (tool.imageUrl) {
-          <img [src]="tool.imageUrl" class="img-thumbnail" style="max-height: 150px; display: block; padding: 0; border: none;"/>
+          <img
+            [src]="tool.imageUrl"
+            class="img-thumbnail image-wrapper"
+            style="max-height: 70px; max-width: 70px"
+          />
           }
         </td>
         <td>{{ tool.name }}</td>
@@ -35,7 +39,7 @@
         <td class="text-center">
           <div class="dropdown">
             <button
-              class="btn btn-light"
+              class="btn btn-sm btn-light"
               type="button"
               data-bs-toggle="dropdown"
             >
@@ -48,7 +52,7 @@
                   class="dropdown-item"
                   (click)="openEditToolModal(tool)"
                 >
-                  <i class="bi bi-pencil me-1"></i>
+                  <i class="bi bi-pencil-square me-1"></i>
                   Edytuj
                 </button>
               </li>

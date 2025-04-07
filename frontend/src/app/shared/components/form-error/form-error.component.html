@@ -24,6 +24,11 @@
     Maksymalna długość to
     {{ control.errors["maxlength"].requiredLength }} znaków.
   </small>
+  } @if (control.errors['fileSize']) {
+  <small class="text-danger">
+    Plik jest za duży (max.
+    {{ control.errors["fileSize"].requiredSize / 1024 / 1024 }} MB).
+  </small>
   }
 </div>
 }

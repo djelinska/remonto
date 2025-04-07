@@ -8,6 +8,7 @@ import { InfoNotesComponent } from '../../components/info/info-notes/info-notes.
 import { ProjectBudgetDto } from '../../../../core/services/project/models/project-budget.dto';
 import { ProjectDto } from '../../../../shared/models/project.dto';
 import { ProjectService } from '../../../../core/services/project/project.service';
+import { ProjectStateService } from '../../../../core/services/project/project-state.service';
 
 @Component({
   selector: 'app-info',
@@ -28,7 +29,8 @@ export class InfoComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private projectStateService: ProjectStateService
   ) {}
 
   ngOnInit(): void {
@@ -48,6 +50,7 @@ export class InfoComponent implements OnInit {
         .getProjectById(this.projectId)
         .subscribe((project) => {
           this.project = project;
+          this.projectStateService.setSelectedProject(project);
         });
     }
   }
@@ -65,5 +68,6 @@ export class InfoComponent implements OnInit {
   refreshProject(): void {
     this.loadProjectInfo();
     this.loadProjectBudget();
+    this.projectStateService.refreshProjects().subscribe();
   }
 }

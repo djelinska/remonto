@@ -92,6 +92,15 @@ app-global-search {
   &.btn-outline-danger:hover {
     color: var(--gray-50) !important;
   }
+
+  &.btn-outline-primary {
+    &.active {
+      color: var(--gray-50) !important;
+    }
+    &:hover {
+      color: var(--gray-50) !important;
+    }
+  }
 }
 
 table.table {
@@ -123,12 +132,14 @@ table.table {
   background-color: #e6edff;
   border-color: #ccdaff;
   font-size: 13px;
+  color: #00144d;
 }
 
 .alert-danger {
   background-color: #faebee;
   border-color: #ecb9c2;
   font-size: 13px;
+  color: #3c1018;
 }
 
 .card {
@@ -163,6 +174,11 @@ table.table {
   font-weight: 500;
 }
 
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
 .fc {
   a {
     color: var(--gray-800);
@@ -186,6 +202,9 @@ table.table {
   .fc-button {
     &.fc-addTask-button {
       margin-left: 0 !important;
+
+      @extend .btn;
+      @extend .btn-primary;
     }
 
     &:focus {
@@ -194,7 +213,11 @@ table.table {
     }
   }
 
-  .fc-toolbar-title,
+  .fc-toolbar-title {
+    font-size: 1.25rem;
+    text-transform: capitalize;
+  }
+
   .fc-col-header-cell {
     text-transform: capitalize;
   }
