@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ElementRef, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -13,8 +14,8 @@ import { FormErrorComponent } from '../../../../../shared/components/form-error/
 import { ImageService } from '../../../../../core/services/image/image.service';
 import { ToolDto } from '../../../../../shared/models/tool.dto';
 import { ToolFormDto } from '../../../../../core/services/tool/models/tool-form.dto';
+import { fileSizeValidator } from '../../../../../shared/validators/file-size.validator';
 import { formatDate } from '@angular/common';
-import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-tool-form',
@@ -33,7 +34,6 @@ export class ToolFormComponent {
   statusLabels: Record<string, string> = ElementStatus;
 
   imagePreview: string | null = null;
-  selectedFile: File | null = null;
 
   constructor(
     public modalRef: BsModalRef,
@@ -59,6 +59,7 @@ export class ToolFormComponent {
       link: [''],
       note: [''],
       imageUrl: [''],
+      image: [null, [fileSizeValidator(2 * 1024 * 1024)]],
     });
   }
 
@@ -123,8 +124,13 @@ export class ToolFormComponent {
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
+
     if (file) {
-      this.selectedFile = file;
+      const imageControl = this.form.get('image');
+      imageControl?.setValue(file);
+      imageControl?.markAsTouched();
+      imageControl?.updateValueAndValidity();
+
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
@@ -134,11 +140,11 @@ export class ToolFormComponent {
   }
 
   uploadImage(): Observable<string | null> {
-    if (!this.selectedFile) {
+    if (!this.form.value.image) {
       return of(null);
     }
 
-    return this.imageService.uploadImage(this.selectedFile);
+    return this.imageService.uploadImage(this.form.value.image);
   }
 
   onSubmit(): void {
@@ -184,7 +190,7 @@ export class ToolFormComponent {
 
   removeImage(): void {
     this.imagePreview = null;
-    this.selectedFile = null;
+    this.form.get('image')?.setValue(null);
     this.form.patchValue({ imageUrl: null });
     if (this.fileInput) {
       this.fileInput.nativeElement.value = '';

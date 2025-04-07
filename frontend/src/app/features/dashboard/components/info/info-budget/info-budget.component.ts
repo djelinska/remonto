@@ -17,13 +17,29 @@ export class InfoBudgetComponent {
 
   pieChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          boxWidth: 30,
+          boxHeight: 15,
+          padding: 15,
+          font: {
+            size: 13,
+            family: "'Poppins', sans-serif",
+          },
+          color: '#9ca3af',
+        },
+      },
+    },
   };
   pieChartLabels: string[] = ['Robocizna', 'Materiały', 'Narzędzia'];
   pieChartData: ChartData<'pie'> = {
     labels: this.pieChartLabels,
     datasets: [{ data: [0, 0, 0] }],
   };
-  pieChartType: ChartType = 'pie';
+  pieChartType: ChartType = 'doughnut';
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['projectBudget']?.currentValue) {

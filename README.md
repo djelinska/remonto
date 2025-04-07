@@ -1,6 +1,6 @@
 # Remonto - Home Renovation Management App
 
-![Remonto Logo](./assets/logo.png)
+![Remonto Logo](./assets/remonto-logo.png)
 
 ---
 

@@ -1,8 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Component, OnInit } from '@angular/core';
-import { of, switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 
+import { CommonModule } from '@angular/common';
 import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
 import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectService } from '../../../../../core/services/project/project.service';
@@ -11,13 +12,14 @@ import { ProjectStateService } from '../../../../../core/services/project/projec
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   providers: [ProjectService],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnInit {
-  selectedProject: ProjectDto | null = null;
+  projectId!: string;
+  project$!: Observable<ProjectDto | null>;
   modalRef?: BsModalRef;
 
   constructor(
@@ -40,7 +42,11 @@ export class HeaderComponent implements OnInit {
       )
       .subscribe({
         next: (project) => {
-          this.selectedProject = project;
+          if (project) {
+            this.projectStateService.setSelectedProject(project);
+            this.project$ = this.projectStateService.selectedProject$;
+            this.projectId = project.id;
+          }
         },
         error: (error) => {
           console.error('Error fetching project:', error);
@@ -63,8 +69,8 @@ export class HeaderComponent implements OnInit {
   }
 
   deleteProject(): void {
-    if (this.selectedProject?.id) {
-      this.projectService.deleteProject(this.selectedProject.id).subscribe({
+    if (this.projectId) {
+      this.projectService.deleteProject(this.projectId).subscribe({
         next: () => {
           this.projectStateService.refreshProjects().subscribe();
           this.router.navigate(['/dashboard']);
