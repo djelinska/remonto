@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, merge } from 'rxjs';
 
 import { GlobalSearchService } from '../../../../core/services/search/global-search.service';
 import { HighlightTypeDirective } from '../../../../shared/directives/highlight-type.directive';
@@ -19,6 +19,7 @@ export class GlobalSearchComponent implements OnInit {
 
   searchControl = new FormControl('');
   filterControl = new FormControl<string[]>(['task', 'material', 'tool']);
+  sortDirectionControl = new FormControl<'a-z' | 'z-a'>('a-z');
 
   results: SearchResultDto[] = [];
   isLoading = true;
@@ -32,56 +33,50 @@ export class GlobalSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.searchService.fetchAllData().subscribe((data) => {
-      this.searchService.setAllData(data);
-      this.searchControl.enable();
-      this.performSearch();
+    this.searchService.fetchAllData().subscribe({
+      next: (data) => {
+        this.searchService.setAllData(data);
+        this.searchControl.enable();
+        this.performSearch();
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading data:', err);
+        this.isLoading = false;
+      }
     });
 
-    this.searchControl.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(() => this.performSearch());
-
-    this.filterControl.valueChanges.subscribe(() => this.performSearch());
+    merge(
+      this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged()),
+      this.filterControl.valueChanges,
+      this.sortDirectionControl.valueChanges
+    ).subscribe(() => this.performSearch());
   }
 
   performSearch(): void {
     const query = this.searchControl.value || '';
-    const selectedFilters = [
-      ...(this.filterControl.value ?? ['task', 'material', 'tool']),
-    ];
-
-    // Log selected filters before performing the search
-    // console.log('📌 Aktualne filtry:', selectedFilters);
-
-    this.results = this.searchService.search(query, selectedFilters);
-
-    // Debugging logs to track the process
-    // console.log('🔍 Aktualna fraza:', query);
-    // console.log('📋 Wyniki wyszukiwania:', this.results);
+    const selectedFilters = this.filterControl.value || ['task', 'material', 'tool'];
+    const sortDirection = this.sortDirectionControl.value || 'a-z';
+    
+    this.results = this.searchService.search(query, selectedFilters, sortDirection);
   }
 
   getResultLink(result: SearchResultDto): string {
     return result.type === 'task'
-      ? `/dashboard/projects/${result.projectId}/tasks`
-      : `/dashboard/projects/${result.projectId}/materials-tools`;
+      ? `/dashboard/projects/${result.projectId}/tasks/${result.id}`
+      : `/dashboard/projects/${result.projectId}/materials-tools/${result.id}`;
   }
 
   toggleFilter(type: string): void {
-    // Use Set to avoid duplicates
-    const filters = new Set(this.filterControl.value);
+    const currentFilters = this.filterControl.value || [];
+    const newFilters = currentFilters.includes(type)
+      ? currentFilters.filter(t => t !== type)
+      : [...currentFilters, type];
 
-    // Add/remove filters correctly
-    if (filters.has(type)) {
-      filters.delete(type);
-    } else {
-      filters.add(type);
-    }
+    this.filterControl.setValue(newFilters);
+  }
 
-    // Set the updated filters
-    this.filterControl.setValue(Array.from(filters));
-
-    // Debugging logs to track changes
-    // console.log('✅ Po zmianie filtrów:', this.filterControl.value);
+  trackByResult(index: number, result: SearchResultDto): string {
+    return result.id;
   }
 }
