@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import request from 'supertest';
 import fs from 'fs';
 import path from 'path';
-import { upload } from '../utils/Multer'; // adjust path
+import { upload } from '../../utils/Multer'; // adjust path
 
 const app = express();
 const uploadsDir = path.join(process.cwd(), 'uploads');

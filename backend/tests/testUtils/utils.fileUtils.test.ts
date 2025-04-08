@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { deleteFileByUrl } from '../utils/fileUtils'; // adjust path as needed
+import { deleteFileByUrl } from '../../utils/fileUtils'; // adjust path as needed
 
 const uploadsDir = path.join(process.cwd(), 'uploads');
 

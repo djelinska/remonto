@@ -1,4 +1,4 @@
-import AppError from '../utils/AppError'; // adjust path if needed
+import AppError from '../../utils/AppError'; // adjust path if needed
 
 describe('AppError', () => {
   it('should create an error with message and status code', () => {

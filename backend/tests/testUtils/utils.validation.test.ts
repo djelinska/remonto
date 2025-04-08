@@ -16,13 +16,13 @@ import {
     checkPassword,
     comparePassword,
     encryptPassword,
-} from '../utils/validation'; // Update with your actual module path
-import { User } from '../types/models/user.dto';
-import { UserTypes } from '../types/enums/user-types';
-import { TaskStatus } from '../types/enums/task-status';
-import { TaskPriority } from '../types/enums/task-priority';
-import { ElementStatus } from '../types/enums/element-status';
-import { TaskCategory } from '../types/enums/task-category';
+} from '../../utils/validation'; // Update with your actual module path
+import { User } from '../../types/models/user.dto';
+import { UserTypes } from '../../types/enums/user-types';
+import { TaskStatus } from '../../types/enums/task-status';
+import { TaskPriority } from '../../types/enums/task-priority';
+import { ElementStatus } from '../../types/enums/element-status';
+import { TaskCategory } from '../../types/enums/task-category';
 
 describe('Utility Functions', () => {
     describe('checkIfCorrectId', () => {

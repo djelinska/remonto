@@ -49,10 +49,16 @@ router.patch('/api/user/profile', [authenticateUser], async (req: AuthRequest, r
     if (!userId) {
         throw new AppError('User id not found in request', 400);
     }
-    const isAccOwner = await userService.checkAllowedOperation(req.body.currentPassword, userId)
-    if (!isAccOwner) {
-        throw new AppError('User unauthorized to change data', 401);
+    try {
+        const isAccOwner = await userService.checkAllowedOperation(req.body.currentPassword, userId)
+        if (!isAccOwner) {
+            throw new AppError('User unauthorized to change data', 401);
+        }
+    } catch (error: any) {
+        console.error(error);
+        return res.status(401).json({ message: 'User unauthorized to change data' });
     }
+
 
     try {
         const updatedUser = await userService.updateUserProfile(userId.toString(), req.body);
@@ -62,10 +68,15 @@ router.patch('/api/user/profile', [authenticateUser], async (req: AuthRequest, r
         return res.status(500).json({ message: 'Server error' });
     }
 });
-router.patch('/api/user/resetPassword', async (req: ResetPasswordRequest, res: Response) => {
+router.patch('/api/user/resetPassword', [authenticateUser], async (req: ResetPasswordRequest, res: Response) => {
     const { email, newPassword } = req.body
-    if (!email || !newPassword) {
-        throw new AppError('Email not found in request', 400);
+    try {
+        if (!email || !newPassword) {
+            throw new AppError('Email not found in request', 400);
+        }
+    } catch (error: any) {
+        console.error(error);
+        return res.status(400).json({ message: 'Email not found in request' });
     }
 
     try {

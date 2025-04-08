@@ -1,7 +1,7 @@
-import generateToken from '../utils/generateToken'; // adjust path as needed
+import generateToken from '../../utils/generateToken'; // adjust path as needed
 import jwt from 'jsonwebtoken';
-import { UserDto } from '../types/models/user.dto';
-import { UserTypes } from '../types/enums/user-types';
+import { UserDto } from '../../types/models/user.dto';
+import { UserTypes } from '../../types/enums/user-types';
 import { Types } from 'mongoose';
 
 describe('generateToken', () => {
