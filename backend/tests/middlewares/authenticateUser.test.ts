@@ -160,7 +160,6 @@ describe('authenticateUser middleware', () => {
     expect(nextFunction).not.toHaveBeenCalled();
   });
 
-  // New test case for malformed token
   it('should return 401 for malformed authorization header', () => {
     mockRequest.headers = {
       authorization: 'InvalidFormat',
