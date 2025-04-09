@@ -3,8 +3,14 @@ module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
   moduleNameMapper: {
-    '^@backend/(.*)$': '<rootDir>/backend/$1', 
-    '^@frontend/(.*)$': '<rootDir>/frontend/src/$1', 
+    '^@backend/(.*)$': '<rootDir>/backend/$1',
+    '^@frontend/(.*)$': '<rootDir>/frontend/src/$1',
   },
-  roots: ['<rootDir>/backend', '<rootDir>/frontend', '<rootDir>/test'],
-};
+  roots: ['<rootDir>'],
+  modulePaths: ['<rootDir>'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/dist/',
+    '/frontend/',
+  ],
+}

@@ -4,18 +4,21 @@ import { PostProjectRequest } from "../types/models/projectRequest.dto";
 
 const validateProjectData = async (req: PostProjectRequest, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user?.id;
-    const projectData = { ...req.body, userId };
+    if (!req.user?.id) {
+      return res.status(400).json({
+        message: "Validation error",
+        details: ["User ID is required"],
+      });
+    }
 
-    // Create a new instance of the model with the request body
+    const projectData = { ...req.body, userId: req.user.id };
+
     const project = new ProjectModel(projectData);
 
-    // Validate the data using the schema
     await project.validate();
 
-    next(); // Proceed to the next middleware/route handler if validation passes
+    next(); 
   } catch (error: any) {
-    // Handle validation errors
     if (error.name === "ValidationError") {
       const errors = Object.values(error.errors).map((err: any) => err.message);
       return res
@@ -23,8 +26,8 @@ const validateProjectData = async (req: PostProjectRequest, res: Response, next:
         .json({ message: "Validation error", details: errors });
     }
 
-    next(error); // Pass other errors to the global error handler
+    next(error); 
   }
 };
 
-export default validateProjectData
+export default validateProjectData;

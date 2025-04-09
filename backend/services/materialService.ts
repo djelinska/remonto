@@ -9,11 +9,11 @@ type ObjectId = Types.ObjectId;
 
 export const fetchProjectMaterials = async (projectId: ObjectId): Promise<Material[]> => {
 	try {
-		const materials: MaterialDto[] | null = await MaterialModel.find({projectId});
+		const materials: MaterialDto[] = await MaterialModel.find({projectId});
 
-		if (!materials) {
-			throw new Error('Materials not found');
-		}
+    if (materials.length === 0) {
+      throw new Error('No materials found for this project');
+    }
 
 		return materials.map((material: MaterialDto) => ({
 			id: material._id,
