@@ -1,14 +1,28 @@
 import { NextFunction, Response } from "express";
+import mongoose from "mongoose";
 import MaterialModel from "../models/materialModel";
 import { PostMaterialRequest } from "../types/models/materialRequest.dto";
 
 const validateMaterialData = async (req: PostMaterialRequest, res: Response, next: NextFunction) => {
     try {
-        const projectId = req.params.projectId
-        const materialData = { ...req.body, projectId };
+        // First check if projectId exists
+        if (!req.params.projectId) {
+            return res.status(400).json({
+                message: "Validation error",
+                details: ["Project ID is required"],
+            });
+        }
 
+        // Then validate projectId format
+        if (!mongoose.Types.ObjectId.isValid(req.params.projectId)) {
+            return res.status(400).json({
+                message: "Validation error",
+                details: ["Invalid project ID"],
+            });
+        }
+
+        const materialData = { ...req.body, projectId: req.params.projectId };
         const material = new MaterialModel(materialData);
-
         await material.validate();
 
         next();
@@ -19,9 +33,8 @@ const validateMaterialData = async (req: PostMaterialRequest, res: Response, nex
                 .status(400)
                 .json({ message: "Validation error", details: errors });
         }
-
         next(error);
     }
 };
 
-export default validateMaterialData
+export default validateMaterialData;

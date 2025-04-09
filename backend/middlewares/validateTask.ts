@@ -6,38 +6,38 @@ import { NextFunction, Response } from "express";
 
 const validateTaskData = async (req: PostTaskRequest, res: Response, next: NextFunction) => {
     try {
-        const projectId = req.params.projectId
+        const projectId = req.params.projectId;
         if (!projectId) {
-            throw new AppError("ProjectIdUndefinedError", 400)
+            return res.status(400).json({ 
+                message: "Validation error",
+                details: ["Project ID is required"]
+            });
         }
+
         const taskData = { ...req.body, projectId };
 
         if (taskData.startDate && taskData.endDate) {
             if (!checkStartAndEndDate(taskData.startDate, taskData.endDate)) {
-                throw new AppError("DateValidationError", 400)
+                return res.status(400).json({
+                    message: "Date validation error",
+                    details: ["Start date cannot be after end date"]
+                });
             }
         }
 
         const task = new TaskModel(taskData);
-
         await task.validate();
-
         next();
     } catch (error: any) {
         if (error.name === "ValidationError") {
             const errors = Object.values(error.errors).map((err: any) => err.message);
-            return res
-                .status(400)
-                .json({ message: "Validation error", details: errors });
+            return res.status(400).json({ 
+                message: "Validation error", 
+                details: errors 
+            });
         }
-        if (error.message === "DateValidationError") {
-            return res
-                .status(400)
-                .json({ message: "Date validation error (start date cannot be after end date)", details: error.message });
-        }
-
         next(error);
     }
 };
 
-export default validateTaskData
+export default validateTaskData;

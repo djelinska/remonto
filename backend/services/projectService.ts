@@ -15,6 +15,10 @@ export const fetchUserProjects = async (userId: ObjectId): Promise<ProjectList> 
 	try {
 		const projects: ProjectDto[] | null = await ProjectModel.find({ userId: userId });
 
+		if (projects.length === 0) {
+			throw new Error('No projects found for this user');
+		  }
+
 		if (!projects) {
 			throw new Error("Projects not found or you don't have permission to view them");
 		}
