@@ -7,75 +7,104 @@ import { TaskDto } from '../types/models/task.dto';
 import TaskModel from '../models/taskModel';
 import { ToolDto } from '../types/models/tool.dto';
 import ToolModel from '../models/toolModel';
-import { Types } from 'mongoose';
-import { UserDto } from '../types/models/user.dto';
+import { ObjectId, Types } from 'mongoose';
+import { User, UserDto } from '../types/models/user.dto';
 import UserModel from '../models/userModel';
-import { encryptPassword } from '../utils/validation';
+import { comparePassword, encryptPassword } from '../utils/validation';
+import { UserTypes } from '../types/enums/user-types';
+import { resolve } from 'path';
 
 interface UserData {
-	tasks: Array<TaskDto & { projectName: string; type: 'task' }>;
-	materials: Array<MaterialDto & { projectName: string; type: 'material' }>;
-	tools: Array<ToolDto & { projectName: string; type: 'tool' }>;
+    tasks: Array<TaskDto & { projectName: string; type: 'task' }>;
+    materials: Array<MaterialDto & { projectName: string; type: 'material' }>;
+    tools: Array<ToolDto & { projectName: string; type: 'tool' }>;
 }
 
 const fetchUserProfile = async (userId: string): Promise<UserDto> => {
-	const user: UserDto | null = await UserModel.findById(new Types.ObjectId(userId));
-	if (!user) {
-		throw new Error('User not found');
-	}
+    const user: UserDto | null = await UserModel.findById(new Types.ObjectId(userId));
+    if (!user) {
+        throw new Error('User not found');
+    }
 
-	return user;
+    return user;
 };
 
 const fetchAllUserData = async (userId: string): Promise<UserData> => {
-	try {
-		const projects: ProjectDto[] = await ProjectModel.find({ userId: new Types.ObjectId(userId) }).select('_id name');
+    try {
+        const projects: ProjectDto[] = await ProjectModel.find({ userId: new Types.ObjectId(userId) }).select('_id name');
 
-		if (!projects.length) {
-			return { tasks: [], materials: [], tools: [] };
-		}
+        if (!projects.length) {
+            return { tasks: [], materials: [], tools: [] };
+        }
 
-		const projectIds = projects.map((project) => project._id);
+        const projectIds = projects.map((project) => project._id);
 
-		const tasks = await TaskModel.find({ projectId: { $in: projectIds } })
-			.select('name projectId')
-			.lean();
+        const tasks = await TaskModel.find({ projectId: { $in: projectIds } })
+            .select('name projectId')
+            .lean();
 
-		const materials = await MaterialModel.find({ projectId: { $in: projectIds } })
-			.select('name projectId')
-			.lean();
+        const materials = await MaterialModel.find({ projectId: { $in: projectIds } })
+            .select('name projectId')
+            .lean();
 
-		const tools = await ToolModel.find({ projectId: { $in: projectIds } })
-			.select('name projectId')
-			.lean();
+        const tools = await ToolModel.find({ projectId: { $in: projectIds } })
+            .select('name projectId')
+            .lean();
 
-		const projectsMap: Record<string, string> = projects.reduce((acc, project) => {
-			acc[project._id.toString()] = project.name;
-			return acc;
-		}, {} as Record<string, string>);
+        const projectsMap: Record<string, string> = projects.reduce((acc, project) => {
+            acc[project._id.toString()] = project.name;
+            return acc;
+        }, {} as Record<string, string>);
 
-		return {
-			tasks: tasks.map((task) => ({
-				...task,
-				projectName: projectsMap[task.projectId.toString()] || 'Nieznany projekt',
-				type: 'task',
-			})),
-			materials: materials.map((material) => ({
-				...material,
-				projectName: projectsMap[material.projectId.toString()] || 'Nieznany projekt',
-				type: 'material',
-			})),
-			tools: tools.map((tool) => ({
-				...tool,
-				projectName: projectsMap[tool.projectId.toString()] || 'Nieznany projekt',
-				type: 'tool',
-			})),
-		};
-	} catch (error: any) {
-		throw new Error(`Error fetching user data: ${error.message}`);
-	}
+        return {
+            tasks: tasks.map((task) => ({
+                ...task,
+                projectName: projectsMap[task.projectId.toString()] || 'Nieznany projekt',
+                type: 'task',
+            })),
+            materials: materials.map((material) => ({
+                ...material,
+                projectName: projectsMap[material.projectId.toString()] || 'Nieznany projekt',
+                type: 'material',
+            })),
+            tools: tools.map((tool) => ({
+                ...tool,
+                projectName: projectsMap[tool.projectId.toString()] || 'Nieznany projekt',
+                type: 'tool',
+            })),
+        };
+    } catch (error: any) {
+        throw new Error(`Error fetching user data: ${error.message}`);
+    }
 };
 
+const resetUserPassword = async (email: string, newPassword: string): Promise<UserDto> => {
+    const updateObj: Partial<UserDto> = {};
+
+    updateObj.password = await encryptPassword(newPassword);
+
+    const updatedUser = await UserModel.findOneAndUpdate({ email }, { $set: updateObj }, { new: true }).select('-password');
+
+    if (!updatedUser) {
+        throw new AppError('Nie znaleziono użytkownika', 404);
+    }
+
+    return updatedUser;
+};
+const checkAllowedOperation = async (password: string, userId: Types.ObjectId): Promise<boolean> => {
+    if (!userId || !password) {
+        throw new AppError('No password or user data provided', 400);
+    }
+    const user = await UserModel.findById(userId)
+    if (!user) {
+        return false
+    }
+    const compare = await comparePassword(password, user.password)
+    if (compare) {
+        return true
+    }
+    return false
+}
 const updateUserProfile = async (userId: string, updateData: Partial<UserDto>): Promise<UserDto> => {
     const updateObj: Partial<UserDto> = {};
 
@@ -92,7 +121,7 @@ const updateUserProfile = async (userId: string, updateData: Partial<UserDto>): 
         updateObj.password = await encryptPassword(updateData.password);
     }
 
-    const updatedUser = await UserModel.findByIdAndUpdate(new Types.ObjectId(userId), updateObj, { new: true }).select('-password');
+    const updatedUser = await UserModel.findByIdAndUpdate(new Types.ObjectId(userId), { $set: updateObj }, { new: true }).select('-password');
 
     if (!updatedUser) {
         throw new AppError('Nie znaleziono użytkownika', 404);
@@ -125,10 +154,12 @@ const deleteUserProfile = async (userId: string): Promise<void> => {
 
 
 const userService = {
-	fetchUserProfile: fetchUserProfile,
-	fetchAllUserData: fetchAllUserData,
-	updateUserProfile: updateUserProfile,
-	deleteUserProfile: deleteUserProfile,
+    fetchUserProfile: fetchUserProfile,
+    fetchAllUserData: fetchAllUserData,
+    updateUserProfile: updateUserProfile,
+    deleteUserProfile: deleteUserProfile,
+    checkAllowedOperation: checkAllowedOperation,
+    resetUserPassword: resetUserPassword
 };
 
 export default userService;

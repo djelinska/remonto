@@ -1,7 +1,7 @@
 import express, { Response } from 'express';
 
 import AppError from '../../utils/AppError';
-import AuthRequest from '../../types/models/authRequest.dto';
+import AuthRequest, { ResetPasswordRequest } from '../../types/models/authRequest.dto';
 import { UserDto } from '../../types/models/user.dto';
 import authenticateUser from '../../middlewares/authenticateUser';
 import userService from '../../services/userService';
@@ -9,50 +9,78 @@ import userService from '../../services/userService';
 const router = express.Router();
 
 router.get('/api/user/profile', [authenticateUser], async (req: AuthRequest, res: Response) => {
-	const userId = req.user?.id;
-	if (!userId) {
-		throw new AppError('User id not found in request', 400);
-	}
-
-	try {
-		const user: UserDto = await userService.fetchUserProfile(userId.toString());
-
-		res.status(200).json({
-			id: user._id,
-			email: user.email,
-			firstName: user.firstName,
-			lastName: user.lastName,
-			type: user.type,
-		});
-	} catch (error: any) {
-		console.error(error);
-		return res.status(500).json({ message: 'Server error' });
-	}
-});
-
-router.get('/api/user/data', [authenticateUser], async (req: AuthRequest, res: Response) => {
-	const userId = req.user?.id;
-	if (!userId) {
-		throw new AppError('User id not found in request', 400);
-	}
-
-	try {
-		const data = await userService.fetchAllUserData(userId.toString());
-		res.status(200).json(data);
-	} catch (error: any) {
-		console.error(error);
-		return res.status(500).json({ message: 'Server error' });
-	}
-});
-
-router.patch('/api/user/profile', [authenticateUser], async (req: AuthRequest, res: Response) => {
     const userId = req.user?.id;
     if (!userId) {
         throw new AppError('User id not found in request', 400);
     }
 
     try {
+        const user: UserDto = await userService.fetchUserProfile(userId.toString());
+
+        res.status(200).json({
+            id: user._id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            type: user.type,
+        });
+    } catch (error: any) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/api/user/data', [authenticateUser], async (req: AuthRequest, res: Response) => {
+    const userId = req.user?.id;
+    if (!userId) {
+        throw new AppError('User id not found in request', 400);
+    }
+
+    try {
+        const data = await userService.fetchAllUserData(userId.toString());
+        res.status(200).json(data);
+    } catch (error: any) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+router.patch('/api/user/profile', [authenticateUser], async (req: AuthRequest, res: Response) => {
+    const userId = req.user?.id;
+    if (!userId) {
+        throw new AppError('User id not found in request', 400);
+    }
+    try {
+        const isAccOwner = await userService.checkAllowedOperation(req.body.currentPassword, userId)
+        if (!isAccOwner) {
+            throw new AppError('User unauthorized to change data', 401);
+        }
+    } catch (error: any) {
+        console.error(error);
+        return res.status(401).json({ message: 'User unauthorized to change data' });
+    }
+
+
+    try {
         const updatedUser = await userService.updateUserProfile(userId.toString(), req.body);
+        res.status(200).json(updatedUser);
+    } catch (error: any) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+router.patch('/api/user/resetPassword', [authenticateUser], async (req: ResetPasswordRequest, res: Response) => {
+    const { email, newPassword } = req.body
+    try {
+        if (!email || !newPassword) {
+            throw new AppError('Email not found in request', 400);
+        }
+    } catch (error: any) {
+        console.error(error);
+        return res.status(400).json({ message: 'Email not found in request' });
+    }
+
+    try {
+        const updatedUser = await userService.resetUserPassword(email, newPassword);
         res.status(200).json(updatedUser);
     } catch (error: any) {
         console.error(error);
