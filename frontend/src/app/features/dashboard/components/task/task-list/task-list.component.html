@@ -17,7 +17,17 @@
       @for (task of tasks; track task.id) {
       <tr>
         <td>{{ task.name }}</td>
-        <td class="text-nowrap">{{ statusLabels[task.status] }}</td>
+        <td class="text-nowrap">
+          <select 
+            class="form-select form-select-sm"
+            [(ngModel)]="task.status"
+            (change)="onStatusChange(task)"
+          >
+            @for (status of statusOptions; track status) {
+              <option [value]="status">{{ statusLabels[status] }}</option>
+            }
+          </select>
+        </td>
         <td class="text-nowrap">
           {{ task.startDate | date : (task.allDay ? "d MMM y" : "medium") }}
         </td>
@@ -33,7 +43,7 @@
         <td class="text-center">
           <div class="dropdown">
             <button
-              class="btn btn-light"
+              class="btn btn-sm btn-light"
               type="button"
               data-bs-toggle="dropdown"
             >
@@ -46,7 +56,7 @@
                   class="dropdown-item"
                   (click)="openEditTaskModal(task)"
                 >
-                  <i class="bi bi-pencil me-1"></i>
+                  <i class="bi bi-pencil-square me-1"></i>
                   Edytuj
                 </button>
               </li>

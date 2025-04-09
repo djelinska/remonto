@@ -1,33 +1,38 @@
 <div class="card h-100">
   <div class="card-body">
-    <h1 class="card-title">Budżet</h1>
+    <h2 class="card-title mb-3">
+      <i class="bi bi-piggy-bank text-primary me-2"></i>
+      Budżet
+    </h2>
     @if (projectBudget) {
-    <div class="mb-3">
-      <div>
-        <span class="label me-3">Zaplanowany budżet:</span>
-        <span>{{ projectBudget.budget | currency : "PLN" }}</span>
-      </div>
-      <div>
-        <span class="label me-3">Całkowite wydatki:</span>
-        <span
-          [ngClass]="{
-            'text-danger':
-              projectBudget.totalSpent > projectBudget.budget &&
-              projectBudget.budget !== 0
-          }"
-          >{{ projectBudget.totalSpent | currency : "PLN" }}</span
-        >
-      </div>
+    <div class="row mb-3">
+      <p class="col-md-6">
+        <span>Zaplanowany budżet:</span>
+        {{ projectBudget.budget | currency : "PLN" }}
+      </p>
+      <p
+        class="col-md-6"
+        [ngClass]="{
+          'text-danger':
+            projectBudget.totalSpent > projectBudget.budget &&
+            projectBudget.budget !== 0
+        }"
+      >
+        <span>Całkowite wydatki:</span>
+        {{ projectBudget.totalSpent | currency : "PLN" }}
+      </p>
     </div>
     @if (projectBudget.totalSpent > 0) {
-    <canvas
-      baseChart
-      [data]="pieChartData"
-      [options]="pieChartOptions"
-      [type]="pieChartType"
-    >
-    </canvas
-    >} @else {
+    <div class="chart-container">
+      <canvas
+        baseChart
+        [data]="pieChartData"
+        [options]="pieChartOptions"
+        [type]="pieChartType"
+      >
+      </canvas>
+    </div>
+    } @else {
     <div class="alert alert-info mb-0">Brak wydatków</div>
     }}
   </div>

@@ -116,6 +116,8 @@ export class CalendarComponent implements OnInit {
         start: task.startDate,
         end: task.endDate,
         allDay: task.allDay,
+        backgroundColor: '#ebe9fb',
+        borderColor: '#d6d4f7',
       }));
 
       this.updateCalendarEvents(taskEvents);
@@ -127,7 +129,10 @@ export class CalendarComponent implements OnInit {
       materials: this.materialService.getMaterialsByProject(this.projectId),
       tools: this.toolService.getToolsByProject(this.projectId),
     }).subscribe(({ materials, tools }) => {
-      const events = [...materials, ...tools]
+      const events = [
+        ...materials.map((item) => ({ ...item, type: 'material' })),
+        ...tools.map((item) => ({ ...item, type: 'tool' })),
+      ]
         .filter((item) => item.deliveryDate)
         .map((item) => ({
           id: item.id,
@@ -136,6 +141,8 @@ export class CalendarComponent implements OnInit {
           }: ${item.name}`,
           start: item.deliveryDate,
           allDay: item.allDay,
+          backgroundColor: item.type === 'material' ? '#f5edf7' : '#f8ecf4',
+          borderColor: item.type === 'material' ? '#e1cae7' : '#ebc6de',
         }));
 
       this.updateCalendarEvents(events);

@@ -1,12 +1,13 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { of, zip } from 'rxjs';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { CommonModule } from '@angular/common';
+import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
 import { ImageService } from '../../../../../core/services/image/image.service';
 import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectService } from '../../../../../core/services/project/project.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { ConfirmModalComponent } from '../../../../../shared/components/confirm-modal/confirm-modal.component';
-import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-info-images',
@@ -26,6 +27,7 @@ export class InfoImagesComponent implements OnInit {
   projectImages: { url: string; preview: string }[] = [];
   isLoading = false;
   deletingImage: string | null = null;
+  imageError: string | null = null;
 
   constructor(
     private imageService: ImageService,
@@ -39,13 +41,25 @@ export class InfoImagesComponent implements OnInit {
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
+    const maxSize = 2 * 1024 * 1024;
+
     if (file) {
-      this.selectedFile = file;
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
       };
       reader.readAsDataURL(file);
+
+      if (file.size > maxSize) {
+        this.imageError = `Plik jest za duży (max. ${
+          maxSize / 1024 / 1024
+        } MB)`;
+        this.selectedFile = null;
+        return;
+      }
+
+      this.imageError = null;
+      this.selectedFile = file;
     }
   }
 
@@ -65,14 +79,14 @@ export class InfoImagesComponent implements OnInit {
                 error: (err) => {
                   console.error('Error adding image to project:', err);
                   this.isLoading = false;
-                }
+                },
               });
           }
         },
         error: (err) => {
           console.error('Error uploading image:', err);
           this.isLoading = false;
-        }
+        },
       });
     }
   }
@@ -82,10 +96,10 @@ export class InfoImagesComponent implements OnInit {
       initialState: {
         title: 'Usuń zdjęcie',
         message: 'Czy na pewno chcesz usunąć to zdjęcie?',
-        btnTitle: 'Usuń'
-      }
+        btnTitle: 'Usuń',
+      },
     });
-  
+
     modalRef.content!.confirmCallback = () => {
       this.deletingImage = imageUrl;
       this.imageService.deleteImage(imageUrl).subscribe({
@@ -100,16 +114,16 @@ export class InfoImagesComponent implements OnInit {
               error: (err) => {
                 console.error('Error removing image from project:', err);
                 this.deletingImage = null;
-              }
+              },
             });
         },
         error: (err) => {
           console.error('Error deleting image:', err);
           this.deletingImage = null;
-        }
+        },
       });
     };
-  
+
     modalRef.content!.cancelCallback = () => {
       this.deletingImage = null;
     };
@@ -124,20 +138,21 @@ export class InfoImagesComponent implements OnInit {
           const imageRequests = imageUrls.map((url) =>
             url ? this.imageService.getImage(url) : of(null)
           );
-  
+
           zip(...imageRequests).subscribe({
             next: (imagePreviews) => {
               this.projectImages = imageUrls
                 .map((url, index) => ({ url, preview: imagePreviews[index] }))
-                .filter((item): item is { url: string; preview: string } => 
-                  item.preview !== null
+                .filter(
+                  (item): item is { url: string; preview: string } =>
+                    item.preview !== null
                 );
               this.isLoading = false;
             },
             error: (err) => {
               console.error('Error loading images:', err);
               this.isLoading = false;
-            }
+            },
           });
         } else {
           this.projectImages = [];
@@ -147,7 +162,7 @@ export class InfoImagesComponent implements OnInit {
       error: (err) => {
         console.error('Error loading project:', err);
         this.isLoading = false;
-      }
+      },
     });
   }
 
