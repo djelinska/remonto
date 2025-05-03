@@ -67,19 +67,21 @@ describe('userService', () => {
         select: jest.fn().mockReturnThis(),
         lean: jest.fn().mockResolvedValue(updatedUser)
       };
+      
       (UserModel.findByIdAndUpdate as jest.Mock).mockReturnValue(mockUserQuery);
-
+    
       await userService.updateUserProfile(mockUserId, {
         password: 'newpassword123'
       });
 
-      expect(UserModel.findByIdAndUpdate).toHaveBeenCalledWith(
-        new Types.ObjectId(mockUserId),
-        expect.objectContaining({
-          password: expect.not.stringMatching('newpassword123')
-        }),
-        { new: true }
-      );
+      const [idArg, updateArg, optionsArg] = (UserModel.findByIdAndUpdate as jest.Mock).mock.calls[0];
+  
+      expect(idArg).toEqual(new Types.ObjectId(mockUserId));
+      
+      expect(updateArg.$set.password).not.toBe('newpassword123');
+      expect(updateArg.$set.password).toMatch(/^\$2[ayb]\$.{56}$/); 
+      
+      expect(optionsArg).toEqual({ new: true });
     });
 
   });
