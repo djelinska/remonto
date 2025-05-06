@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { User } from '../../../../../shared/models/user';
+import { UserDto } from '../../../../../shared/models/user.dto';
 import { UserService } from '../../../../../core/services/user/user.service';
 
 @Component({
@@ -15,7 +15,7 @@ import { UserService } from '../../../../../core/services/user/user.service';
   styleUrl: './topbar.component.scss',
 })
 export class TopbarComponent implements OnInit {
-  user$!: Observable<User>;
+  user$!: Observable<UserDto>;
 
   constructor(
     private router: Router,

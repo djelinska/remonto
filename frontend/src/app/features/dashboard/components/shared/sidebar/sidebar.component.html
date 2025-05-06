@@ -1,6 +1,6 @@
 <div class="d-flex flex-column border-end" id="sidebar">
   <div class="p-4 border-bottom" id="logo">
-    <a [routerLink]="['/dashboard']"
+    <a routerLink="/dashboard"
       ><img src="/assets/images/remonto_logo.svg" alt="Remonto"
     /></a>
   </div>
@@ -17,10 +17,6 @@
 
   <div class="p-4 mb-auto">
     <app-project-list></app-project-list>
-  </div>
-
-  <div class="p-4">
-    <a routerLink="/admin/templates">Panel administratora</a>
   </div>
 
   <div class="p-4 border-top d-flex align-items-center">

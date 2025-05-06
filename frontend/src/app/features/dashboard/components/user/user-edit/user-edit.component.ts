@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { User } from '../../../../../shared/models/user';
+import { UserDto } from '../../../../../shared/models/user.dto';
 import { UserService } from '../../../../../core/services/user/user.service';
 
 @Component({
@@ -14,8 +14,8 @@ import { UserService } from '../../../../../core/services/user/user.service';
   styleUrls: ['./user-edit.component.scss'],
 })
 export class UserEditComponent {
-  @Input() user!: User;
-  @Output() userUpdated = new EventEmitter<User>();
+  @Input() user!: UserDto;
+  @Output() userUpdated = new EventEmitter<UserDto>();
   loading = false;
   errorMessage = '';
 

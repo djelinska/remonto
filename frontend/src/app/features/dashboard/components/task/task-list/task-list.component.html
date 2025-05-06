@@ -18,13 +18,13 @@
       <tr>
         <td>{{ task.name }}</td>
         <td class="text-nowrap">
-          <select 
-            class="form-select form-select-sm"
+          <select
+            class="form-select form-select-sm fit-content"
             [(ngModel)]="task.status"
             (change)="onStatusChange(task)"
           >
             @for (status of statusOptions; track status) {
-              <option [value]="status">{{ statusLabels[status] }}</option>
+            <option [value]="status">{{ statusLabels[status] }}</option>
             }
           </select>
         </td>

@@ -1,92 +1,118 @@
-import mongoose, { Types } from 'mongoose';
-import TemplateModel from '../models/templateModel';
-import { TemplateFormDto } from '../types/models/template.dto';
+import {MaterialTemplateDto, TaskTemplateDto, TemplateDto, TemplateFormDto, ToolTemplateDto} from '../types/models/template.dto';
+
 import ReturnMessage from '../types/models/returnMessage.model';
+import TemplateModel from '../models/templateModel';
+import {Types} from 'mongoose';
 
 type ObjectId = Types.ObjectId;
 
-type TemplateList = Array<{ id: Types.ObjectId; name: string }>;
-
 // Fetch all templates
-export const fetchTemplates = async (): Promise<TemplateList> => {
-  try {
-    const templates = await TemplateModel.find();
+export const fetchTemplates = async (): Promise<TemplateDto[]> => {
+	try {
+		const templates = await TemplateModel.find();
 
-    if (!templates.length) {
-      throw new Error('No templates found');
-    }
+		if (!templates.length) {
+			return [];
+		}
 
-    return templates.map((template) => ({
-      id: template._id,
-      name: template.project.name,
-    }));
-  } catch (error) {
-    console.error('Error fetching templates:', error);
-    throw new Error('Error fetching templates');
-  }
+		return templates.map((template) => ({
+			id: template._id,
+			project: {
+				name: template.project.name,
+				description: template.project.description,
+				budget: template.project.budget,
+			},
+			tasks: template.tasks.map((task: TaskTemplateDto) => ({
+				name: task.name,
+				status: task.status,
+				category: task.category,
+				priority: task.priority,
+				note: task.note,
+			})),
+			materials: template.materials.map((material: MaterialTemplateDto) => ({
+				name: material.name,
+				status: material.status,
+				quantity: material.quantity,
+				unit: material.unit,
+				type: material.type,
+				note: material.note,
+			})),
+			tools: template.tools.map((tool: ToolTemplateDto) => ({
+				name: tool.name,
+				status: tool.status,
+				quantity: tool.quantity,
+				note: tool.note,
+			})),
+			taskCount: template.tasks.length,
+			materialCount: template.materials.length,
+			toolCount: template.tools.length,
+		}));
+	} catch (error) {
+		console.error('Error fetching templates:', error);
+		throw new Error('Error fetching templates');
+	}
 };
 
 // Fetch a single template by ID
 export const fetchTemplateById = async (templateId: ObjectId): Promise<TemplateFormDto> => {
-  try {
-    const template = await TemplateModel.findById(templateId);
+	try {
+		const template = await TemplateModel.findById(templateId);
 
-    if (!template) {
-      throw new Error('Template not found');
-    }
+		if (!template) {
+			throw new Error('Template not found');
+		}
 
-    return template;
-  } catch (error) {
-    console.error('Error fetching template:', error);
-    throw new Error('Error fetching template');
-  }
+		return template;
+	} catch (error) {
+		console.error('Error fetching template:', error);
+		throw new Error('Error fetching template');
+	}
 };
 
 // Create a new template
 export const createTemplate = async (newTemplate: TemplateFormDto): Promise<TemplateFormDto> => {
-  try {
-    const template = new TemplateModel(newTemplate);
+	try {
+		const template = new TemplateModel(newTemplate);
 
-    await template.save();
+		await template.save();
 
-    return template;
-  } catch (error) {
-    console.error('Error creating template:', error);
-    throw new Error('Error creating template');
-  }
+		return template;
+	} catch (error) {
+		console.error('Error creating template:', error);
+		throw new Error('Error creating template');
+	}
 };
 
 // Update an existing template
 export const updateTemplate = async (templateId: ObjectId, updatedTemplate: TemplateFormDto): Promise<TemplateFormDto> => {
-  try {
-    const template = await TemplateModel.findByIdAndUpdate(templateId, { $set: updatedTemplate }, { new: true, runValidators: true });
+	try {
+		const template = await TemplateModel.findByIdAndUpdate(templateId, {$set: updatedTemplate}, {new: true, runValidators: true});
 
-    if (!template) {
-      throw new Error('Template not found');
-    }
+		if (!template) {
+			throw new Error('Template not found');
+		}
 
-    return template;
-  } catch (error) {
-    console.error('Error updating template:', error);
-    throw new Error('Error updating template');
-  }
+		return template;
+	} catch (error) {
+		console.error('Error updating template:', error);
+		throw new Error('Error updating template');
+	}
 };
 
 // Delete a template
 export const deleteTemplate = async (templateId: ObjectId): Promise<ReturnMessage> => {
-  try {
-    const result = await TemplateModel.findByIdAndDelete(templateId);
+	try {
+		const result = await TemplateModel.findByIdAndDelete(templateId);
 
-    if (!result) {
-      throw new Error('Template not found');
-    }
+		if (!result) {
+			throw new Error('Template not found');
+		}
 
-    return {
-      message: 'Template deleted successfully',
-    };
-  } catch (error) {
-    console.error('Error deleting template:', error);
-    throw new Error('Error deleting template');
-  }
+		return {
+			message: 'Template deleted successfully',
+		};
+	} catch (error) {
+		console.error('Error deleting template:', error);
+		throw new Error('Error deleting template');
+	}
 };
-

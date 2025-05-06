@@ -5,8 +5,8 @@ import { AuthService } from '../../../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { User } from '../../../../shared/models/user';
 import { UserDeleteComponent } from '../../components/user/user-delete/user-delete.component';
+import { UserDto } from '../../../../shared/models/user.dto';
 import { UserEditComponent } from '../../components/user/user-edit/user-edit.component';
 import { UserService } from '../../../../core/services/user/user.service';
 
@@ -18,7 +18,7 @@ import { UserService } from '../../../../core/services/user/user.service';
   styleUrl: './user-profile.component.scss',
 })
 export class UserProfileComponent implements OnInit {
-  user$!: Observable<User>;
+  user$!: Observable<UserDto>;
   modalRef?: BsModalRef;
 
   constructor(
@@ -36,7 +36,7 @@ export class UserProfileComponent implements OnInit {
     this.user$ = this.userService.getUserProfile();
   }
 
-  openEdit(user: User): void {
+  openEdit(user: UserDto): void {
     const initialState = { user: { ...user } }; // Kopia obiektu użytkownika
     this.modalRef = this.modalService.show(UserEditComponent, {
       class: 'modal-md',
@@ -50,7 +50,7 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  openDelete(user: User): void {
+  openDelete(user: UserDto): void {
     const initialState = { user };
     this.modalRef = this.modalService.show(UserDeleteComponent, {
       class: 'modal-md',

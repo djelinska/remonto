@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectListComponent } from '../../project/project-list/project-list.component';
 import { ProjectService } from '../../../../../core/services/project/project.service';
-import { User } from '../../../../../shared/models/user';
+import { UserDto } from '../../../../../shared/models/user.dto';
 import { UserService } from '../../../../../core/services/user/user.service';
 
 @Component({
@@ -21,7 +21,7 @@ import { UserService } from '../../../../../core/services/user/user.service';
 export class SidebarComponent implements OnInit {
   selectedProjectName: string | null = null;
   projects$!: Observable<ProjectDto[]>;
-  user$!: Observable<User>;
+  user$!: Observable<UserDto>;
 
   constructor(
     private router: Router,

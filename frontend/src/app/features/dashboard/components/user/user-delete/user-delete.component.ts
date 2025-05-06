@@ -1,10 +1,10 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
-import { UserService } from '../../../../../core/services/user/user.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { User } from '../../../../../shared/models/user'; // Importuj model użytkownika
-import { BsModalRef } from 'ngx-bootstrap/modal';
-
+import { UserDto } from '../../../../../shared/models/user.dto'; // Importuj model użytkownika
+import { UserService } from '../../../../../core/services/user/user.service';
 
 @Component({
   selector: 'app-user-delete',
@@ -14,7 +14,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
   styleUrls: ['./user-delete.component.scss'],
 })
 export class UserDeleteComponent {
-  @Input() user!: User;
+  @Input() user!: UserDto;
   @Output() userDeleted = new EventEmitter<void>();
   loading = false;
   errorMessage = '';
@@ -35,5 +35,5 @@ export class UserDeleteComponent {
         console.error(error);
       },
     });
-  }  
+  }
 }
