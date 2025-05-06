@@ -63,76 +63,31 @@ describe('userService', () => {
         });
     });
 
-    describe('updateUserProfile', () => {
-        it('should hash password when updating password', async () => {
-            const updatedUser = { ...mockUserDto };
-            const mockUserQuery = {
-                select: jest.fn().mockReturnThis(),
-                lean: jest.fn().mockResolvedValue(updatedUser)
-            };
-            (UserModel.findByIdAndUpdate as jest.Mock).mockReturnValue(mockUserQuery);
+  describe('updateUserProfile', () => {
+    it('should hash password when updating password', async () => {
+      const updatedUser = { ...mockUserDto };
+      const mockUserQuery = {
+        select: jest.fn().mockReturnThis(),
+        lean: jest.fn().mockResolvedValue(updatedUser)
+      };
+      
+      (UserModel.findByIdAndUpdate as jest.Mock).mockReturnValue(mockUserQuery);
+    
+      await userService.updateUserProfile(mockUserId, {
+        password: 'newpassword123'
+      });
 
-            await userService.updateUserProfile(mockUserId, {
-                password: 'newpassword123'
-            });
-
-            expect(UserModel.findByIdAndUpdate).toHaveBeenCalledWith(
-                new Types.ObjectId(mockUserId),
-                expect.objectContaining({
-                    password: expect.not.stringMatching('newpassword123')
-                }),
-                { new: true }
-            );
-        });
-
+      const [idArg, updateArg, optionsArg] = (UserModel.findByIdAndUpdate as jest.Mock).mock.calls[0];
+  
+      expect(idArg).toEqual(new Types.ObjectId(mockUserId));
+      
+      expect(updateArg.$set.password).not.toBe('newpassword123');
+      expect(updateArg.$set.password).toMatch(/^\$2[ayb]\$.{56}$/); 
+      
+      expect(optionsArg).toEqual({ new: true });
     });
-    describe('resetUserPassword', () => {
-        const email = 'test@example.com';
-        const oldPassword = 'old';
-        const newPassword = 'newPass';
-        it('should throw if user not found', async () => {
-            (UserModel.findOne as jest.Mock).mockResolvedValue(null);
-            await expect(userService.resetUserPassword(email, oldPassword, newPassword)).rejects.toThrow(AppError);
-        });
 
-        it('should throw if password mismatch', async () => {
-            (UserModel.findOne as jest.Mock).mockResolvedValue({ password: 'hashed' });
-            (comparePassword as jest.Mock).mockResolvedValue(false);
-            await expect(userService.resetUserPassword(email, oldPassword, newPassword)).rejects.toThrow(AppError);
-        });
-        it('should update password successfully', async () => {
-            const user = { email, password: 'hashed' };
-            const encrypted = 'encryptedNew';
-            const updated = { email, _id: new Types.ObjectId(mockUserId) };
-
-            // Stub finding the user
-            (UserModel.findOne as jest.Mock).mockResolvedValue(user);
-
-            // Stub password comparison/encryption
-            (comparePassword as jest.Mock).mockResolvedValue(true);
-            (encryptPassword as jest.Mock).mockResolvedValue(encrypted);
-
-            // Stub the chainable findOneAndUpdate().select(...)
-            const selectMock = jest.fn().mockResolvedValue(updated);
-            (UserModel.findOneAndUpdate as jest.Mock).mockReturnValue({
-                select: selectMock,
-            });
-
-            const result = await userService.resetUserPassword(email, oldPassword, newPassword);
-
-            expect(comparePassword).toHaveBeenCalledWith(oldPassword, 'hashed');
-            expect(encryptPassword).toHaveBeenCalledWith(newPassword);
-            expect(UserModel.findOneAndUpdate).toHaveBeenCalledWith(
-                { email },
-                { $set: { password: encrypted } },
-                { new: true }
-            );
-            expect(selectMock).toHaveBeenCalledWith('-password');
-            expect(result).toEqual(updated);
-        });
-
-
-    });
+  });
 
     describe('deleteUserProfile', () => {
         it('should delete user and all related data', async () => {

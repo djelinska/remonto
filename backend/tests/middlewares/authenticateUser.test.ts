@@ -13,7 +13,7 @@ process.env.SECRETKEY = 'test-secret-key';
 describe('authenticateUser middleware', () => {
   let mockRequest: Partial<AuthRequest>;
   let mockResponse: Partial<Response>;
-  let nextFunction: NextFunction;
+  let nextFunction: NextFunction; 
 
   beforeEach(() => {
     mockRequest = {
