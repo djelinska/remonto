@@ -33,7 +33,14 @@
 
     <div class="card-body">
       <p><span>Nazwa:</span>{{ template.project.name }}</p>
-      <p><span>Opis:</span>{{ template.project.description }}</p>
+      <p>
+        <span>Opis:</span
+        >{{
+          template.project.description
+            ? template.project.description
+            : "Brak opisu"
+        }}
+      </p>
       <p>
         <span>Budżet:</span>
         {{ template.project.budget | currency : "PLN" }}

@@ -14,7 +14,13 @@
       @for (template of templates; track template.id) {
       <tr>
         <td>{{ template.project.name }}</td>
-        <td>{{ template.project.description }}</td>
+        <td>
+          {{
+            template.project.description
+              ? template.project.description
+              : "Brak opisu"
+          }}
+        </td>
         <td>{{ template.taskCount }}</td>
         <td>{{ template.materialCount }}</td>
         <td>{{ template.toolCount }}</td>

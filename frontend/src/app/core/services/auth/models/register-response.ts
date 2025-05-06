@@ -1,6 +1,6 @@
-import { User } from '../../../../shared/models/user';
+import { UserDto } from '../../../../shared/models/user.dto';
 
 export interface RegisterResponse {
   message: string;
-  user: User;
+  user: UserDto;
 }

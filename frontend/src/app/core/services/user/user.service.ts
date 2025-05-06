@@ -2,7 +2,7 @@ import { Observable, Subject, tap } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../../../shared/models/user';
+import { UserDto } from '../../../shared/models/user.dto';
 import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
@@ -14,12 +14,12 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUserProfile(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/user/profile`);
+  getUserProfile(): Observable<UserDto> {
+    return this.http.get<UserDto>(`${this.apiUrl}/user/profile`);
   }
 
-  updateUserProfile(user: User): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/user/profile`, user).pipe(
+  updateUserProfile(user: UserDto): Observable<UserDto> {
+    return this.http.patch<UserDto>(`${this.apiUrl}/user/profile`, user).pipe(
       tap(() => {
         this.userUpdated.next();
       })

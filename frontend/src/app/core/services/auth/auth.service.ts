@@ -1,11 +1,12 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, map, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoginRequest } from './models/login-request.model';
 import { LoginResponse } from './models/login-response';
 import { RegisterRequest } from './models/register-request';
 import { RegisterResponse } from './models/register-response';
+import { UserDto } from '../../../shared/models/user.dto';
 import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
@@ -13,7 +14,7 @@ import { environment } from '../../../../environments/environment.development';
 })
 export class AuthService {
   private apiUrl = environment.apiUrl;
-  private readonly tokenKey = 'auth_token';
+  private readonly sessionKey = 'session';
 
   constructor(private http: HttpClient) {}
 
@@ -21,9 +22,15 @@ export class AuthService {
     return this.http
       .post<LoginResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(
-        map((response: any) => {
+        map((response: LoginResponse) => {
           if (response.token) {
-            localStorage.setItem(this.tokenKey, response.token);
+            localStorage.setItem(
+              this.sessionKey,
+              JSON.stringify({
+                token: response.token,
+                user: response.user,
+              })
+            );
           }
           return response;
         })
@@ -35,14 +42,22 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.sessionKey);
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem(this.tokenKey);
+    return !!localStorage.getItem(this.sessionKey);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
+    return (
+      JSON.parse(localStorage.getItem(this.sessionKey) || '{}').token || null
+    );
+  }
+
+  getLoggedInUser(): UserDto | null {
+    return (
+      JSON.parse(localStorage.getItem(this.sessionKey) || '{}').user || null
+    );
   }
 }

@@ -10,6 +10,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { Component } from '@angular/core';
 import { FormErrorComponent } from '../../../../shared/components/form-error/form-error.component';
+import { UserType } from '../../../../shared/enums/user-type';
 
 @Component({
   selector: 'app-login',
@@ -36,8 +37,12 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.form.valid) {
       this.authService.login(this.form.value).subscribe({
-        next: () => {
-          this.router.navigate(['/dashboard']);
+        next: (response) => {
+          if (response?.user.type === UserType.ADMIN) {
+            this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
         },
         error: (error) => {
           this.errorMessage = error.error.message;
