@@ -78,9 +78,18 @@ const fetchAllUserData = async (userId: string): Promise<UserData> => {
     }
 };
 
-const resetUserPassword = async (email: string, newPassword: string): Promise<UserDto> => {
+const resetUserPassword = async (email: string, oldPassword: string, newPassword: string): Promise<UserDto> => {
     const updateObj: Partial<UserDto> = {};
 
+    const user: UserDto | null = await UserModel.findOne({ email });
+    if (!user) {
+        throw new AppError('Nieprawidłowe dane logowania', 401);
+    }
+
+    const passwordsMatch: boolean = await comparePassword(oldPassword, user.password);
+    if (!passwordsMatch) {
+        throw new AppError('Hasla sie nie zgadzaja', 401);
+    }
     updateObj.password = await encryptPassword(newPassword);
 
     const updatedUser = await UserModel.findOneAndUpdate({ email }, { $set: updateObj }, { new: true }).select('-password');

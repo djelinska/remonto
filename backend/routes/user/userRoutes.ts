@@ -68,23 +68,23 @@ router.patch('/api/user/profile', [authenticateUser], async (req: AuthRequest, r
         return res.status(500).json({ message: 'Server error' });
     }
 });
-router.patch('/api/user/resetPassword', [authenticateUser], async (req: ResetPasswordRequest, res: Response) => {
-    const { email, newPassword } = req.body
+router.patch('/api/user/changePassword', [authenticateUser], async (req: ResetPasswordRequest, res: Response) => {
+    const { oldPassword, newPassword } = req.body
     try {
-        if (!email || !newPassword) {
-            throw new AppError('Email not found in request', 400);
+        if (!oldPassword || !newPassword || !req.user?.email) {
+            throw new AppError('Passwords not found in request', 400);
         }
     } catch (error: any) {
         console.error(error);
-        return res.status(400).json({ message: 'Email not found in request' });
+        return res.status(400).json({ message: 'Passwords not found in request' });
     }
 
     try {
-        const updatedUser = await userService.resetUserPassword(email, newPassword);
+        const updatedUser = await userService.resetUserPassword(req.user.email, oldPassword, newPassword);
         res.status(200).json(updatedUser);
     } catch (error: any) {
         console.error(error);
-        return res.status(500).json({ message: 'Server error' });
+        return res.status(500).json({ message: 'Old password does not match current password' });
     }
 });
 
