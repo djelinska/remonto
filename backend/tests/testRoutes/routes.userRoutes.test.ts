@@ -15,7 +15,7 @@ app.use(userRouter);
 // Mock req.user for authenticated routes
 const mockUserId = '123';
 (authenticateUser as jest.Mock).mockImplementation((req, res, next) => {
-    req.user = { id: mockUserId };
+    req.user = { id: mockUserId, email: "mail@example.com"};
     next();
 });
 
@@ -95,23 +95,23 @@ describe('User Routes', () => {
         });
     });
 
-    describe('PATCH /api/user/resetPassword', () => {
-        it('should reset user password', async () => {
+    describe('PATCH /api/user/changePassword', () => {
+        it('should change user password', async () => {
             const updatedUser = { email: 'reset@example.com' };
             (userService.resetUserPassword as jest.Mock).mockResolvedValue(updatedUser);
 
             const res = await request(app)
-                .patch('/api/user/resetPassword')
-                .send({ email: 'reset@example.com', newPassword: 'newpass123' });
+                .patch('/api/user/changePassword')
+                .send({ oldPassword: 'oldpass123', newPassword: 'newpass123' });
             expect(res.status).toBe(200);
             expect(res.body).toEqual(updatedUser);
         });
 
-        it('should return 400 if email or password is missing', async () => {
-            (userService.resetUserPassword as jest.Mock).mockResolvedValue(new AppError('Email not found in request', 400));
+        it('should return 400 if password is missing', async () => {
+            (userService.resetUserPassword as jest.Mock).mockResolvedValue(new AppError('Hasla sie nie zgadzaja', 400));
             const res = await request(app)
-                .patch('/api/user/resetPassword')
-                .send({ email: '' });
+                .patch('/api/user/changePassword')
+                .send({ newPassword: "newpass123" });
 
             expect(res.status).toBe(400);
             expect(res.body).toHaveProperty('message');

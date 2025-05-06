@@ -1,8 +1,9 @@
 import { Request } from "express"
 import { User, UserData } from "./user.dto"
 export interface ResetPasswordRequest extends Request {
+    user?: User
     body: {
-        email: string
+        oldPassword: string
         newPassword: string
     }
 }
