@@ -38,10 +38,10 @@
     <shared-form-error [control]="form.get('email')"></shared-form-error>
   </div>
 
-  @if (!isEditMode) {
   <div class="mb-3">
     <label for="password" class="form-label">
-      Hasło <span class="text-danger">*</span>
+      @if (!isEditMode) { Hasło <span class="text-danger">*</span>
+      } @else { Nowe hasło }
     </label>
     <input
       id="password"
@@ -52,7 +52,6 @@
     />
     <shared-form-error [control]="form.get('password')"></shared-form-error>
   </div>
-  }
 
   <div class="mb-3">
     <label for="type" class="form-label">
