@@ -13,7 +13,7 @@
             type="file"
             class="form-control"
             (change)="onFileSelected($event)"
-            [disabled]="isLoading"
+            [disabled]="isLoading || isRefreshing"
           />
           @if (imageError) {
           <div class="form-error mt-1">
@@ -25,7 +25,7 @@
           type="button"
           class="btn btn-primary"
           (click)="uploadImage()"
-          [disabled]="!selectedFile || isLoading"
+          [disabled]="!selectedFile || isLoading || isRefreshing"
         >
           @if (isLoading) {
           <span
@@ -42,7 +42,7 @@
       </div>
       }
     </div>
-    @if (isLoading && projectImages.length === 0) {
+    @if ((isLoading || isRefreshing) && projectImages.length === 0) {
     <div class="text-center">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -70,6 +70,7 @@
               role="status"
               aria-hidden="true"
             ></span>
+            Usuwanie ...
             } @else {
             <i class="bi bi-trash"></i>
             }
