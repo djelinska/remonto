@@ -4,11 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { ProfileService } from '../../../../core/services/profile/profile.service';
 import { Router } from '@angular/router';
 import { UserDeleteComponent } from '../../components/user/user-delete/user-delete.component';
 import { UserDto } from '../../../../shared/models/user.dto';
 import { UserEditComponent } from '../../components/user/user-edit/user-edit.component';
-import { UserService } from '../../../../core/services/user/user.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit {
   modalRef?: BsModalRef;
 
   constructor(
-    private userService: UserService,
+    private profileService: ProfileService,
     private router: Router,
     private authService: AuthService,
     private modalService: BsModalService
@@ -33,11 +33,11 @@ export class UserProfileComponent implements OnInit {
   }
 
   loadUserProfile(): void {
-    this.user$ = this.userService.getUserProfile();
+    this.user$ = this.profileService.getUserProfile();
   }
 
   openEdit(user: UserDto): void {
-    const initialState = { user: { ...user } }; // Kopia obiektu użytkownika
+    const initialState = { user: { ...user } };
     this.modalRef = this.modalService.show(UserEditComponent, {
       class: 'modal-md',
       initialState,

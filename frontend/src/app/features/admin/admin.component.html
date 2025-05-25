@@ -2,6 +2,23 @@
   <app-topbar></app-topbar>
 
   <div class="p-4 container">
+    <div class="btn-group mb-4">
+      <a
+        [routerLink]="['users']"
+        routerLinkActive="active"
+        class="btn btn-primary"
+      >
+        Użytkownicy
+      </a>
+      <a
+        [routerLink]="['templates']"
+        routerLinkActive="active"
+        class="btn btn-primary"
+      >
+        Szablony
+      </a>
+    </div>
+
     <router-outlet></router-outlet>
   </div>
 </div>

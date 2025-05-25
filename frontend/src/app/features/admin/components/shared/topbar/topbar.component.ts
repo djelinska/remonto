@@ -4,8 +4,8 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { ProfileService } from '../../../../../core/services/profile/profile.service';
 import { UserDto } from '../../../../../shared/models/user.dto';
-import { UserService } from '../../../../../core/services/user/user.service';
 
 @Component({
   selector: 'app-topbar',
@@ -20,19 +20,19 @@ export class TopbarComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private userService: UserService
+    private profileService: ProfileService
   ) {}
 
   ngOnInit(): void {
     this.loadUserProfile();
 
-    this.userService.getUserUpdatedListener().subscribe(() => {
+    this.profileService.getUserUpdatedListener().subscribe(() => {
       this.loadUserProfile();
     });
   }
 
   loadUserProfile(): void {
-    this.user$ = this.userService.getUserProfile();
+    this.user$ = this.profileService.getUserProfile();
   }
 
   logout(): void {

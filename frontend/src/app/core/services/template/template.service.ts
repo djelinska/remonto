@@ -19,7 +19,7 @@ export class TemplateService {
   }
 
   getTemplateById(id: string): Observable<TemplateDto> {
-    return this.http.get<TemplateDto>(`${this.apiUrl}/templates/${id}`);
+    return this.http.get<TemplateDto>(`${this.apiUrl}/admin/templates/${id}`);
   }
 
   createTemplate(template: TemplateFormDto): Observable<TemplateDto> {
