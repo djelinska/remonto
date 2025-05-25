@@ -26,6 +26,7 @@ export class InfoImagesComponent implements OnInit {
   selectedFile: File | null = null;
   projectImages: { url: string; preview: string }[] = [];
   isLoading = false;
+  isRefreshing = false;
   deletingImage: string | null = null;
   imageError: string | null = null;
 
@@ -130,7 +131,7 @@ export class InfoImagesComponent implements OnInit {
   }
 
   private loadProjectImages(): void {
-    this.isLoading = true;
+    this.isRefreshing = true;
     this.projectService.getProjectById(this.projectId).subscribe({
       next: (project) => {
         const imageUrls = project.imageUrls || []; // Handle undefined case
@@ -147,21 +148,21 @@ export class InfoImagesComponent implements OnInit {
                   (item): item is { url: string; preview: string } =>
                     item.preview !== null
                 );
-              this.isLoading = false;
+              this.isRefreshing = false;
             },
             error: (err) => {
               console.error('Error loading images:', err);
-              this.isLoading = false;
+              this.isRefreshing = false;
             },
           });
         } else {
           this.projectImages = [];
-          this.isLoading = false;
+          this.isRefreshing = false;
         }
       },
       error: (err) => {
         console.error('Error loading project:', err);
-        this.isLoading = false;
+        this.isRefreshing = false;
       },
     });
   }
