@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h4 class="modal-title">Edytuj użytkownika</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    data-bs-dismiss="modal"
+    (click)="onCancel()"
+  ></button>
+</div>
+<div class="modal-body">
+  <app-user-form
+    [isEditMode]="true"
+    [user]="user"
+    (formSubmit)="onUserUpdated($event)"
+  ></app-user-form>
+</div>

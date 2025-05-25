@@ -3,8 +3,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ProfileService } from '../../../../../core/services/profile/profile.service';
 import { UserDto } from '../../../../../shared/models/user.dto';
-import { UserService } from '../../../../../core/services/user/user.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -19,7 +19,10 @@ export class UserEditComponent {
   loading = false;
   errorMessage = '';
 
-  constructor(private userService: UserService, public modalRef: BsModalRef) {}
+  constructor(
+    private profileService: ProfileService,
+    public modalRef: BsModalRef
+  ) {}
 
   validateForm(): boolean {
     this.errorMessage = '';
@@ -48,7 +51,7 @@ export class UserEditComponent {
     }
 
     this.loading = true;
-    this.userService.updateUserProfile(this.user).subscribe({
+    this.profileService.updateUserProfile(this.user).subscribe({
       next: (updatedUser) => {
         this.loading = false;
         this.userUpdated.emit(updatedUser);

@@ -6,7 +6,6 @@ import {Types} from 'mongoose';
 
 type ObjectId = Types.ObjectId;
 
-// Fetch all templates
 export const fetchTemplates = async (): Promise<TemplateDto[]> => {
 	try {
 		const templates = await TemplateModel.find();
@@ -53,7 +52,6 @@ export const fetchTemplates = async (): Promise<TemplateDto[]> => {
 	}
 };
 
-// Fetch a single template by ID
 export const fetchTemplateById = async (templateId: ObjectId): Promise<TemplateFormDto> => {
 	try {
 		const template = await TemplateModel.findById(templateId);
@@ -69,7 +67,6 @@ export const fetchTemplateById = async (templateId: ObjectId): Promise<TemplateF
 	}
 };
 
-// Create a new template
 export const createTemplate = async (newTemplate: TemplateFormDto): Promise<TemplateFormDto> => {
 	try {
 		const template = new TemplateModel(newTemplate);
@@ -83,7 +80,6 @@ export const createTemplate = async (newTemplate: TemplateFormDto): Promise<Temp
 	}
 };
 
-// Update an existing template
 export const updateTemplate = async (templateId: ObjectId, updatedTemplate: TemplateFormDto): Promise<TemplateFormDto> => {
 	try {
 		const template = await TemplateModel.findByIdAndUpdate(templateId, {$set: updatedTemplate}, {new: true, runValidators: true});
@@ -99,7 +95,6 @@ export const updateTemplate = async (templateId: ObjectId, updatedTemplate: Temp
 	}
 };
 
-// Delete a template
 export const deleteTemplate = async (templateId: ObjectId): Promise<ReturnMessage> => {
 	try {
 		const result = await TemplateModel.findByIdAndDelete(templateId);
@@ -116,3 +111,13 @@ export const deleteTemplate = async (templateId: ObjectId): Promise<ReturnMessag
 		throw new Error('Error deleting template');
 	}
 };
+
+const templateService = {
+	fetchTemplates,
+	fetchTemplateById,
+	createTemplate,
+	updateTemplate,
+	deleteTemplate,
+};
+
+export default templateService;

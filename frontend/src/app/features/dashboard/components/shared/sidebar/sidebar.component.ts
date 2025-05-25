@@ -4,11 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
+import { ProfileService } from '../../../../../core/services/profile/profile.service';
 import { ProjectDto } from '../../../../../shared/models/project.dto';
 import { ProjectListComponent } from '../../project/project-list/project-list.component';
 import { ProjectService } from '../../../../../core/services/project/project.service';
 import { UserDto } from '../../../../../shared/models/user.dto';
-import { UserService } from '../../../../../core/services/user/user.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -26,19 +26,19 @@ export class SidebarComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private userService: UserService
+    private profileService: ProfileService
   ) {}
 
   ngOnInit(): void {
     this.loadUserProfile();
 
-    this.userService.getUserUpdatedListener().subscribe(() => {
+    this.profileService.getUserUpdatedListener().subscribe(() => {
       this.loadUserProfile();
     });
   }
 
   loadUserProfile(): void {
-    this.user$ = this.userService.getUserProfile();
+    this.user$ = this.profileService.getUserProfile();
   }
 
   logout(): void {

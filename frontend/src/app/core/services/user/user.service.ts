@@ -1,8 +1,8 @@
-import { Observable, Subject, tap } from 'rxjs';
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { UserDto } from '../../../shared/models/user.dto';
+import { UserFormDto } from './models/user-form.dto';
 import { environment } from '../../../../environments/environment.development';
 
 @Injectable({
@@ -10,27 +10,22 @@ import { environment } from '../../../../environments/environment.development';
 })
 export class UserService {
   private apiUrl = environment.apiUrl;
-  private userUpdated = new Subject<void>();
 
   constructor(private http: HttpClient) {}
 
-  getUserProfile(): Observable<UserDto> {
-    return this.http.get<UserDto>(`${this.apiUrl}/user/profile`);
+  getUsers(): Observable<UserDto[]> {
+    return this.http.get<UserDto[]>(`${this.apiUrl}/admin/users`);
   }
 
-  updateUserProfile(user: UserDto): Observable<UserDto> {
-    return this.http.patch<UserDto>(`${this.apiUrl}/user/profile`, user).pipe(
-      tap(() => {
-        this.userUpdated.next();
-      })
-    );
+  createUser(user: UserFormDto): Observable<UserDto> {
+    return this.http.post<UserDto>(`${this.apiUrl}/admin/users`, user);
   }
 
-  getUserUpdatedListener(): Observable<void> {
-    return this.userUpdated.asObservable();
+  updateUser(id: string, user: UserFormDto): Observable<UserDto> {
+    return this.http.patch<UserDto>(`${this.apiUrl}/admin/users/${id}`, user);
   }
 
-  deleteUserProfile(): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiUrl}/user/profile`);
+  deleteUser(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/users/${id}`);
   }
 }

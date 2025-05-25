@@ -3,8 +3,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserDto } from '../../../../../shared/models/user.dto'; // Importuj model użytkownika
-import { UserService } from '../../../../../core/services/user/user.service';
+import { ProfileService } from '../../../../../core/services/profile/profile.service';
+import { UserDto } from '../../../../../shared/models/user.dto';
 
 @Component({
   selector: 'app-user-delete',
@@ -19,11 +19,14 @@ export class UserDeleteComponent {
   loading = false;
   errorMessage = '';
 
-  constructor(private userService: UserService, public modalRef: BsModalRef) {}
+  constructor(
+    private profileService: ProfileService,
+    public modalRef: BsModalRef
+  ) {}
 
   confirmDelete() {
     this.loading = true;
-    this.userService.deleteUserProfile().subscribe({
+    this.profileService.deleteUserProfile().subscribe({
       next: () => {
         this.loading = false;
         this.userDeleted.emit();

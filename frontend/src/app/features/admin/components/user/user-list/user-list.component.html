@@ -1,0 +1,56 @@
+<div class="table-responsive">
+  <table class="table table-bordered align-middle">
+    <thead>
+      <tr>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Email</th>
+        <th>Typ użytkownika</th>
+        <th class="th-action"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of users; track user.id) {
+      <tr>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.type }}</td>
+        <td class="text-center">
+          <div class="dropdown">
+            <button
+              class="btn btn-sm btn-light"
+              type="button"
+              data-bs-toggle="dropdown"
+            >
+              <i class="bi bi-three-dots"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <button
+                  type="button"
+                  class="dropdown-item"
+                  (click)="openEditUserModal(user)"
+                >
+                  <i class="bi bi-pencil-square me-1"></i>
+                  Edytuj
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  class="dropdown-item text-danger"
+                  (click)="deleteUser(user.id)"
+                >
+                  <i class="bi bi-trash me-1"></i>
+                  Usuń
+                </button>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
