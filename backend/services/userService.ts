@@ -164,6 +164,9 @@ const updateUserProfile = async (userId: string, updateData: Partial<UserDto>): 
 	if (updateData.email !== undefined) {
 		updateObj.email = updateData.email;
 	}
+	if (updateData.password?.trim()) {
+		updateObj.password = await encryptPassword(updateData.password);
+	}
 	updateObj.type = updateData.type !== undefined ? updateData.type : UserTypes.USER;
 
 	const updatedUser = await UserModel.findByIdAndUpdate(new Types.ObjectId(userId), {$set: updateObj}, {new: true}).select('-password');
