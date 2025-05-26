@@ -36,24 +36,32 @@ describe('projectService', () => {
 
   describe('fetchUserProjects', () => {
     it('should return user projects', async () => {
-      (ProjectModel.find as jest.Mock).mockResolvedValue([mockProjectDto]);
+        const mockProjects = [
+            { ...mockProjectDto, _id: new Types.ObjectId() },
+            { ...mockProjectDto, _id: new Types.ObjectId(), name: 'Second Project' }
+        ];
+        
+        (ProjectModel.find as jest.Mock).mockResolvedValue(mockProjects);
 
-      const result = await projectService.fetchUserProjects(new Types.ObjectId(mockUserId));
+        const result = await projectService.fetchUserProjects(new Types.ObjectId(mockUserId));
 
-      expect(result).toEqual([{
-        id: mockProjectDto._id,
-        name: mockProjectDto.name
-      }]);
-      expect(ProjectModel.find).toHaveBeenCalledWith({ userId: new Types.ObjectId(mockUserId) });
+        expect(result).toEqual([
+            { id: mockProjects[0]._id, name: mockProjects[0].name },
+            { id: mockProjects[1]._id, name: mockProjects[1].name }
+        ]);
+        expect(ProjectModel.find).toHaveBeenCalledWith({ 
+            userId: new Types.ObjectId(mockUserId) 
+        });
     });
 
     it('should throw error when no projects found', async () => {
-        (ProjectModel.find as jest.Mock).mockResolvedValue([]);
+        (ProjectModel.find as jest.Mock).mockResolvedValue(null); // or []
+        
         await expect(projectService.fetchUserProjects(new Types.ObjectId(mockUserId)))
-          .rejects
-          .toThrow('Error fetching projects');
-      });
-  });
+            .rejects
+            .toThrow('Error fetching projects');
+    });
+});
 
   describe('fetchUserProjectById', () => {
     it('should return a project by ID', async () => {
@@ -155,35 +163,52 @@ describe('projectService', () => {
   });
 
   describe('deleteUserProject', () => {
-    it('should delete a project', async () => {
-      (ProjectModel.deleteOne as jest.Mock).mockResolvedValue({ deletedCount: 1 });
+    it('should delete a project and its related materials, tools, and tasks', async () => {
+        (MaterialModel.deleteMany as jest.Mock).mockResolvedValue({ deletedCount: 1 });
+        (ToolModel.deleteMany as jest.Mock).mockResolvedValue({ deletedCount: 1 });
+        (TaskModel.deleteMany as jest.Mock).mockResolvedValue({ deletedCount: 1 });
+        (ProjectModel.deleteOne as jest.Mock).mockResolvedValue({ deletedCount: 1 });
 
-      const result = await projectService.deleteUserProject(
-        new Types.ObjectId(mockUserId),
-        new Types.ObjectId(mockProjectId)
-      );
+        const result = await projectService.deleteUserProject(
+            new Types.ObjectId(mockUserId),
+            new Types.ObjectId(mockProjectId)
+        );
 
-      expect(result).toEqual({ 
-        message: 'Project deleted successfully' 
-      });
+        expect(result).toEqual({ 
+            message: 'Project deleted successfully' 
+        });
+        
+        expect(MaterialModel.deleteMany).toHaveBeenCalledWith({ 
+            projectId: new Types.ObjectId(mockProjectId) 
+        });
+        expect(ToolModel.deleteMany).toHaveBeenCalledWith({ 
+            projectId: new Types.ObjectId(mockProjectId) 
+        });
+        expect(TaskModel.deleteMany).toHaveBeenCalledWith({ 
+            projectId: new Types.ObjectId(mockProjectId) 
+        });
+        expect(ProjectModel.deleteOne).toHaveBeenCalledWith({ 
+            userId: new Types.ObjectId(mockUserId), 
+            _id: new Types.ObjectId(mockProjectId) 
+        });
     });
 
     it('should return success message even when no project was deleted', async () => {
-        (ProjectModel.deleteOne as jest.Mock).mockResolvedValue({ 
-          acknowledged: true, 
-          deletedCount: 0 
-        });
-      
-        const result = await projectService.deleteUserProject(
-          new Types.ObjectId(mockUserId),
-          new Types.ObjectId(mockProjectId)
-        );
-      
-        expect(result).toEqual({
-          message: 'Project deleted successfully'
-        });
-      });
-  });
+    (MaterialModel.deleteMany as jest.Mock).mockResolvedValue({ deletedCount: 0 });
+    (ToolModel.deleteMany as jest.Mock).mockResolvedValue({ deletedCount: 0 });
+    (TaskModel.deleteMany as jest.Mock).mockResolvedValue({ deletedCount: 0 });
+    (ProjectModel.deleteOne as jest.Mock).mockResolvedValue({ deletedCount: 0 });
+
+    const result = await projectService.deleteUserProject(
+        new Types.ObjectId(mockUserId),
+        new Types.ObjectId(mockProjectId)
+    );
+
+    expect(result).toEqual({
+        message: 'Project deleted successfully'
+    });
+    });
+});
 
   describe('fetchProjectBudget', () => {
     it('should return project budget details', async () => {

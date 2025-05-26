@@ -103,20 +103,26 @@ export const updateUserProject = async (userId: ObjectId, projectId: ObjectId, u
 };
 
 export const deleteUserProject = async (userId: ObjectId, projectId: ObjectId): Promise<ReturnMessage> => {
-	try {
-		const project = await ProjectModel.deleteOne({userId: userId, _id: projectId});
+    try {
+        await Promise.all([
+            MaterialModel.deleteMany({ projectId: projectId }),
+            ToolModel.deleteMany({ projectId: projectId }),
+            TaskModel.deleteMany({ projectId: projectId })
+        ]);
 
-		if (!project) {
-			throw new Error('project not found or user not authorized');
-		}
+        const project = await ProjectModel.deleteOne({ userId: userId, _id: projectId });
 
-		return {
-			message: 'Project deleted successfully',
-		};
-	} catch (error) {
-		console.error('Error deleting project:', error);
-		throw new Error('Error deleting project');
-	}
+        if (!project) {
+            throw new Error('Project not found or user not authorized');
+        }
+
+        return {
+            message: 'Project deleted successfully',
+        };
+    } catch (error) {
+        console.error('Error deleting project:', error);
+        throw new Error('Error deleting project');
+    }
 };
 
 export const fetchProjectBudget = async (userId: ObjectId, projectId: ObjectId) => {
