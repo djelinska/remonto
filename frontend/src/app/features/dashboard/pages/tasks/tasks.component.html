@@ -1,6 +1,6 @@
 <div class="p-4">
   <div class="d-flex justify-content-end mb-4">
-    <button type="button" class="btn btn-primary" (click)="openAddTaskModal()">
+    <button type="button" class="btn btn-primary" (click)="openAddTaskModal()" id="addTaskButton">
       <i class="bi bi-plus"></i>
       Dodaj zadanie
     </button>
@@ -14,6 +14,7 @@
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#todoTasks"
+          id="todoTasksHeading"
         >
           <i class="bi bi-file-earmark-text text-primary me-2"></i>
           Planowane
@@ -27,6 +28,7 @@
           (taskDeleted)="deleteTask($event)"
           (taskDeleted)="deleteTask($event)"
           (taskUpdated)="refreshTasks()"
+          listId="todoTasksList"
         ></app-task-list>
         } @else {
         <div class="alert alert-info">Brak zadań</div>
@@ -41,6 +43,7 @@
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#inProgressTasks"
+          id="inProgressTasksHeading"
         >
           <i class="bi bi-arrow-repeat text-primary me-2"></i>
           W trakcie
@@ -53,6 +56,7 @@
           [projectId]="projectId"
           (taskDeleted)="deleteTask($event)"
           (taskUpdated)="refreshTasks()"
+          listId="inProgressTasksList"
         ></app-task-list>
         } @else {
         <div class="alert alert-info">Brak zadań</div>
@@ -67,6 +71,7 @@
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#completedTasks"
+          id="completedTasksHeading"
         >
           <i class="bi bi-check2-square text-primary me-2"></i>
           Zakończone
@@ -79,6 +84,7 @@
           [projectId]="projectId"
           (taskDeleted)="deleteTask($event)"
           (taskUpdated)="refreshTasks()"
+          listId="completedTasksList"
         ></app-task-list>
         } @else {
         <div class="alert alert-info">Brak zadań</div>

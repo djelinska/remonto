@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive" [id]="listId">
   <table class="table table-bordered align-middle">
     <thead>
       <tr>
@@ -22,6 +22,8 @@
             class="form-select form-select-sm fit-content"
             [(ngModel)]="task.status"
             (change)="onStatusChange(task)"
+            [id]="'statusSelect_' + task.id"
+            name="taskStatus"
           >
             @for (status of statusOptions; track status) {
             <option [value]="status">{{ statusLabels[status] }}</option>
@@ -46,15 +48,19 @@
               class="btn btn-sm btn-light"
               type="button"
               data-bs-toggle="dropdown"
+              [id]="'dropdownMenu_' + task.id"
+              aria-expanded="false"
+              aria-label="Menu akcji"
             >
               <i class="bi bi-three-dots"></i>
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" [attr.aria-labelledby]="'dropdownMenu_' + task.id">
               <li>
                 <button
                   type="button"
                   class="dropdown-item"
                   (click)="openEditTaskModal(task)"
+                  [id]="'editBtn_' + task.id"
                 >
                   <i class="bi bi-pencil-square me-1"></i>
                   Edytuj
@@ -65,6 +71,7 @@
                   type="button"
                   class="dropdown-item text-danger"
                   (click)="deleteTask(task.id)"
+                  [id]="'deleteBtn_' + task.id"
                 >
                   <i class="bi bi-trash me-1"></i>
                   Usuń
