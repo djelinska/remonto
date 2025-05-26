@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 export class TaskListComponent {
   @Input() tasks: TaskDto[] = [];
   @Input() projectId!: string;
+  @Input() listId: string = ''; 
   @Output() taskDeleted = new EventEmitter<string>();
   @Output() taskUpdated = new EventEmitter<TaskDto>();
 

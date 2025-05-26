@@ -1,18 +1,22 @@
 <div class="p-4">
-  <h1>Szukaj w projektach</h1>
+  <h1 id="searchTitle">Szukaj w projektach</h1>
 
-  <input
-    #searchInput
-    type="text"
-    id="globalSearchInput"
-    class="form-control mt-4 w-100"
-    placeholder="Szukaj zadań, materiałów, narzędzi..."
-    [formControl]="searchControl"
-    [disabled]="isLoading"
-  />
+  <div class="mt-4">
+    <label for="globalSearchInput" class="visually-hidden">Wyszukiwarka</label>
+    <input
+      #searchInput
+      type="text"
+      id="globalSearchInput"
+      class="form-control w-100"
+      placeholder="Szukaj zadań, materiałów, narzędzi..."
+      [formControl]="searchControl"
+      [attr.disabled]="isLoading ? true : null"
+      aria-labelledby="searchTitle globalSearchInput"
+    />
+  </div>
 
-  <div class="mt-3">
-    <label class="me-2">Filtruj wyniki:</label>
+  <fieldset class="mt-3">
+    <legend class="me-2">Filtruj wyniki:</legend>
     <div class="form-check form-check-inline">
       <input
         class="form-check-input"
@@ -20,7 +24,7 @@
         id="tasks"
         (change)="toggleFilter('task')"
         [checked]="(filterControl.value || []).includes('task')"
-        [disabled]="isLoading"
+        [attr.disabled]="isLoading ? true : null"
       />
       <label class="form-check-label" for="tasks">Zadania</label>
     </div>
@@ -31,7 +35,7 @@
         id="materials"
         (change)="toggleFilter('material')"
         [checked]="(filterControl.value || []).includes('material')"
-        [disabled]="isLoading"
+        [attr.disabled]="isLoading ? true : null"
       />
       <label class="form-check-label" for="materials">Materiały</label>
     </div>
@@ -42,15 +46,15 @@
         id="tools"
         (change)="toggleFilter('tool')"
         [checked]="(filterControl.value || []).includes('tool')"
-        [disabled]="isLoading"
+        [attr.disabled]="isLoading ? true : null"
       />
       <label class="form-check-label" for="tools">Narzędzia</label>
     </div>
-  </div>
+  </fieldset>
 
   <div class="mt-3">
-    <label class="me-2">Sortuj:</label>
-    <div class="btn-group" role="group">
+    <span class="me-2">Sortuj:</span>
+    <div class="btn-group" role="group" aria-label="Kierunek sortowania">
       <button
         type="button"
         class="btn btn-sm btn-outline-primary"

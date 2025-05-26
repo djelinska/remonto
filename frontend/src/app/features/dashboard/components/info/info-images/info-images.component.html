@@ -7,10 +7,11 @@
     <div class="mb-4">
       <div class="d-flex align-items-end gap-3">
         <div class="w-100">
-          <label for="image" class="form-label">Zdjęcie</label>
+          <label for="imageInput" class="form-label">Zdjęcie</label>
           <input
             #fileInput
             type="file"
+            id="imageInput"
             class="form-control"
             (change)="onFileSelected($event)"
             [disabled]="isLoading || isRefreshing"
