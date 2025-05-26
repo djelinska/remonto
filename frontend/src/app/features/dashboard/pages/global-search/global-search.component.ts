@@ -17,7 +17,7 @@ import { SearchResultDto } from '../../../../core/services/search/models/search-
 export class GlobalSearchComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef;
 
-  searchControl = new FormControl('');
+  searchControl = new FormControl({value: '', disabled: false});
   filterControl = new FormControl<string[]>(['task', 'material', 'tool']);
   sortDirectionControl = new FormControl<'a-z' | 'z-a'>('a-z');
 
@@ -39,6 +39,7 @@ export class GlobalSearchComponent implements OnInit {
         this.searchControl.enable();
         this.performSearch();
         this.isLoading = false;
+        this.performSearch();
       },
       error: (err) => {
         console.error('Error loading data:', err);
