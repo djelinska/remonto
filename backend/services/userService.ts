@@ -1,5 +1,5 @@
 import {User, UserDto} from '../types/models/user.dto';
-import {comparePassword, encryptPassword} from '../utils/validation';
+import {checkEmail, checkPassword, comparePassword, encryptPassword} from '../utils/validation';
 
 import AppError from '../utils/AppError';
 import {MaterialDto} from '../types/models/material.dto';
@@ -118,53 +118,55 @@ const resetUserPassword = async (email: string, oldPassword: string, newPassword
 	return updatedUser;
 };
 
-const checkAllowedOperation = async (password: string, userId: Types.ObjectId): Promise<boolean> => {
-	if (!userId || !password) {
-		throw new AppError('No password or user data provided', 400);
+const checkAllowedOperation = async (paramsUserId: Types.ObjectId, tokenUserId: Types.ObjectId): Promise<boolean> => {
+	if (!paramsUserId) {
+		throw new Error('No user data provided');
 	}
-	const user = await UserModel.findById(userId);
+	const user = await UserModel.findById(paramsUserId);
 	if (!user) {
 		return false;
 	}
-	const compare = await comparePassword(password, user.password);
-	if (compare) {
-		return true;
+	if (paramsUserId.toString() !== tokenUserId.toString()) {
+		return false;
 	}
-	return false;
+	return true;
 };
 
 export const createUserProfile = async (newUser: UserDto): Promise<UserDto> => {
-	try {
-		const existingUser: UserDto | null = await UserModel.findOne({email: newUser.email});
-		if (existingUser) {
-			throw new AppError('Email jest już powiązany z innym kontem', 409);
-		}
-
-		newUser.password = await encryptPassword(newUser.password);
-
-		const user = new UserModel(newUser);
-		await user.save();
-
-		return user;
-	} catch (error) {
-		console.error('Error creating user:', error);
-		throw new Error('Error creating user');
+	if (!checkEmail(newUser.email)) {
+		throw new Error('Invalid email format');
 	}
+
+	if (!checkPassword(newUser.password)) {
+		throw new Error('Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character');
+	}
+
+	const existingUser: UserDto | null = await UserModel.findOne({email: newUser.email});
+	if (existingUser) {
+		throw new AppError('Email jest już powiązany z innym kontem', 409);
+	}
+
+	newUser.password = await encryptPassword(newUser.password);
+
+	const user = new UserModel(newUser);
+	await user.save();
+
+	return user;
 };
 
 const updateUserProfile = async (userId: string, updateData: Partial<UserDto>): Promise<UserDto> => {
 	const updateObj: Partial<UserDto> = {};
 
-	if (updateData.firstName !== undefined) {
+	if (updateData.firstName) {
 		updateObj.firstName = updateData.firstName;
 	}
-	if (updateData.lastName !== undefined) {
+	if (updateData.lastName) {
 		updateObj.lastName = updateData.lastName;
 	}
-	if (updateData.email !== undefined) {
-		updateObj.email = updateData.email;
+	if (updateData.email && checkEmail(updateData.email) && (await UserModel.findOne({email: updateData.email, _id: {$ne: userId}}))) {
+		throw new AppError('Email jest już powiązany z innym kontem', 409);
 	}
-	if (updateData.password?.trim()) {
+	if (updateData.password?.trim() && checkPassword(updateData.password)) {
 		updateObj.password = await encryptPassword(updateData.password);
 	}
 	updateObj.type = updateData.type !== undefined ? updateData.type : UserTypes.USER;
@@ -172,7 +174,7 @@ const updateUserProfile = async (userId: string, updateData: Partial<UserDto>): 
 	const updatedUser = await UserModel.findByIdAndUpdate(new Types.ObjectId(userId), {$set: updateObj}, {new: true}).select('-password');
 
 	if (!updatedUser) {
-		throw new AppError('Nie znaleziono użytkownika', 404);
+		throw new Error('User not found');
 	}
 
 	return updatedUser;

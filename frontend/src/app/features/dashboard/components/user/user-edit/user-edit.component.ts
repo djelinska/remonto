@@ -59,8 +59,8 @@ export class UserEditComponent {
       },
       error: (error) => {
         this.loading = false;
-        this.errorMessage = 'Błąd podczas aktualizacji użytkownika';
-        console.error(error);
+        this.errorMessage = error.error.message;
+        console.error('Error updating user profile:', error);
       },
     });
   }

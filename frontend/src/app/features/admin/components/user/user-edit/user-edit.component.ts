@@ -17,6 +17,7 @@ export class UserEditComponent {
   @Output() userUpdated = new EventEmitter<void>();
 
   user: UserDto | null = null;
+  errorMessage: string = '';
 
   constructor(public modalRef: BsModalRef, private userService: UserService) {}
 
@@ -28,6 +29,7 @@ export class UserEditComponent {
           this.hideModal();
         },
         error: (error) => {
+          this.errorMessage = error.error.message;
           console.error('Error updating user:', error);
         },
       });
