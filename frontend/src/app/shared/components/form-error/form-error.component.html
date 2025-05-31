@@ -29,6 +29,11 @@
     Plik jest za duży (max.
     {{ control.errors["fileSize"].requiredSize / 1024 / 1024 }} MB).
   </small>
+  } @if (control.errors['passwordStrength']) {
+  <small class="text-danger">
+    Hasło musi mieć minimum 8 znaków, zawierać małą i wielką literę, cyfrę oraz
+    znak specjalny.
+  </small>
   }
 </div>
 }

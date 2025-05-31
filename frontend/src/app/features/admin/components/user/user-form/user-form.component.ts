@@ -11,6 +11,7 @@ import { FormErrorComponent } from '../../../../../shared/components/form-error/
 import { UserDto } from '../../../../../shared/models/user.dto';
 import { UserFormDto } from '../../../../../core/services/user/models/user-form.dto';
 import { UserType } from '../../../../../shared/enums/user-type';
+import { passwordStrengthValidator } from '../../../../../shared/validators/password-strength.validator';
 
 @Component({
   selector: 'app-user-form',
@@ -47,7 +48,7 @@ export class UserFormComponent {
           Validators.maxLength(50),
         ],
       ],
-      password: [''],
+      password: ['', passwordStrengthValidator()],
       email: ['', [Validators.required, Validators.email]],
       type: [null, Validators.required],
     });
@@ -57,7 +58,9 @@ export class UserFormComponent {
     this.loadUserData();
 
     if (!this.isEditMode) {
-      this.form.get('password')?.setValidators([Validators.required]);
+      this.form
+        .get('password')
+        ?.setValidators([Validators.required, passwordStrengthValidator()]);
     }
   }
 

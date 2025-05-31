@@ -30,4 +30,7 @@
       Zapisz
     </button>
   </div>
+  @if (errorMessage) {
+  <div class="alert alert-danger mt-3">{{ errorMessage }}</div>
+  }
 </div>

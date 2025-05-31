@@ -14,4 +14,7 @@
     [user]="user"
     (formSubmit)="onUserUpdated($event)"
   ></app-user-form>
+  @if (errorMessage) {
+  <div class="alert alert-danger mt-3">{{ errorMessage }}</div>
+  }
 </div>
