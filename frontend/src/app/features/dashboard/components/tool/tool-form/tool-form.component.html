@@ -1,33 +1,37 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
   <div class="mb-3">
-    <label for="name" class="form-label">
+    <label for="tool-name" class="form-label">
       Nazwa <span class="text-danger">*</span>
     </label>
     <input
-      id="name"
+      id="tool-name"
       formControlName="name"
       class="form-control"
       placeholder="Wprowadź nazwę narzędzia"
+      autocomplete="off"
     />
     <shared-form-error [control]="form.get('name')"></shared-form-error>
   </div>
 
   <div class="mb-3">
-    <label for="image" class="form-label">Zdjęcie</label>
+    <label for="tool-image" class="form-label">Zdjęcie</label>
     <input
       #fileInput
+      id="tool-image"
       type="file"
       class="form-control"
       (change)="onFileSelected($event)"
+      accept="image/*"
     />
     <shared-form-error [control]="form.get('image')"></shared-form-error>
     @if (imagePreview) {
     <div class="mt-3 position-relative" style="display: inline-block">
-      <img [src]="imagePreview" class="img-thumbnail" style="height: 150px" />
+      <img [src]="imagePreview" class="img-thumbnail" style="height: 150px" alt="Podgląd zdjęcia narzędzia" />
       <button
         type="button"
         class="btn btn-sm btn-light position-absolute top-0 end-0"
         (click)="removeImage()"
+        aria-label="Usuń zdjęcie"
       >
         <i class="bi bi-trash"></i>
       </button>
@@ -36,13 +40,13 @@
   </div>
 
   <div class="mb-3">
-    <label for="status" class="form-label">
+    <label for="tool-status" class="form-label">
       Status <span class="text-danger">*</span>
     </label>
-    <select id="status" formControlName="status" class="form-select">
+    <select id="tool-status" formControlName="status" class="form-select" autocomplete="off">
       <option value="null" disabled selected>Wybierz status</option>
       @for (status of statuses; track $index) {
-      <option [value]="status" [label]="statusLabels[status]"></option>
+      <option [value]="status">{{ statusLabels[status] }}</option>
       }
     </select>
     <shared-form-error [control]="form.get('status')"></shared-form-error>
@@ -50,7 +54,7 @@
 
   @if (status === 'IN_DELIVERY' || status === 'READY_FOR_PICKUP') {
   <div class="mb-3">
-    <label for="deliveryDate" class="form-label"
+    <label for="tool-deliveryDate" class="form-label"
       >{{
         status === "READY_FOR_PICKUP" ? "Termin odbioru" : "Termin dostawy"
       }}
@@ -58,19 +62,21 @@
     </label>
     <div class="d-flex align-items-center gap-2">
       <input
-        id="deliveryDate"
+        id="tool-deliveryDate"
         [type]="form.value.allDay ? 'date' : 'datetime-local'"
         formControlName="deliveryDate"
         class="form-control"
+        autocomplete="off"
       />
       <div class="form-check">
         <input
-          id="allDay"
+          id="tool-allDay"
           type="checkbox"
           formControlName="allDay"
           class="form-check-input"
+          autocomplete="off"
         />
-        <label class="form-check-label" for="allDay">Całodniowe</label>
+        <label class="form-check-label" for="tool-allDay">Całodniowe</label>
       </div>
     </div>
     <shared-form-error [control]="form.get('deliveryDate')"></shared-form-error>
@@ -79,60 +85,65 @@
 
   <div class="mb-3 d-flex gap-2">
     <div class="w-100">
-      <label for="cost" class="form-label">Koszt</label>
+      <label for="tool-cost" class="form-label">Koszt</label>
       <div class="input-group">
         <input
           type="number"
-          id="cost"
+          id="tool-cost"
           class="form-control"
           formControlName="cost"
           step="0.01"
+          autocomplete="off"
         />
         <span class="input-group-text">zł</span>
       </div>
     </div>
 
     <div>
-      <label for="quantity" class="form-label">Ilość</label>
+      <label for="tool-quantity" class="form-label">Ilość</label>
       <input
         type="number"
-        id="quantity"
+        id="tool-quantity"
         class="form-control"
         formControlName="quantity"
         step="1"
+        autocomplete="off"
       />
     </div>
   </div>
 
   <div class="mb-3">
-    <label for="location" class="form-label">Lokalizacja</label>
+    <label for="tool-location" class="form-label">Lokalizacja</label>
     <input
-      id="location"
+      id="tool-location"
       formControlName="location"
       class="form-control"
       placeholder="Miejsce przechowywania/odbioru"
+      autocomplete="off"
     />
     <shared-form-error [control]="form.get('location')"></shared-form-error>
   </div>
 
   <div class="mb-3">
-    <label for="link" class="form-label">Link</label>
+    <label for="tool-link" class="form-label">Link</label>
     <input
-      id="link"
+      id="tool-link"
       formControlName="link"
       class="form-control"
       placeholder="Link do produktu"
+      autocomplete="off"
     />
     <shared-form-error [control]="form.get('link')"></shared-form-error>
   </div>
 
   <div class="mb-3">
-    <label for="note" class="form-label">Notatka</label>
+    <label for="tool-note" class="form-label">Notatka</label>
     <textarea
-      id="note"
+      id="tool-note"
       formControlName="note"
       class="form-control"
       placeholder="Notatka"
+      autocomplete="off"
     ></textarea>
   </div>
 

@@ -1,5 +1,6 @@
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, forkJoin, of, zip } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { ActivatedRoute } from '@angular/router';
 import { Component } from '@angular/core';
@@ -46,37 +47,56 @@ export class MaterialsToolsComponent {
   }
 
   private loadMaterials(): void {
-    this.materialService
-      .getMaterialsByProject(this.projectId)
-      .subscribe((materials) => {
-        const imageRequests = materials.map((material) =>
-          material.imageUrl
-            ? this.imageService.getImage(material.imageUrl)
-            : of(null)
-        );
+  this.materialService
+    .getMaterialsByProject(this.projectId)
+    .subscribe({
+      next: (materials) => {
+        const imageRequests = materials.map((material) => {
+          if (!material.imageUrl || material.imageUrl.startsWith('blob:')) {
+            return of(null);
+          }
+          return this.imageService.getImage(material.imageUrl).pipe(
+            catchError(() => of(null)) 
+          );
+        });
 
-        zip(...imageRequests).subscribe((imageUrls) => {
+        forkJoin(imageRequests).subscribe((imageUrls) => {
           this.materials = materials.map((material, index) => ({
             ...material,
-            imageUrl: imageUrls[index] || '',
+            imageUrl: imageUrls[index] || material.imageUrl || '',
           }));
         });
-      });
-  }
+      },
+      error: (error) => {
+        console.error('Error loading materials:', error);
+      }
+    });
+}
 
-  private loadTools(): void {
-    this.toolService.getToolsByProject(this.projectId).subscribe((tools) => {
-      const imageRequests = tools.map((tool) =>
-        tool.imageUrl ? this.imageService.getImage(tool.imageUrl) : of(null)
-      );
-      zip(...imageRequests).subscribe((imageUrls) => {
+private loadTools(): void {
+  this.toolService.getToolsByProject(this.projectId).subscribe({
+    next: (tools) => {
+      const imageRequests = tools.map((tool) => {
+        if (!tool.imageUrl || tool.imageUrl.startsWith('blob:')) {
+          return of(null);
+        }
+        return this.imageService.getImage(tool.imageUrl).pipe(
+          catchError(() => of(null)) 
+        );
+      });
+
+      forkJoin(imageRequests).subscribe((imageUrls) => {
         this.tools = tools.map((tool, index) => ({
           ...tool,
-          imageUrl: imageUrls[index] || '',
+          imageUrl: imageUrls[index] || tool.imageUrl || '',
         }));
       });
-    });
-  }
+    },
+    error: (error) => {
+      console.error('Error loading tools:', error);
+    }
+  });
+}
 
   openAddMaterialModal(): void {
     const initialState = { projectId: this.projectId };
