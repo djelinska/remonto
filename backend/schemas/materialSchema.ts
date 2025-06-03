@@ -3,7 +3,6 @@ import {Schema} from 'mongoose';
 import {checkToolsMaterialsStatus} from '../utils/validation';
 import mongoose from 'mongoose';
 
-// Material Schema
 const materialSchema = new Schema<MaterialDto>({
 	projectId: {
 		type: mongoose.Schema.Types.ObjectId,

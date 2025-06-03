@@ -59,7 +59,7 @@ export class ProjectFormComponent {
       tasks: this.fb.array([]),
       materials: this.fb.array([]),
       tools: this.fb.array([]),
-    });
+    }, { validators: this.dateValidator });
   }
 
   ngOnInit(): void {
@@ -87,6 +87,16 @@ export class ProjectFormComponent {
       this.form.patchValue(formattedProject);
     }
   }
+
+  dateValidator(form: FormGroup): { [key: string]: boolean } | null {
+  const startDate = form.get('startDate')?.value;
+  const endDate = form.get('endDate')?.value;
+
+  if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+    return { 'invalidDateRange': true };
+  }
+  return null;
+}
 
   onTemplateSelect(event: any) {
     const selectedTemplateId = event.target.value;

@@ -26,7 +26,6 @@ const router = express.Router();
 
 router.get('/api/projects', authenticateUser, async (req: ProjectRequest, res: Response) => {
 	try {
-		// Access the authenticated user data from req.user
 		const userId = req.user?.id;
 		if (!userId) {
 			throw new Error('Could not find ids in request');
@@ -43,7 +42,6 @@ router.get('/api/projects', authenticateUser, async (req: ProjectRequest, res: R
 
 router.get('/api/projects/:projectId', authenticateUser, async (req: ProjectRequest, res: Response) => {
 	try {
-		// Access the authenticated user data from req.user
 		const userId = req.user?.id;
 		const projectId = req.params.projectId;
 		if (!userId || !projectId) {
@@ -61,7 +59,6 @@ router.get('/api/projects/:projectId', authenticateUser, async (req: ProjectRequ
 
 router.post('/api/projects', [authenticateUser, validateProjectData], async (req: PostProjectRequest, res: Response) => {
 	try {
-		// Access the authenticated user data from req.user
 		const userId = req.user?.id;
 		const newProject = req.body;
 		if (!userId) {
@@ -98,7 +95,6 @@ router.put('/api/projects/:projectId', [authenticateUser, validateProjectData], 
 
 router.delete('/api/projects/:projectId', authenticateUser, async (req: ProjectRequest, res: Response) => {
 	try {
-		// Access the authenticated user data from req.user
 		const userId = req.user?.id;
 		const projectId = req.params.projectId;
 		if (!userId || !projectId) {
@@ -229,7 +225,6 @@ router.delete(
     }
 );
 
-// Task, materials and tools routes
 router.use('/api/projects/:projectId/tasks', taskRoutes);
 router.use('/api/projects/:projectId/materials', materialRoutes);
 router.use('/api/projects/:projectId/tools', toolRoutes);

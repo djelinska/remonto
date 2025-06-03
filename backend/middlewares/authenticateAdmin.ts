@@ -6,7 +6,6 @@ import { UserTypes } from '../types/enums/user-types';
 
 const authenticateAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
 	try {
-		// Get token from the 'Authorization' header (format: Bearer <token>)
 		const authHeader = req.headers['authorization'];
 
 		if (!authHeader) {
@@ -15,7 +14,6 @@ const authenticateAdmin = (req: AuthRequest, res: Response, next: NextFunction) 
 				.json({ message: 'Authorization header is missing' });
 		}
 
-		// Extract token from "Bearer <token>" format
 		const token = authHeader.split(' ')[1];
 
 		if (!token) {
@@ -24,10 +22,8 @@ const authenticateAdmin = (req: AuthRequest, res: Response, next: NextFunction) 
 				.json({ message: 'Authentication token is missing' });
 		}
 
-		// Verify the token
 		const decoded: string | JwtPayload = jwt.verify(token, process.env.SECRETKEY as jwt.Secret);
 
-		// Attach user data to the request object
 		const userData = decoded as User;
         if (userData.type !== UserTypes.ADMIN){
 			return res

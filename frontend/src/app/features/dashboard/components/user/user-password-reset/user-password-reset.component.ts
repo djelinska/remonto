@@ -101,20 +101,7 @@ export class UserPasswordResetComponent {
         this.loading = false;
         this.passwordChanged.emit();
         this.modalRef?.hide();
-      },
-      // error: (error) => {
-      //   this.loading = false;
-      //   if (error.error?.message) {
-      //     this.errorMessage = error.error.message;
-      //   } else if (error.status === 401) {
-      //     this.errorMessage = 'Current password is incorrect';
-      //   } else if (error.status === 400) {
-      //     this.errorMessage = 'Invalid password data';
-      //   } else {
-      //     this.errorMessage = 'Error changing password';
-      //   }
-      //   console.error(error);
-      // }
+      }
     });
   }
 }

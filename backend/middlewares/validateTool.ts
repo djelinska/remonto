@@ -13,12 +13,10 @@ const validateToolData = async (req: ToolRequest, res: Response, next: NextFunct
     try {
         const { projectId } = req.params;
 
-        // Attempt to cast projectId to ObjectId
         if (!Types.ObjectId.isValid(projectId)) {
             return res.status(400).json({ message: "Invalid projectId format" });
         }
 
-        // Cast projectId to ObjectId
         const projectIdObjectId = new Types.ObjectId(projectId);
 
         const toolData: ToolData = { ...req.body, projectId: projectIdObjectId };
