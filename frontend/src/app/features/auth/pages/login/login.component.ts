@@ -22,6 +22,7 @@ import { UserType } from '../../../../shared/enums/user-type';
 export class LoginComponent {
   form: FormGroup;
   errorMessage: string = '';
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -32,6 +33,10 @@ export class LoginComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit(): void {

@@ -21,6 +21,7 @@ import { FormErrorComponent } from '../../../../shared/components/form-error/for
 export class RegisterComponent {
   form: FormGroup;
   errorMessage: string = '';
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,6 +42,10 @@ export class RegisterComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit(): void {

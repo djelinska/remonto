@@ -20,16 +20,19 @@
         </div>
         <div class="mt-3">
           <label for="password" class="form-label">Hasło</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            class="form-control"
-            formControlName="password"
-          />
-          <shared-form-error
-            [control]="form.get('password')"
-          ></shared-form-error>
+          <div class="input-group">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              name="password"
+              id="password"
+              class="form-control"
+              formControlName="password"
+            />
+            <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
+              <i class="bi" [class.bi-eye]="!showPassword" [class.bi-eye-slash]="showPassword"></i>
+            </button>
+          </div>
+          <shared-form-error [control]="form.get('password')"></shared-form-error>
         </div>
         <button
           type="submit"
