@@ -33,4 +33,15 @@ export class ProfileService {
   deleteUserProfile(): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(this.apiUrl);
   }
+
+changePassword(currentPassword: string, newPassword: string): Observable<any> {
+  return this.http.patch(`${this.apiUrl}/changePassword`, { 
+    oldPassword: currentPassword,
+    newPassword 
+  }).pipe(
+    tap(() => {
+      this.userUpdated.next();
+    })
+  );
+}
 }

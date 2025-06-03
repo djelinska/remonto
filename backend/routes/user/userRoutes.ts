@@ -68,7 +68,7 @@ router.patch('/api/user/profile', [authenticateUser], async (req: AuthRequest, r
         return res.status(500).json({ message: 'Server error' });
     }
 });
-router.patch('/api/user/changePassword', [authenticateUser], async (req: ResetPasswordRequest, res: Response) => {
+router.patch('/api/user/profile/changePassword', [authenticateUser], async (req: ResetPasswordRequest, res: Response) => {
     const { oldPassword, newPassword } = req.body
     try {
         if (!oldPassword || !newPassword || !req.user?.email) {

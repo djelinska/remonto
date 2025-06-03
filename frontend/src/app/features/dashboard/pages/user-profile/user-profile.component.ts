@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { UserDeleteComponent } from '../../components/user/user-delete/user-delete.component';
 import { UserDto } from '../../../../shared/models/user.dto';
 import { UserEditComponent } from '../../components/user/user-edit/user-edit.component';
+import { UserPasswordResetComponent } from '../../components/user/user-password-reset/user-password-reset.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -61,6 +62,19 @@ export class UserProfileComponent implements OnInit {
       this.modalRef.content.userDeleted.subscribe(() => {
         this.authService.logout();
         this.router.navigate(['/']);
+      });
+    }
+  }
+
+  openPasswordReset(user: UserDto): void {
+    const initialState = { user };
+    this.modalRef = this.modalService.show(UserPasswordResetComponent, {
+      class: 'modal-md',
+      initialState,
+    });
+
+    if (this.modalRef.content) {
+      this.modalRef.content.passwordChanged.subscribe(() => {
       });
     }
   }
