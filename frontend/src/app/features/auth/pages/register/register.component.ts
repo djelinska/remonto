@@ -10,6 +10,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { Component } from '@angular/core';
 import { FormErrorComponent } from '../../../../shared/components/form-error/form-error.component';
+import { passwordStrengthValidator } from '../../../../shared/validators/password-strength.validator';
 
 @Component({
   selector: 'app-register',
@@ -40,7 +41,10 @@ export class RegisterComponent {
         Validators.maxLength(50),
       ]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
+      password: new FormControl('', [
+        Validators.required,
+        passwordStrengthValidator(),
+      ]),
     });
   }
 

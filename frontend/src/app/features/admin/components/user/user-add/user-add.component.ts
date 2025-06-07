@@ -15,6 +15,8 @@ import { UserService } from '../../../../../core/services/user/user.service';
 export class UserAddComponent {
   @Output() userAdded = new EventEmitter<void>();
 
+  errorMessage: string = '';
+
   constructor(public modalRef: BsModalRef, private userService: UserService) {}
 
   onUserAdded(user: UserFormDto): void {
@@ -24,6 +26,7 @@ export class UserAddComponent {
         this.hideModal();
       },
       error: (error) => {
+        this.errorMessage = error.error.message;
         console.error('Error adding user:', error);
       },
     });
