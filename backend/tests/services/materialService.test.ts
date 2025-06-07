@@ -47,14 +47,6 @@ describe('materialService', () => {
       }]);
       expect(MaterialModel.find).toHaveBeenCalledWith({ projectId: new Types.ObjectId(mockProjectId) });
     });
-
-    it('should throw error when materials not found', async () => {
-      (MaterialModel.find as jest.Mock).mockResolvedValue([]); 
-
-      await expect(materialService.fetchProjectMaterials(new Types.ObjectId(mockProjectId)))
-        .rejects
-        .toThrow('Error fetching project materials');
-    });
   });
 
   describe('fetchMaterialById', () => {

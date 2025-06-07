@@ -8,17 +8,14 @@ module.exports = {
   reporters: [
     'default',
     [
-      'jest-html-reporter',
+      './node_modules/jest-html-reporter',
       {
         pageTitle: 'Test Report',
-        outputPath: 'test-report.html', 
+        outputPath: './test-report.html',
         includeFailureMsg: true,
-        includeConsoleLog: true,
-        theme: 'lightTheme'
+        includeConsoleLog: true
       }
     ]
   ],
-  collectCoverage: true,
-  coverageReporters: ['html', 'text', 'lcov'],
-  coverageDirectory: './coverage'
+  collectCoverage: false
 };

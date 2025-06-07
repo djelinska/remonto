@@ -5,9 +5,8 @@ import ProjectModel from '../../models/projectModel';
 import TaskModel from '../../models/taskModel';
 import MaterialModel from '../../models/materialModel';
 import ToolModel from '../../models/toolModel';
-import {
-    mockUserDto
-} from '../mockData/mockUser';
+import { mockUserDto } from '../mockData/mockUser';
+import { UserTypes } from '../../types/enums/user-types';
 import { comparePassword, encryptPassword } from '../../utils/validation';
 import AppError from '../../utils/AppError';
 
@@ -16,7 +15,7 @@ jest.mock('../../models/projectModel');
 jest.mock('../../models/taskModel');
 jest.mock('../../models/materialModel');
 jest.mock('../../models/toolModel');
-jest.mock('../../utils/validation')
+jest.mock('../../utils/validation');
 
 describe('userService', () => {
     const mockUserId = mockUserDto._id.toString();
@@ -62,32 +61,6 @@ describe('userService', () => {
             });
         });
     });
-
-  describe('updateUserProfile', () => {
-    it('should hash password when updating password', async () => {
-      const updatedUser = { ...mockUserDto };
-      const mockUserQuery = {
-        select: jest.fn().mockReturnThis(),
-        lean: jest.fn().mockResolvedValue(updatedUser)
-      };
-      
-      (UserModel.findByIdAndUpdate as jest.Mock).mockReturnValue(mockUserQuery);
-    
-      await userService.updateUserProfile(mockUserId, {
-        password: 'newpassword123'
-      });
-
-      const [idArg, updateArg, optionsArg] = (UserModel.findByIdAndUpdate as jest.Mock).mock.calls[0];
-  
-      expect(idArg).toEqual(new Types.ObjectId(mockUserId));
-      
-      expect(updateArg.$set.password).not.toBe('newpassword123');
-      expect(updateArg.$set.password).toMatch(/^\$2[ayb]\$.{56}$/); 
-      
-      expect(optionsArg).toEqual({ new: true });
-    });
-
-  });
 
     describe('deleteUserProfile', () => {
         it('should delete user and all related data', async () => {

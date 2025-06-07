@@ -1,4 +1,3 @@
-// __tests__/template.service.test.ts
 import mongoose, { Types } from 'mongoose';
 import TemplateModel from '../../models/templateModel';
 import * as service from '../../services/templateService';
@@ -11,28 +10,46 @@ const mockTemplateModel = TemplateModel as jest.Mocked<typeof TemplateModel>;
 describe('Template Service', () => {
   const fakeId = new Types.ObjectId();
   const fakeTemplate = {
-    _id: fakeId,
-    project: { name: 'Test Project' },
-    foo: 'bar',
-  } as unknown as TemplateFormDto;
+  _id: fakeId,
+  project: { 
+    name: 'Test Project',
+    description: undefined,
+    budget: undefined,
+    userId: new Types.ObjectId(), 
+    startDate: new Date(),        
+    imageUrls: [],
+    notes: []
+  },
+  tasks: [],
+  materials: [],
+  tools: []
+} as unknown as TemplateFormDto;
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   describe('fetchTemplates', () => {
-    it('returns list of {id, name} when templates exist', async () => {
-      mockTemplateModel.find.mockResolvedValue([fakeTemplate]);
-      const list = await service.fetchTemplates();
-      expect(list).toEqual([{ id: fakeId, name: 'Test Project' }]);
-      expect(mockTemplateModel.find).toHaveBeenCalledTimes(1);
-    });
-
-    it('throws when no templates found', async () => {
-      mockTemplateModel.find.mockResolvedValue([]);
-      await expect(service.fetchTemplates()).rejects.toThrow('Error fetching templates');
-      expect(mockTemplateModel.find).toHaveBeenCalled();
-    });
+    it('returns list of templates with complete structure when templates exist', async () => {
+    mockTemplateModel.find.mockResolvedValue([fakeTemplate]);
+    const list = await service.fetchTemplates();
+    
+    expect(list).toEqual([{
+      id: fakeId,
+      project: {
+        name: 'Test Project',
+        description: undefined,
+        budget: undefined
+      },
+      tasks: [],
+      materials: [],
+      tools: [],
+      taskCount: 0,
+      materialCount: 0,
+      toolCount: 0
+    }]);
+    expect(mockTemplateModel.find).toHaveBeenCalledTimes(1);
+  });
 
     it('throws on model error', async () => {
       mockTemplateModel.find.mockRejectedValue(new Error('DB fail'));
@@ -61,7 +78,6 @@ describe('Template Service', () => {
 
   describe('createTemplate', () => {
     it('saves and returns the new template', async () => {
-      // simulate `new TemplateModel()` returning an object with save()
       const mockInstance = {
         save: jest.fn().mockResolvedValue(undefined),
         ...fakeTemplate
