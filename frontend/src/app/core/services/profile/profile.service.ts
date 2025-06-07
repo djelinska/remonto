@@ -10,6 +10,7 @@ import { environment } from '../../../../environments/environment.development';
 })
 export class ProfileService {
   private apiUrl = `${environment.apiUrl}/user/profile`;
+  private apiUrlPassword = `${environment.apiUrl}/user`;
   private userUpdated = new Subject<void>();
 
   constructor(private http: HttpClient) {}
@@ -35,7 +36,7 @@ export class ProfileService {
   }
 
 changePassword(currentPassword: string, newPassword: string): Observable<any> {
-  return this.http.patch(`${this.apiUrl}/changePassword`, { 
+  return this.http.patch(`${this.apiUrlPassword}/changePassword`, { 
     oldPassword: currentPassword,
     newPassword 
   }).pipe(
