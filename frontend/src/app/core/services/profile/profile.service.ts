@@ -10,6 +10,7 @@ import { environment } from '../../../../environments/environment.development';
 })
 export class ProfileService {
   private apiUrl = `${environment.apiUrl}/user/profile`;
+  private apiUrlPassword = `${environment.apiUrl}/user`;
   private userUpdated = new Subject<void>();
 
   constructor(private http: HttpClient) {}
@@ -19,12 +20,7 @@ export class ProfileService {
   }
 
   updateUserProfile(user: UserDto): Observable<UserDto> {
-    return this.http.patch<UserDto>(this.apiUrl, user).pipe(
-      tap(() => {
-        this.userUpdated.next();
-      })
-    );
-  }
+  return this.http.patch<UserDto>(`${this.apiUrl}`, user);}
 
   getUserUpdatedListener(): Observable<void> {
     return this.userUpdated.asObservable();
@@ -33,4 +29,15 @@ export class ProfileService {
   deleteUserProfile(): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(this.apiUrl);
   }
+
+changePassword(currentPassword: string, newPassword: string): Observable<any> {
+  return this.http.patch(`${this.apiUrlPassword}/changePassword`, { 
+    oldPassword: currentPassword,
+    newPassword 
+  }).pipe(
+    tap(() => {
+      this.userUpdated.next();
+    })
+  );
+}
 }

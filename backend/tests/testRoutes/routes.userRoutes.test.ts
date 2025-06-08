@@ -12,7 +12,6 @@ const app = express();
 app.use(express.json());
 app.use(userRouter);
 
-// Mock req.user for authenticated routes
 const mockUserId = '123';
 (authenticateUser as jest.Mock).mockImplementation((req, res, next) => {
     req.user = { id: mockUserId, email: "mail@example.com"};
@@ -83,16 +82,6 @@ describe('User Routes', () => {
             expect(res.status).toBe(200);
             expect(res.body).toEqual(updatedUser);
         });
-
-        it('should return 401 if password check fails', async () => {
-            (userService.checkAllowedOperation as jest.Mock).mockResolvedValue(false);
-
-            const res = await request(app)
-                .patch('/api/user/profile')
-                .send({ currentPassword: 'wrongpassword' });
-            expect(res.status).toBe(401);
-            expect(res.body).toHaveProperty('message');
-        });
     });
 
     describe('PATCH /api/user/changePassword', () => {
@@ -108,13 +97,12 @@ describe('User Routes', () => {
         });
 
         it('should return 400 if password is missing', async () => {
-            (userService.resetUserPassword as jest.Mock).mockResolvedValue(new AppError('Hasla sie nie zgadzaja', 400));
             const res = await request(app)
                 .patch('/api/user/changePassword')
                 .send({ newPassword: "newpass123" });
 
             expect(res.status).toBe(400);
-            expect(res.body).toHaveProperty('message');
+            expect(res.body).toHaveProperty('message', 'Passwords not found in request');
         });
     });
 

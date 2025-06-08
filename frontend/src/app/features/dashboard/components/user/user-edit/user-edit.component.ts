@@ -46,22 +46,28 @@ export class UserEditComponent {
   }
 
   saveChanges() {
-    if (!this.validateForm()) {
-      return;
-    }
-
-    this.loading = true;
-    this.profileService.updateUserProfile(this.user).subscribe({
-      next: (updatedUser) => {
-        this.loading = false;
-        this.userUpdated.emit(updatedUser);
-        this.modalRef?.hide();
-      },
-      error: (error) => {
-        this.loading = false;
-        this.errorMessage = error.error.message;
-        console.error('Error updating user profile:', error);
-      },
-    });
+  if (!this.validateForm()) {
+    return;
   }
+
+  this.loading = true;
+  
+  const userToUpdate = {
+    ...this.user,
+    email: this.user.email.toLowerCase()
+  };
+
+  this.profileService.updateUserProfile(userToUpdate).subscribe({
+    next: (updatedUser) => {
+      this.loading = false;
+      this.userUpdated.emit(updatedUser);
+      this.modalRef?.hide();
+    },
+    error: (error) => {
+      this.loading = false;
+      this.errorMessage = error.error.message;
+      console.error('Błąd podczas edytowania konta', error);
+    },
+  });
+}
 }

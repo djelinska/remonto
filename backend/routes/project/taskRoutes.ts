@@ -5,7 +5,7 @@ import validateTaskData from "../../middlewares/validateTask";
 import { Types } from 'mongoose'
 import { TaskRequest, PostTaskRequest } from "../../types/models/taskRequest.dto";
 
-const router = express.Router({ mergeParams: true }); // to access :projectId
+const router = express.Router({ mergeParams: true });
 
 
 router.get("/", [authenticateUser], async (req: TaskRequest, res: Response) => {

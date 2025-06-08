@@ -130,3 +130,19 @@ export async function encryptPassword(password: string): Promise<string> {
 		});
 	return hash;
 }
+
+export function validatePasswordChange(currentPassword: string, newPassword: string): boolean {
+    if (!currentPassword || !newPassword) {
+        return false;
+    }
+    
+    if (currentPassword === newPassword) {
+        return false;
+    }
+
+    if (newPassword.length < 6) {
+        return false;
+    }
+
+    return true;
+}

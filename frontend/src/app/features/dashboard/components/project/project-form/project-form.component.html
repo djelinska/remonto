@@ -7,6 +7,7 @@
       class="form-select"
       formControlName="template"
       (change)="onTemplateSelect($event)"
+      autocomplete="off"
     >
       <option value="null" disabled selected>Wybierz szablon</option>
       @for (template of templates; track template.id) {
@@ -31,6 +32,7 @@
       class="form-control"
       formControlName="name"
       placeholder="Wprowadź nazwę projektu"
+      autocomplete="off"
     />
     <shared-form-error [control]="form.get('name')"></shared-form-error>
   </div>
@@ -42,6 +44,7 @@
       class="form-control"
       formControlName="description"
       placeholder="Opis"
+      autocomplete="off"
     ></textarea>
   </div>
 
@@ -54,6 +57,7 @@
       id="startDate"
       class="form-control"
       formControlName="startDate"
+      autocomplete="off"
     />
     <shared-form-error [control]="form.get('startDate')"></shared-form-error>
   </div>
@@ -65,7 +69,14 @@
       id="endDate"
       class="form-control"
       formControlName="endDate"
+      autocomplete="off"
+      [min]="form.get('startDate')?.value"
     />
+    @if (form.errors?.['invalidDateRange']) {
+    <div class="text-danger small mt-1">
+      Data zakończenia nie może być wcześniejsza niż data rozpoczęcia
+    </div>
+    }
   </div>
 
   <div class="mb-3">
@@ -77,6 +88,7 @@
         class="form-control"
         formControlName="budget"
         step="0.01"
+        autocomplete="off"
       />
       <span class="input-group-text">zł</span>
     </div>
@@ -86,6 +98,8 @@
     <button type="button" class="btn btn-light" (click)="onCancel()">
       Anuluj
     </button>
-    <button type="submit" class="btn btn-primary">Zapisz</button>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+      Zapisz
+    </button>
   </div>
 </form>

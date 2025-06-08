@@ -19,8 +19,12 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
+    const normalizedCredentials = {
+    ...credentials,
+    email: credentials.email.toLowerCase()
+    };
     return this.http
-      .post<LoginResponse>(`${this.apiUrl}/login`, credentials)
+      .post<LoginResponse>(`${this.apiUrl}/login`, normalizedCredentials)
       .pipe(
         map((response: LoginResponse) => {
           if (response.token) {
@@ -38,7 +42,11 @@ export class AuthService {
   }
 
   register(details: RegisterRequest): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, details);
+    const normalizedDetails = {
+    ...details,
+    email: details.email.toLowerCase()
+    };
+    return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, normalizedDetails);
   }
 
   logout(): void {

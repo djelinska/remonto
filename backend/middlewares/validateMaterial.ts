@@ -5,7 +5,6 @@ import { PostMaterialRequest } from "../types/models/materialRequest.dto";
 
 const validateMaterialData = async (req: PostMaterialRequest, res: Response, next: NextFunction) => {
     try {
-        // First check if projectId exists
         if (!req.params.projectId) {
             return res.status(400).json({
                 message: "Validation error",
@@ -13,7 +12,6 @@ const validateMaterialData = async (req: PostMaterialRequest, res: Response, nex
             });
         }
 
-        // Then validate projectId format
         if (!mongoose.Types.ObjectId.isValid(req.params.projectId)) {
             return res.status(400).json({
                 message: "Validation error",

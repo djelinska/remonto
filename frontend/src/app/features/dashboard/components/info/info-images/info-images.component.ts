@@ -134,7 +134,7 @@ export class InfoImagesComponent implements OnInit {
     this.isRefreshing = true;
     this.projectService.getProjectById(this.projectId).subscribe({
       next: (project) => {
-        const imageUrls = project.imageUrls || []; // Handle undefined case
+        const imageUrls = project.imageUrls || [];
         if (imageUrls.length > 0) {
           const imageRequests = imageUrls.map((url) =>
             url ? this.imageService.getImage(url) : of(null)

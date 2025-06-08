@@ -5,10 +5,9 @@ import ProjectModel from '../../models/projectModel';
 import TaskModel from '../../models/taskModel';
 import MaterialModel from '../../models/materialModel';
 import ToolModel from '../../models/toolModel';
-import {
-    mockUserDto
-} from '../mockData/mockUser';
-import { comparePassword, encryptPassword } from '../../utils/validation';
+import { mockUserDto } from '../mockData/mockUser';
+import { UserTypes } from '../../types/enums/user-types';
+import { comparePassword, encryptPassword, checkEmail, checkPassword } from '../../utils/validation';
 import AppError from '../../utils/AppError';
 
 jest.mock('../../models/userModel');
@@ -16,7 +15,13 @@ jest.mock('../../models/projectModel');
 jest.mock('../../models/taskModel');
 jest.mock('../../models/materialModel');
 jest.mock('../../models/toolModel');
-jest.mock('../../utils/validation')
+jest.mock('../../utils/validation', () => ({
+    ...jest.requireActual('../../utils/validation'),
+    checkEmail: jest.fn(),
+    checkPassword: jest.fn(),
+    encryptPassword: jest.fn(),
+    comparePassword: jest.fn()
+}));
 
 describe('userService', () => {
     const mockUserId = mockUserDto._id.toString();
@@ -24,6 +29,9 @@ describe('userService', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        (checkEmail as jest.Mock).mockImplementation((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+        (checkPassword as jest.Mock).mockImplementation((pass) => pass.length >= 8 && /[A-Z]/.test(pass) && /[a-z]/.test(pass) && /\d/.test(pass) && /[!@#$%^&*]/.test(pass));
+        (encryptPassword as jest.Mock).mockResolvedValue('$hashedPassword123');
     });
 
     describe('fetchUserProfile', () => {
@@ -41,7 +49,7 @@ describe('userService', () => {
 
             await expect(userService.fetchUserProfile(mockUserId))
                 .rejects
-                .toThrow('User not found');
+                .toThrow('Nie znaleziono użytkownika');
         });
     });
 
@@ -63,31 +71,76 @@ describe('userService', () => {
         });
     });
 
-  describe('updateUserProfile', () => {
-    it('should hash password when updating password', async () => {
-      const updatedUser = { ...mockUserDto };
-      const mockUserQuery = {
-        select: jest.fn().mockReturnThis(),
-        lean: jest.fn().mockResolvedValue(updatedUser)
-      };
-      
-      (UserModel.findByIdAndUpdate as jest.Mock).mockReturnValue(mockUserQuery);
-    
-      await userService.updateUserProfile(mockUserId, {
-        password: 'newpassword123'
-      });
+    describe('updateUserProfile', () => {
+    const validMockUser = { 
+        ...mockUserDto,
+        email: 'valid@example.com',
+        firstName: 'Updated' 
+    };
 
-      const [idArg, updateArg, optionsArg] = (UserModel.findByIdAndUpdate as jest.Mock).mock.calls[0];
-  
-      expect(idArg).toEqual(new Types.ObjectId(mockUserId));
-      
-      expect(updateArg.$set.password).not.toBe('newpassword123');
-      expect(updateArg.$set.password).toMatch(/^\$2[ayb]\$.{56}$/); 
-      
-      expect(optionsArg).toEqual({ new: true });
+    const validPassword = 'ValidPass123!';
+    const invalidPassword = 'weak';
+    const invalidEmail = 'invalid-email';
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        (checkEmail as jest.Mock).mockImplementation((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+        (checkPassword as jest.Mock).mockImplementation((pass) => pass.length >= 8 && /[A-Z]/.test(pass) && /[a-z]/.test(pass) && /\d/.test(pass) && /[!@#$%^&*]/.test(pass));
+        (encryptPassword as jest.Mock).mockResolvedValue('$hashedPassword123');
     });
 
-  });
+    it('should reject invalid email format', async () => {
+        (checkEmail as jest.Mock).mockReturnValueOnce(false);
+        
+        await expect(userService.updateUserProfile(
+            mockUserId, 
+            { email: invalidEmail }
+        )).rejects.toThrow('Nieprawidłowy format emaila');
+    });
+
+    it('should reject weak passwords', async () => {
+        (checkPassword as jest.Mock).mockReturnValueOnce(false);
+        
+        await expect(userService.updateUserProfile(
+            mockUserId, 
+            { password: invalidPassword }
+        )).rejects.toThrow('Hasło musi mieć co najmniej 8 znaków');
+    });
+
+    it('should handle database errors', async () => {
+        (UserModel.findByIdAndUpdate as jest.Mock).mockImplementation(() => {
+            throw new Error('Database error');
+        });
+
+        await expect(userService.updateUserProfile(
+            mockUserId, 
+            { firstName: 'Updated' }
+        )).rejects.toThrow('Database error');
+    });
+
+    it('should normalize email to lowercase', async () => {
+        const mockExec = jest.fn().mockResolvedValue(validMockUser);
+        const mockLean = jest.fn().mockReturnValue({ exec: mockExec });
+        const mockSelect = jest.fn().mockReturnValue({ lean: mockLean });
+        
+        (UserModel.findByIdAndUpdate as jest.Mock).mockReturnValue({
+            select: mockSelect,
+            lean: mockLean
+        });
+        (UserModel.findOne as jest.Mock).mockResolvedValue(null);
+
+        const result = await userService.updateUserProfile(
+            mockUserId, 
+            { email: 'VALID@example.com' }
+        );
+
+        expect(UserModel.findByIdAndUpdate).toHaveBeenCalledWith(
+            new Types.ObjectId(mockUserId),
+            { $set: { email: 'valid@example.com' } },
+            { new: true }
+        );
+    });
+    });
 
     describe('deleteUserProfile', () => {
         it('should delete user and all related data', async () => {

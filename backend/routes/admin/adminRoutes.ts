@@ -3,7 +3,6 @@ import express, {Response} from 'express';
 import AppError from '../../utils/AppError';
 import AuthRequest from '../../types/models/authRequest.dto';
 import {Types} from 'mongoose';
-import {UserDto} from '../../types/models/user.dto';
 import authenticateAdmin from '../../middlewares/authenticateAdmin';
 import authenticateUser from '../../middlewares/authenticateUser';
 import templateService from '../../services/templateService';

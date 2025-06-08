@@ -6,7 +6,6 @@ import { TaskDto } from '../types/models/task.dto';
 import { TaskPriority } from '../types/enums/task-priority';
 import { TaskStatus } from '../types/enums/task-status';
 
-// Task Schema
 const taskSchema = new Schema<TaskDto>({
 	projectId: {
 		type: mongoose.Schema.Types.ObjectId,

@@ -8,6 +8,7 @@
       formControlName="name"
       class="form-control"
       placeholder="Wprowadź nazwę zadania"
+      autocomplete="off"
     />
     <shared-form-error [control]="form.get('name')"></shared-form-error>
   </div>
@@ -16,7 +17,7 @@
     <label for="category" class="form-label">
       Kategoria <span class="text-danger">*</span>
     </label>
-    <select id="category" formControlName="category" class="form-select">
+    <select id="category" formControlName="category" class="form-select" autocomplete="off">
       <option value="null" disabled selected>Wybierz kategorię</option>
       @for (category of categories; track $index) {
       <option [value]="category" [label]="categoryLabels[category]"></option>
@@ -27,7 +28,7 @@
 
   <div class="mb-3">
     <label for="status" class="form-label">Status</label>
-    <select id="status" formControlName="status" class="form-select">
+    <select id="status" formControlName="status" class="form-select" autocomplete="off">
       <option value="null" disabled selected>Wybierz status</option>
       @for (status of statuses; track $index) {
       <option [value]="status" [label]="statusLabels[status]"></option>
@@ -55,6 +56,7 @@
       [type]="form.value.allDay ? 'date' : 'datetime-local'"
       formControlName="startDate"
       class="form-control"
+      autocomplete="off"
     />
     <shared-form-error [control]="form.get('startDate')"></shared-form-error>
   </div>
@@ -66,6 +68,7 @@
       [type]="form.value.allDay ? 'date' : 'datetime-local'"
       formControlName="endDate"
       class="form-control"
+      autocomplete="off"
     />
     @if (form.errors?.['endDateInvalid'] && form.touched) {
     <div class="form-error mt-1">
@@ -78,7 +81,7 @@
 
   <div class="mb-3">
     <label for="priority" class="form-label">Priorytet</label>
-    <select id="priority" formControlName="priority" class="form-select">
+    <select id="priority" formControlName="priority" class="form-select" autocomplete="off">
       @for (priority of priorities; track $index) {
       <option [ngValue]="priority" [label]="priorityLabels[priority]"></option>
       }
@@ -95,6 +98,7 @@
         class="form-control"
         formControlName="cost"
         step="0.01"
+        autocomplete="off"
       />
       <span class="input-group-text">zł</span>
     </div>
@@ -107,6 +111,7 @@
       formControlName="note"
       class="form-control"
       placeholder="Notatka"
+      autocomplete="off"
     ></textarea>
   </div>
 

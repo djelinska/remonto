@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import request from 'supertest';
+import { Types } from 'mongoose';
 
-// 1. Mock services
 jest.mock('../../services/templateService', () => ({
   fetchTemplates: jest.fn(),
   fetchTemplateById: jest.fn(),
@@ -14,7 +14,7 @@ jest.mock('../../services/userService', () => ({
   deleteUserProfile: jest.fn(),
 }));
 
-// 2. Mock middlewares by providing a default-exported stub that just calls next()
+
 jest.mock('../../middlewares/authenticateUser', () => ({
   __esModule: true,
   default: (_req: Request, _res: Response, next: NextFunction) => next(),
@@ -24,8 +24,8 @@ jest.mock('../../middlewares/authenticateAdmin', () => ({
   default: (_req: Request, _res: Response, next: NextFunction) => next(),
 }));
 
-// 3. Now import your router and the mocked services
-import router from '../../routes/admin/adminRoutes'; // ← adjust this path
+
+import router from '../../routes/admin/adminRoutes'; 
 import {
   fetchTemplates,
   fetchTemplateById,
@@ -70,28 +70,28 @@ describe('Templates & Admin Users API', () => {
     });
   });
 
-  describe('GET /api/templates/:templateId', () => {
+  describe('GET /api/admin/templates/:templateId', () => {
     const validId = '507f191e810c19729de860ea';
 
     it('200 → returns a template', async () => {
-      const tpl = { id: validId, name: 'Test' };
-      (fetchTemplateById as jest.Mock).mockResolvedValue(tpl);
+    const tpl = { id: validId, name: 'Test' };
+    (fetchTemplateById as jest.Mock).mockResolvedValue(tpl);
 
-      const res = await request(app).get(`/api/templates/${validId}`);
+    const res = await request(app).get(`/api/admin/templates/${validId}`);
 
-      expect(fetchTemplateById).toHaveBeenCalledWith(expect.any(Object));
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual(tpl);
-    });
+    expect(fetchTemplateById).toHaveBeenCalledWith(expect.any(Types.ObjectId));
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(tpl);
+  });
 
-    it('500 → on invalid/missing id or service error', async () => {
-      (fetchTemplateById as jest.Mock).mockRejectedValue(new Error());
+  it('500 → on service error', async () => {
+    (fetchTemplateById as jest.Mock).mockRejectedValue(new Error('DB error'));
 
-      const res = await request(app).get(`/api/templates/${validId}`);
+    const res = await request(app).get(`/api/admin/templates/${validId}`);
 
-      expect(res.status).toBe(500);
-      expect(res.body).toEqual({ message: 'Server error' });
-    });
+    expect(res.status).toBe(500);
+    expect(res.body).toEqual({ message: 'Server error' });
+  })
   });
 
   describe('PATCH /api/admin/users/:userId', () => {

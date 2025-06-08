@@ -113,7 +113,6 @@ export const updateTool = async (projectId: ObjectId, toolId: ObjectId, toolData
 
 		if (currentTool.imageUrl) {
 			if (!toolData.imageUrl || currentTool.imageUrl !== toolData.imageUrl) {
-				console.log('Deleting old tool image:', currentTool.imageUrl);
 				deleteFileByUrl(currentTool.imageUrl);
 			}
 		}

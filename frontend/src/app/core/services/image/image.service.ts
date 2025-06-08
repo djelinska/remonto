@@ -1,5 +1,5 @@
-import { Observable, map } from 'rxjs';
-
+import { Observable, map, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
@@ -22,9 +22,13 @@ export class ImageService {
   }
 
   getImage(imageUrl: string): Observable<string> {
-    return this.http
-      .get(imageUrl, { responseType: 'blob' })
-      .pipe(map((blob) => URL.createObjectURL(blob)));
+    if (!imageUrl) {
+      return of('');
+    }
+    return this.http.get(imageUrl, { responseType: 'blob' }).pipe(
+      map((blob) => URL.createObjectURL(blob)),
+      catchError(() => of(''))
+    );
   }
 
   deleteImage(imageUrl: string): Observable<{ message: string }> {

@@ -22,6 +22,7 @@ import { passwordStrengthValidator } from '../../../../shared/validators/passwor
 export class RegisterComponent {
   form: FormGroup;
   errorMessage: string = '';
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -47,16 +48,25 @@ export class RegisterComponent {
     });
   }
 
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit(): void {
-    if (this.form.valid) {
-      this.authService.register(this.form.value).subscribe({
-        next: () => {
-          this.router.navigate(['/login']);
-        },
-        error: (error) => {
-          this.errorMessage = error.error.message;
-        },
-      });
-    }
+  if (this.form.valid) {
+    const registrationData = {
+      ...this.form.value,
+      email: this.form.value.email.toLowerCase() 
+    };
+    
+    this.authService.register(registrationData).subscribe({ 
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        this.errorMessage = error.error.message;
+      },
+    });
+  }
   }
 }

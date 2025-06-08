@@ -23,7 +23,7 @@ interface UserData {
 const fetchUserProfile = async (userId: string): Promise<UserDto> => {
 	const user: UserDto | null = await UserModel.findById(new Types.ObjectId(userId));
 	if (!user) {
-		throw new Error('User not found');
+		throw new AppError('Nie znaleziono użytkownika', 404);
 	}
 
 	return user;
@@ -41,8 +41,8 @@ const fetchUsers = async (): Promise<User[]> => {
 			type: user.type,
 		}));
 	} catch (error) {
-		console.error('Error fetching users:', error);
-		throw new Error('Error fetching users');
+		console.error('Błąd podczas pobierania użytkowników:', error);
+		throw new AppError('Błąd podczas pobierania użytkowników', 500);
 	}
 };
 
@@ -91,7 +91,7 @@ const fetchAllUserData = async (userId: string): Promise<UserData> => {
 			})),
 		};
 	} catch (error: any) {
-		throw new Error(`Error fetching user data: ${error.message}`);
+		throw new AppError(`Błąd podczas pobierania danych użytkownika: ${error.message}`, 500);
 	}
 };
 
@@ -105,7 +105,7 @@ const resetUserPassword = async (email: string, oldPassword: string, newPassword
 
 	const passwordsMatch: boolean = await comparePassword(oldPassword, user.password);
 	if (!passwordsMatch) {
-		throw new AppError('Hasla sie nie zgadzaja', 401);
+		throw new AppError('Hasła się nie zgadzają', 401);
 	}
 	updateObj.password = await encryptPassword(newPassword);
 
@@ -120,7 +120,7 @@ const resetUserPassword = async (email: string, oldPassword: string, newPassword
 
 const checkAllowedOperation = async (paramsUserId: Types.ObjectId, tokenUserId: Types.ObjectId): Promise<boolean> => {
 	if (!paramsUserId) {
-		throw new Error('No user data provided');
+		throw new AppError('Brak danych użytkownika', 400);
 	}
 	const user = await UserModel.findById(paramsUserId);
 	if (!user) {
@@ -134,14 +134,14 @@ const checkAllowedOperation = async (paramsUserId: Types.ObjectId, tokenUserId: 
 
 export const createUserProfile = async (newUser: UserDto): Promise<UserDto> => {
 	if (!checkEmail(newUser.email)) {
-		throw new Error('Invalid email format');
+		throw new AppError('Nieprawidłowy format emaila', 400);
 	}
 
 	if (!checkPassword(newUser.password)) {
-		throw new Error('Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character');
+		throw new AppError('Hasło musi mieć co najmniej 8 znaków i zawierać duże i małe litery, cyfrę oraz znak specjalny', 400);
 	}
 
-	const existingUser: UserDto | null = await UserModel.findOne({email: newUser.email});
+	const existingUser: UserDto | null = await UserModel.findOne({email: newUser.email.toLowerCase()});
 	if (existingUser) {
 		throw new AppError('Email jest już powiązany z innym kontem', 409);
 	}
@@ -155,29 +155,62 @@ export const createUserProfile = async (newUser: UserDto): Promise<UserDto> => {
 };
 
 const updateUserProfile = async (userId: string, updateData: Partial<UserDto>): Promise<UserDto> => {
-	const updateObj: Partial<UserDto> = {};
+    const updateObj: Partial<UserDto> = {};
+    
+    if (updateData.firstName) {
+        if (updateData.firstName.trim().length < 3) {
+            throw new AppError('Imię musi mieć co najmniej 3 znaki', 400);
+        }
+        updateObj.firstName = updateData.firstName;
+    }
+    
+    if (updateData.lastName) {
+        if (updateData.lastName.trim().length < 3) {
+            throw new AppError('Nazwisko musi mieć co najmniej 3 znaki', 400);
+        }
+        updateObj.lastName = updateData.lastName;
+    }
+    
+    if (updateData.email) {
+        const normalizedEmail = updateData.email.toLowerCase();
+        if (!checkEmail(normalizedEmail)) {
+            throw new AppError('Nieprawidłowy format emaila', 400);
+        }
+        
+        const existingUser = await UserModel.findOne({
+            email: normalizedEmail,
+            _id: { $ne: userId }
+        });
+        
+        if (existingUser) {
+            throw new AppError('Email jest już powiązany z innym kontem', 409);
+        }
+        
+        updateObj.email = normalizedEmail;
+    }
+    
+    if (updateData.password?.trim()) {
+        if (!checkPassword(updateData.password)) {
+            throw new AppError('Hasło musi mieć co najmniej 8 znaków i zawierać duże i małe litery, cyfrę oraz znak specjalny', 400);
+        }
+        updateObj.password = await encryptPassword(updateData.password);
+    }
+    
+    if (updateData.type !== undefined) {
+        updateObj.type = updateData.type;
+    }
 
-	if (updateData.firstName) {
-		updateObj.firstName = updateData.firstName;
-	}
-	if (updateData.lastName) {
-		updateObj.lastName = updateData.lastName;
-	}
-	if (updateData.email && checkEmail(updateData.email) && (await UserModel.findOne({email: updateData.email, _id: {$ne: userId}}))) {
-		throw new AppError('Email jest już powiązany z innym kontem', 409);
-	}
-	if (updateData.password?.trim() && checkPassword(updateData.password)) {
-		updateObj.password = await encryptPassword(updateData.password);
-	}
-	updateObj.type = updateData.type !== undefined ? updateData.type : UserTypes.USER;
+    const updatedUser = await UserModel.findByIdAndUpdate(
+        new Types.ObjectId(userId),
+        { $set: updateObj },
+        { new: true }
+    ).select('-password');
 
-	const updatedUser = await UserModel.findByIdAndUpdate(new Types.ObjectId(userId), {$set: updateObj}, {new: true}).select('-password');
+    if (!updatedUser) {
+        throw new AppError('Nie znaleziono użytkownika', 404);
+    }
 
-	if (!updatedUser) {
-		throw new Error('User not found');
-	}
-
-	return updatedUser;
+    return updatedUser;
 };
 
 const deleteUserProfile = async (userId: string): Promise<void> => {

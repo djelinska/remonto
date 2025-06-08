@@ -11,6 +11,7 @@
   "exclude": [
     "node_modules",
     "dist",
-    "jest.config.js"
+    "jest.config.js",
+    "test-results/**/*"
   ]
 }
