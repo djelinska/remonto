@@ -53,15 +53,20 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    if (this.form.valid) {
-      this.authService.register(this.form.value).subscribe({
-        next: () => {
-          this.router.navigate(['/login']);
-        },
-        error: (error) => {
-          this.errorMessage = error.error.message;
-        },
-      });
-    }
+  if (this.form.valid) {
+    const registrationData = {
+      ...this.form.value,
+      email: this.form.value.email.toLowerCase() 
+    };
+    
+    this.authService.register(registrationData).subscribe({ 
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        this.errorMessage = error.error.message;
+      },
+    });
+  }
   }
 }

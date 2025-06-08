@@ -45,30 +45,25 @@ router.get('/api/user/data', [authenticateUser], async (req: AuthRequest, res: R
 	}
 });
 router.patch('/api/user/profile', [authenticateUser], async (req: AuthRequest, res: Response) => {
-	const userId = req.user?.id;
-	try {
-		if (!userId) {
-			throw new Error('User id not found in request');
-		}
+    const userId = req.user?.id;
+    try {
+        if (!userId) {
+            throw new AppError('User id not found in request', 400);
+        }
 
-		if (!req.user?.id) {
-			throw new Error('User is not authenticated');
-		}
-
-		const isAccOwner = await userService.checkAllowedOperation(userId, req.user?.id);
-		if (!isAccOwner) {
-			throw new Error('User unauthorized to change data');
-		}
-
-		const updatedUser = await userService.updateUserProfile(userId.toString(), req.body);
-		res.status(200).json(updatedUser);
-	} catch (error: any) {
-		if (error instanceof AppError) {
-			return res.status(error.statusCode).json({message: error.message});
-		}
-		console.error(error);
-		return res.status(500).json({message: 'Server error'});
-	}
+        if (req.body.email) {
+            req.body.email = req.body.email.toLowerCase();
+        }
+        const updatedUser = await userService.updateUserProfile(userId.toString(), req.body);
+        
+        res.status(200).json(updatedUser);
+    } catch (error: any) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({message: error.message});
+        }
+        console.error(error);
+        return res.status(500).json({message: 'Server error'});
+    }
 });
 router.patch('/api/user/changePassword', [authenticateUser], async (req: ResetPasswordRequest, res: Response) => {
 	const {oldPassword, newPassword} = req.body;

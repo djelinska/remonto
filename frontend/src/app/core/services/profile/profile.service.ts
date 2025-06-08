@@ -20,12 +20,7 @@ export class ProfileService {
   }
 
   updateUserProfile(user: UserDto): Observable<UserDto> {
-    return this.http.patch<UserDto>(this.apiUrl, user).pipe(
-      tap(() => {
-        this.userUpdated.next();
-      })
-    );
-  }
+  return this.http.patch<UserDto>(`${this.apiUrl}`, user);}
 
   getUserUpdatedListener(): Observable<void> {
     return this.userUpdated.asObservable();

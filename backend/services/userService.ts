@@ -155,29 +155,62 @@ export const createUserProfile = async (newUser: UserDto): Promise<UserDto> => {
 };
 
 const updateUserProfile = async (userId: string, updateData: Partial<UserDto>): Promise<UserDto> => {
-	const updateObj: Partial<UserDto> = {};
+    const updateObj: Partial<UserDto> = {};
+    
+    if (updateData.firstName) {
+        if (updateData.firstName.trim().length < 3) {
+            throw new AppError('First name must be at least 3 characters', 400);
+        }
+        updateObj.firstName = updateData.firstName;
+    }
+    
+    if (updateData.lastName) {
+        if (updateData.lastName.trim().length < 3) {
+            throw new AppError('Last name must be at least 3 characters', 400);
+        }
+        updateObj.lastName = updateData.lastName;
+    }
+    
+    if (updateData.email) {
+        const normalizedEmail = updateData.email.toLowerCase();
+        if (!checkEmail(normalizedEmail)) {
+            throw new AppError('Invalid email format', 400);
+        }
+        
+        const existingUser = await UserModel.findOne({
+            email: normalizedEmail,
+            _id: { $ne: userId }
+        });
+        
+        if (existingUser) {
+            throw new AppError('Email is already associated with another account', 409);
+        }
+        
+        updateObj.email = normalizedEmail;
+    }
+    
+    if (updateData.password?.trim()) {
+        if (!checkPassword(updateData.password)) {
+            throw new AppError('Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character', 400);
+        }
+        updateObj.password = await encryptPassword(updateData.password);
+    }
+    
+    if (updateData.type !== undefined) {
+        updateObj.type = updateData.type;
+    }
 
-	if (updateData.firstName) {
-		updateObj.firstName = updateData.firstName;
-	}
-	if (updateData.lastName) {
-		updateObj.lastName = updateData.lastName;
-	}
-	if (updateData.email && checkEmail(updateData.email) && (await UserModel.findOne({email: updateData.email, _id: {$ne: userId}}))) {
-		throw new AppError('Email jest już powiązany z innym kontem', 409);
-	}
-	if (updateData.password?.trim() && checkPassword(updateData.password)) {
-		updateObj.password = await encryptPassword(updateData.password);
-	}
-	updateObj.type = updateData.type !== undefined ? updateData.type : UserTypes.USER;
+    const updatedUser = await UserModel.findByIdAndUpdate(
+        new Types.ObjectId(userId),
+        { $set: updateObj },
+        { new: true }
+    ).select('-password');
 
-	const updatedUser = await UserModel.findByIdAndUpdate(new Types.ObjectId(userId), {$set: updateObj}, {new: true}).select('-password');
+    if (!updatedUser) {
+        throw new Error('User not found');
+    }
 
-	if (!updatedUser) {
-		throw new Error('User not found');
-	}
-
-	return updatedUser;
+    return updatedUser;
 };
 
 const deleteUserProfile = async (userId: string): Promise<void> => {

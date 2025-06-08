@@ -9,11 +9,13 @@ export const registerUser = async (email: string, firstName: string, lastName: s
         throw new AppError('Brak wymaganych pól', 400);
     }
 
-    if (!checkEmail(email) || !checkPassword(password)) {
+    const normalizedEmail = email.toLowerCase();
+
+    if (!checkEmail(normalizedEmail) || !checkPassword(password)) {
         throw new AppError('Niepoprawny format emaila lub hasła', 400);
     }
 
-    const existingUser: UserDto | null = await UserModel.findOne({ email });
+    const existingUser: UserDto | null = await UserModel.findOne({ email: normalizedEmail });
     if (existingUser) {
         throw new AppError('Email jest już powiązany z innym kontem', 409);
     }
@@ -45,7 +47,9 @@ export const loginUser = async (email: string, password: string): Promise<{ toke
         throw new AppError('Brak wymaganych pól', 400);
     }
 
-    const user: UserDto | null = await UserModel.findOne({ email });
+    const normalizedEmail = email.toLowerCase();
+
+    const user: UserDto | null = await UserModel.findOne({ email: normalizedEmail });
     if (!user) {
         throw new AppError('Nieprawidłowe dane logowania', 401);
     }

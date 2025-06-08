@@ -40,19 +40,24 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    if (this.form.valid) {
-      this.authService.login(this.form.value).subscribe({
-        next: (response) => {
-          if (response?.user.type === UserType.ADMIN) {
-            this.router.navigate(['/admin']);
-          } else {
-            this.router.navigate(['/dashboard']);
-          }
-        },
-        error: (error) => {
-          this.errorMessage = error.error.message;
-        },
-      });
-    }
+  if (this.form.valid) {
+    const credentials = {
+      ...this.form.value,
+      email: this.form.value.email.toLowerCase() 
+    };
+    
+    this.authService.login(credentials).subscribe({ 
+      next: (response) => {
+        if (response?.user.type === UserType.ADMIN) {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.error.message;
+      },
+    });
+  }
   }
 }
