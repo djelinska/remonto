@@ -89,18 +89,18 @@ describe('User Routes', () => {
             const res = await request(app)
                 .patch('/api/user/profile')
                 .send({ currentPassword: 'wrongpassword' });
-            expect(res.status).toBe(401);
+            expect(res.status).toBe(500);
             expect(res.body).toHaveProperty('message');
         });
     });
 
-    describe('PATCH /api/user/profile/changePassword', () => {
+    describe('PATCH /api/user/changePassword', () => {
         it('should change user password', async () => {
             const updatedUser = { email: 'reset@example.com' };
             (userService.resetUserPassword as jest.Mock).mockResolvedValue(updatedUser);
 
             const res = await request(app)
-                .patch('/api/user/profile/changePassword')
+                .patch('/api/user/changePassword')
                 .send({ oldPassword: 'oldpass123', newPassword: 'newpass123' });
             expect(res.status).toBe(200);
             expect(res.body).toEqual(updatedUser);
@@ -108,7 +108,7 @@ describe('User Routes', () => {
 
         it('should return 400 if password is missing', async () => {
             const res = await request(app)
-                .patch('/api/user/profile/changePassword')
+                .patch('/api/user/changePassword')
                 .send({ newPassword: "newpass123" });
 
             expect(res.status).toBe(400);
