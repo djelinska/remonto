@@ -7,7 +7,7 @@ import MaterialModel from '../../models/materialModel';
 import ToolModel from '../../models/toolModel';
 import { mockUserDto } from '../mockData/mockUser';
 import { UserTypes } from '../../types/enums/user-types';
-import { comparePassword, encryptPassword } from '../../utils/validation';
+import { comparePassword, encryptPassword, checkEmail, checkPassword } from '../../utils/validation';
 import AppError from '../../utils/AppError';
 
 jest.mock('../../models/userModel');
@@ -15,7 +15,13 @@ jest.mock('../../models/projectModel');
 jest.mock('../../models/taskModel');
 jest.mock('../../models/materialModel');
 jest.mock('../../models/toolModel');
-jest.mock('../../utils/validation');
+jest.mock('../../utils/validation', () => ({
+    ...jest.requireActual('../../utils/validation'),
+    checkEmail: jest.fn(),
+    checkPassword: jest.fn(),
+    encryptPassword: jest.fn(),
+    comparePassword: jest.fn()
+}));
 
 describe('userService', () => {
     const mockUserId = mockUserDto._id.toString();
@@ -23,6 +29,9 @@ describe('userService', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
+        (checkEmail as jest.Mock).mockImplementation((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+        (checkPassword as jest.Mock).mockImplementation((pass) => pass.length >= 8 && /[A-Z]/.test(pass) && /[a-z]/.test(pass) && /\d/.test(pass) && /[!@#$%^&*]/.test(pass));
+        (encryptPassword as jest.Mock).mockResolvedValue('$hashedPassword123');
     });
 
     describe('fetchUserProfile', () => {
@@ -60,6 +69,77 @@ describe('userService', () => {
                 tools: []
             });
         });
+    });
+
+    describe('updateUserProfile', () => {
+    const validMockUser = { 
+        ...mockUserDto,
+        email: 'valid@example.com',
+        firstName: 'Updated' 
+    };
+
+    const validPassword = 'ValidPass123!';
+    const invalidPassword = 'weak';
+    const invalidEmail = 'invalid-email';
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        (checkEmail as jest.Mock).mockImplementation((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+        (checkPassword as jest.Mock).mockImplementation((pass) => pass.length >= 8 && /[A-Z]/.test(pass) && /[a-z]/.test(pass) && /\d/.test(pass) && /[!@#$%^&*]/.test(pass));
+        (encryptPassword as jest.Mock).mockResolvedValue('$hashedPassword123');
+    });
+
+    it('should reject invalid email format', async () => {
+        (checkEmail as jest.Mock).mockReturnValueOnce(false);
+        
+        await expect(userService.updateUserProfile(
+            mockUserId, 
+            { email: invalidEmail }
+        )).rejects.toThrow('Nieprawidłowy format emaila');
+    });
+
+    it('should reject weak passwords', async () => {
+        (checkPassword as jest.Mock).mockReturnValueOnce(false);
+        
+        await expect(userService.updateUserProfile(
+            mockUserId, 
+            { password: invalidPassword }
+        )).rejects.toThrow('Hasło musi mieć co najmniej 8 znaków');
+    });
+
+    it('should handle database errors', async () => {
+        (UserModel.findByIdAndUpdate as jest.Mock).mockImplementation(() => {
+            throw new Error('Database error');
+        });
+
+        await expect(userService.updateUserProfile(
+            mockUserId, 
+            { firstName: 'Updated' }
+        )).rejects.toThrow('Database error');
+    });
+
+    it('should normalize email to lowercase', async () => {
+        const mockExec = jest.fn().mockResolvedValue(validMockUser);
+        const mockLean = jest.fn().mockReturnValue({ exec: mockExec });
+        const mockSelect = jest.fn().mockReturnValue({ lean: mockLean });
+        
+        (UserModel.findByIdAndUpdate as jest.Mock).mockReturnValue({
+            select: mockSelect,
+            lean: mockLean
+        });
+        (UserModel.findOne as jest.Mock).mockResolvedValue(null);
+
+        const result = await userService.updateUserProfile(
+            mockUserId, 
+            { email: 'VALID@example.com' }
+        );
+
+        expect(UserModel.findByIdAndUpdate).toHaveBeenCalledWith(
+            new Types.ObjectId(mockUserId),
+            { $set: { email: 'valid@example.com' } },
+            { new: true }
+        );
+    });
     });
 
     describe('deleteUserProfile', () => {
