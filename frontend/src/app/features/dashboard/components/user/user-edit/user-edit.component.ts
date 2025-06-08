@@ -66,7 +66,7 @@ export class UserEditComponent {
     error: (error) => {
       this.loading = false;
       this.errorMessage = error.error.message;
-      console.error('Error updating user profile:', error);
+      console.error('Błąd podczas edytowania konta', error);
     },
   });
 }

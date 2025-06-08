@@ -54,6 +54,7 @@ router.patch('/api/user/profile', [authenticateUser], async (req: AuthRequest, r
         if (req.body.email) {
             req.body.email = req.body.email.toLowerCase();
         }
+
         const updatedUser = await userService.updateUserProfile(userId.toString(), req.body);
         
         res.status(200).json(updatedUser);

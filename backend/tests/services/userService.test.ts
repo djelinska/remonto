@@ -40,7 +40,7 @@ describe('userService', () => {
 
             await expect(userService.fetchUserProfile(mockUserId))
                 .rejects
-                .toThrow('User not found');
+                .toThrow('Nie znaleziono użytkownika');
         });
     });
 

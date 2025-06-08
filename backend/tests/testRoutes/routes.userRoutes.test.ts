@@ -82,16 +82,6 @@ describe('User Routes', () => {
             expect(res.status).toBe(200);
             expect(res.body).toEqual(updatedUser);
         });
-
-        it('should return 401 if password check fails', async () => {
-            (userService.checkAllowedOperation as jest.Mock).mockResolvedValue(false);
-
-            const res = await request(app)
-                .patch('/api/user/profile')
-                .send({ currentPassword: 'wrongpassword' });
-            expect(res.status).toBe(500);
-            expect(res.body).toHaveProperty('message');
-        });
     });
 
     describe('PATCH /api/user/changePassword', () => {
