@@ -3,6 +3,7 @@ import {MaterialUnit} from '../enums/material-unit';
 import {TaskCategory} from '../enums/task-category';
 import {TaskPriority} from '../enums/task-priority';
 import {TaskStatus} from '../enums/task-status';
+import {Types} from 'mongoose';
 
 export interface ProjectTemplateDto {
 	name: string;
@@ -39,9 +40,9 @@ export interface TemplateDto {
 	tasks: TaskTemplateDto[];
 	materials: MaterialTemplateDto[];
 	tools: ToolTemplateDto[];
-	taskCount: number;
-	materialCount: number;
-	toolCount: number;
+	taskCount?: number;
+	materialCount?: number;
+	toolCount?: number;
 }
 
 export interface TemplateFormDto {
@@ -50,3 +51,5 @@ export interface TemplateFormDto {
 	materials: MaterialTemplateDto[];
 	tools: ToolTemplateDto[];
 }
+
+export type Template = Omit<TemplateDto, '_id'> & {id: Types.ObjectId};

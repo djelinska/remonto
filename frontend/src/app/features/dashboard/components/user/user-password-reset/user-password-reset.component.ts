@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,12 +21,11 @@ export class UserPasswordResetComponent {
   passwordData = {
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
   };
   showCurrentPassword = false;
   showNewPassword = false;
   showConfirmPassword = false;
-
 
   constructor(
     private profileService: ProfileService,
@@ -54,7 +54,10 @@ export class UserPasswordResetComponent {
       return false;
     }
 
-    if (!this.passwordData.newPassword || this.passwordData.newPassword.length < 6) {
+    if (
+      !this.passwordData.newPassword ||
+      this.passwordData.newPassword.length < 6
+    ) {
       this.errorMessage = 'Nowe hasło musi mieć 6 znaków';
       return false;
     }
@@ -70,7 +73,8 @@ export class UserPasswordResetComponent {
     }
 
     if (!/[A-Z]/.test(this.passwordData.newPassword)) {
-      this.errorMessage = 'Hasło musi zawierać przynajmniej jedną wielką literę';
+      this.errorMessage =
+        'Hasło musi zawierać przynajmniej jedną wielką literę';
       return false;
     }
 
@@ -80,8 +84,9 @@ export class UserPasswordResetComponent {
     }
 
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(this.passwordData.newPassword)) {
-        this.errorMessage = 'Hasło musi zawierać przynajmniej jeden znak specjalny';
-        return false;
+      this.errorMessage =
+        'Hasło musi zawierać przynajmniej jeden znak specjalny';
+      return false;
     }
 
     return true;
@@ -93,15 +98,22 @@ export class UserPasswordResetComponent {
     }
 
     this.loading = true;
-    this.profileService.changePassword(
-      this.passwordData.currentPassword, 
-      this.passwordData.newPassword
-    ).subscribe({
-      next: () => {
-        this.loading = false;
-        this.passwordChanged.emit();
-        this.modalRef?.hide();
-      }
-    });
+    this.profileService
+      .changePassword(
+        this.passwordData.currentPassword,
+        this.passwordData.newPassword
+      )
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          this.passwordChanged.emit();
+          this.modalRef?.hide();
+        },
+        error: (error) => {
+          this.loading = false;
+          this.errorMessage = error.error.message;
+          console.error('Error changing password:', error);
+        },
+      });
   }
 }

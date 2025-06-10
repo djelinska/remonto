@@ -22,9 +22,9 @@
   <div class="p-4 border-top d-flex align-items-center">
     <i class="bi bi-person-circle" id="profile-icon"></i>
     @if (user$ | async; as user) {
-    <div class="ms-2 me-auto">{{ user.firstName + " " + user.lastName }}</div>
+    <div class="ms-2 me-4">{{ user.firstName + " " + user.lastName }}</div>
     }
-    <div class="dropdown">
+    <div class="dropdown ms-auto">
       <button
         class="btn btn-sm btn-light"
         type="button"
