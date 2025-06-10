@@ -1,4 +1,4 @@
-import {MaterialTemplateDto, TaskTemplateDto, TemplateDto, TemplateFormDto, ToolTemplateDto} from '../types/models/template.dto';
+import {MaterialTemplateDto, TaskTemplateDto, Template, TemplateDto, TemplateFormDto, ToolTemplateDto} from '../types/models/template.dto';
 
 import ReturnMessage from '../types/models/returnMessage.model';
 import TemplateModel from '../models/templateModel';
@@ -6,7 +6,7 @@ import {Types} from 'mongoose';
 
 type ObjectId = Types.ObjectId;
 
-export const fetchTemplates = async (): Promise<TemplateDto[]> => {
+export const fetchTemplates = async (): Promise<Template[]> => {
 	try {
 		const templates = await TemplateModel.find();
 
@@ -52,7 +52,7 @@ export const fetchTemplates = async (): Promise<TemplateDto[]> => {
 	}
 };
 
-export const fetchTemplateById = async (templateId: ObjectId): Promise<TemplateFormDto> => {
+export const fetchTemplateById = async (templateId: ObjectId): Promise<Template> => {
 	try {
 		const template = await TemplateModel.findById(templateId);
 
@@ -60,7 +60,35 @@ export const fetchTemplateById = async (templateId: ObjectId): Promise<TemplateF
 			throw new Error('Template not found');
 		}
 
-		return template;
+		return {
+			id: template._id,
+			project: {
+				name: template.project.name,
+				description: template.project.description,
+				budget: template.project.budget,
+			},
+			tasks: template.tasks.map((task: TaskTemplateDto) => ({
+				name: task.name,
+				status: task.status,
+				category: task.category,
+				priority: task.priority,
+				note: task.note,
+			})),
+			materials: template.materials.map((material: MaterialTemplateDto) => ({
+				name: material.name,
+				status: material.status,
+				quantity: material.quantity,
+				unit: material.unit,
+				type: material.type,
+				note: material.note,
+			})),
+			tools: template.tools.map((tool: ToolTemplateDto) => ({
+				name: tool.name,
+				status: tool.status,
+				quantity: tool.quantity,
+				note: tool.note,
+			})),
+		};
 	} catch (error) {
 		console.error('Error fetching template:', error);
 		throw new Error('Error fetching template');
