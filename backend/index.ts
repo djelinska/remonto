@@ -5,6 +5,8 @@ import cors from 'cors'
 import routes from './routes/router'
 import cookieParser from 'cookie-parser'
 import mongoose from 'mongoose'
+import UserModel from "./models/userModel";
+import { encryptPassword } from "./utils/validation";
 
 require('dotenv/config');
 
@@ -30,6 +32,21 @@ mongoose
 app.use('/', routes);
 
 const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {
+const server = app.listen(port, async () => {
     console.log(`Server started on port ${port}`);
+    const adminCount = await UserModel.countDocuments({ type: 'ADMIN' });
+    if (adminCount === 0) {
+        const hashedPassword = await encryptPassword('admin');
+        await UserModel.create({
+            firstName: 'Default',
+            lastName: 'Admin',
+            email: 'admin@example.com',
+            password: hashedPassword,
+            type: 'ADMIN',
+        });
+        console.warn(
+            'No admin found. Default admin account created.\nUsername: admin@example.com\nPassword: admin\nPlease change this password immediately.'
+        );
+    }
+
 });
