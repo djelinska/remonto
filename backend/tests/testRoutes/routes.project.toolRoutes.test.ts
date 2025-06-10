@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express from 'express';
-import toolRouter from '../../routes/project/toolRoutes'; // update path
+import toolRouter from '../../routes/project/toolRoutes'; 
 import * as toolService from '../../services/toolService';
 import * as validationUtils from '../../utils/validation';
 import { Types } from 'mongoose';

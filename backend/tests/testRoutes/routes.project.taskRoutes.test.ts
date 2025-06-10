@@ -1,10 +1,9 @@
 import request from 'supertest';
 import express from 'express';
-import taskRouter from '../../routes/project/taskRoutes'; // <- update this to match your actual path
+import taskRouter from '../../routes/project/taskRoutes'; 
 import * as taskService from '../../services/taskService';
 import { Types } from 'mongoose';
 
-// Mock middlewares
 jest.mock('../../middlewares/authenticateUser', () => (req: any, res: any, next: any) => {
   req.user = { id: new Types.ObjectId().toHexString() };
   next();

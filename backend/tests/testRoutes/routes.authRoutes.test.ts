@@ -5,7 +5,6 @@ import authService from '../../services/authService';
 import validateUserData from '../../middlewares/validateUser';
 import AppError from '../../utils/AppError';
 
-// Mock the middleware and service
 jest.mock('../../services/authService');
 jest.mock('../../middlewares/validateUser', () => jest.fn((req, res, next) => next()));
 

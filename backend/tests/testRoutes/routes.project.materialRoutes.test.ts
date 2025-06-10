@@ -6,7 +6,6 @@ import authenticateUser from '../../middlewares/authenticateUser';
 import validateMaterialData from '../../middlewares/validateMaterial';
 import { Types } from 'mongoose';
 
-// Mock middlewares
 jest.mock('../../middlewares/authenticateUser', () => jest.fn((req, res, next) => {
     req.user = { id: 'mockUserId' };
     next();
@@ -14,7 +13,6 @@ jest.mock('../../middlewares/authenticateUser', () => jest.fn((req, res, next) =
 
 jest.mock('../../middlewares/validateMaterial', () => jest.fn((req, res, next) => next()));
 
-// Mock services
 jest.mock('../../services/materialService');
 
 const app = express();

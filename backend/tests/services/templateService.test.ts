@@ -61,7 +61,18 @@ describe('Template Service', () => {
     it('returns a template when found', async () => {
       mockTemplateModel.findById.mockResolvedValue(fakeTemplate);
       const tpl = await service.fetchTemplateById(fakeId);
-      expect(tpl).toBe(fakeTemplate);
+      
+      expect(tpl).toEqual({
+        id: fakeId,
+        project: {
+          name: 'Test Project',
+          description: undefined,
+          budget: undefined
+        },
+        tasks: [],
+        materials: [],
+        tools: []
+      });
       expect(mockTemplateModel.findById).toHaveBeenCalledWith(fakeId);
     });
 
@@ -142,4 +153,3 @@ describe('Template Service', () => {
     });
   });
 });
-

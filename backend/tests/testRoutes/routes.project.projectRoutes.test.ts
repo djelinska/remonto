@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express from 'express';
-import router from '../../routes/project/projectRoutes'; // <-- adjust path as needed
+import router from '../../routes/project/projectRoutes'; 
 import * as projectService from '../../services/projectService';
 import { Types } from 'mongoose';
 import { ProjectNoteDto } from '../../types/models/project.dto';

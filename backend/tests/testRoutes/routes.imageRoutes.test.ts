@@ -17,14 +17,12 @@ app.use(router);
 
 const uploadsDir = path.join(__dirname, '../../uploads');
 
-// Ensure the uploads directory exists before tests
 beforeAll(() => {
     if (!fs.existsSync(uploadsDir)) {
         fs.mkdirSync(uploadsDir);
     }
 });
 
-// Clean up uploaded files after tests
 afterAll(() => {
     fs.readdirSync(uploadsDir).forEach(file => {
         fs.unlinkSync(path.join(uploadsDir, file));
@@ -36,7 +34,6 @@ describe('Image Routes', () => {
         it('should upload a file and return its URL', async () => {
             const testImagePath = path.join(__dirname, '../test-assets/test-image.jpg');
 
-            // Make sure the test image exists
             if (!fs.existsSync(testImagePath)) {
                 fs.writeFileSync(testImagePath, 'fake image content');
             }
